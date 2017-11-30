@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*-coding: utf-8 -*
 
-from models.tools import Tools as Tools
+from tools import Tools as Tools
 
 
 class SCPM:
