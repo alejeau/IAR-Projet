@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*-coding: utf-8 -*
 
-import pickle
+import tools.Archivist as Archivist
 
 
 def config_dipm1_generator():
@@ -28,7 +28,7 @@ def config_dipm1_generator():
     # time increment
     conf.update({'dt': 1.0})
 
-    serialize_config(conf, '../configs/dipm1.p')
+    Archivist.store(conf, '../configs/dipm1.p')
 
 
 def config_sim1_generator():
@@ -55,14 +55,7 @@ def config_sim1_generator():
     config1.update({'channels': channels})
     config1.update({'salience': salience})
 
-    serialize_config(config1, '../configs/sim1.p')
-
-
-def serialize_config(config: dict, file_name: str):
-    # Using pickle's serialization to keep int keys as int
-    with open(file_name, 'wb') as results_file:
-        pickle.dump(config, results_file)
-    results_file.close()
+    Archivist.store(config1, '../configs/sim1.p')
 
 
 config_sim1_generator()

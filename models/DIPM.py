@@ -2,7 +2,7 @@
 # -*-coding: utf-8 -*
 
 from tools import Tools as Tools
-import tools.ConfigurationLoader as confLoader
+import tools.Archivist as confLoader
 
 
 class DIPM:
@@ -67,7 +67,9 @@ class DIPM:
     def delta_a(self, a: float, u: float):
         return a - self.k * (a - u) * self.dt
 
-    def next(self) -> float:
+    def next(self, salience) -> float:
+        # we have the salience, we now need a_i_xxx
+        # we also probably need to store the past values
         pass
 
     def load_conf(self, filename: str):
