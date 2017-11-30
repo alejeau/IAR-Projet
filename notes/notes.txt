@@ -1,0 +1,33 @@
+Biology inspired robot beahviour selection mechanism
+
+Basal ganglia (ganglions de la base)
+
+BBR: beahviour-based robotics
+
+STN: subthalamic nucleus
+
+GP: globus paladius
+	- GPi: GP internal (internal segment)
+	- GPe: GP external (external segment)
+
+SN: substantia nigra
+	- SNr: SN pars reticulate
+	- SNc: SN pars compacta
+
+
+Basal ganglia:
+	- DIPM: direct-indirect pathway model
+	- SCPM: select-control  pathway model
+
+Heaviside step function: H(x) = {0 if x <  0
+								{1 if x >= 1
+
+salience = saillance, grande probabilité d'être remarqué
+
+GA: genetic algorithm
+
+
+
+
+
+

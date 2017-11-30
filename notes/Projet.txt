@@ -1,0 +1,6 @@
+Wang, Y., Li, S., Chen, Q., & Hu, W. (2007).
+Biology inspired robot behavior selection mechanism: using genetic algorithm.
+Bio-Inspired Computational Intelligence and Applications , 777-786.
+	● https://www.researchgate.net/profile/Hong_Gu4/publication/225154035_Parameter_Identification_of_Bilinear_System_Based_on_Genetic_Algorithm/links/56eb491108ae2a58dc4a0db5.pdf#page=796
+	● Tuteur : benoit.girard@isir.upmc.fr
+	● Objectif : Au minimum, reproduire les deux modèles des ganglions de la base proposés, faire évoluer leurs poids pour obtenir vos propres versions des figures 3, 4, 5 et 6
