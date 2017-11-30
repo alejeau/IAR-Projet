@@ -2,6 +2,7 @@
 # -*-coding: utf-8 -*
 
 from tools import Tools as Tools
+import tools.ConfigurationLoader as confLoader
 
 
 class DIPM:
@@ -66,6 +67,22 @@ class DIPM:
     def delta_a(self, a: float, u: float):
         return a - self.k * (a - u) * self.dt
 
-    def next(self):
+    def next(self) -> float:
         pass
 
+    def load_conf(self, filename: str):
+        conf = confLoader.load(filename)
+        self.wcs1 = conf['wcs1']
+        self.wcs2 = conf['wcs2']
+        self.wsd2_gpe = conf['wsd2_gpe']
+        self.wgpe_stn = conf['wgpe_stn']
+        self.wsd1_gpi = conf['wsd1_gpi']
+        self.stn_gpi = conf['stn_gpi']
+        self.theta_d1 = conf['theta_d1']
+        self.theta_d2 = conf['theta_d2']
+        self.theta_gpe = conf['theta_gpe']
+        self.theta_stn = conf['theta_stn']
+        self.theta_gpi = conf['theta_gpi']
+        self.m = conf['m']
+        self.k = conf['k']
+        self.dt = conf['dt']
