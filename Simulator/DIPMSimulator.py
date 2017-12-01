@@ -8,9 +8,9 @@ import numpy as np
 
 class DIPMSimulator:
     def __init__(self):
-        self.dipms = {}
+        self.dipms = {float: DIPM.DIPM()}
         self.config = None
-        self.gpi_output = []
+        self.gpi_output = {float: {float: float}}
         self.timeline = []
 
     def init_and_load_config(self, filename: str):
@@ -25,25 +25,36 @@ class DIPMSimulator:
 
             # add the DIPM
             self.dipms.update({i: dipm})
-        stop = self.config['runs'] * self.config['time_interval']
-        self.timeline = np.arange(0, stop, self.config['time_interval'])
 
     def run_sim(self, result_file: str):
         channels = self.config['channels']
         salience = self.config['salience']
+        thresholds = {}
+        for channel in range(0, channels):
+            thresholds.update({channel: self.dipms[channel].get_theta_gpi()})
         gpi_outputs = {}
 
+
         # main loop of the simulation
-        for t in self.timeline:
+        for t in range(0, self.config['nb_of_runs']):
+            stn_list = []
             for channel in range(0, channels):
-                # we get the next result
-                res = self.dipms[channel].next(salience[channel][t])
+                # compute y_stn output for each channel
+                stn_list.append(self.dipms[channel].compute_stn(salience[channel][t]))
+
+            for channel in range(0, channels):
+                # compute y_gpi output for each channel
+                res = self.dipms[channel].compute_gpi(stn_list)
+
                 # we store it
                 new = gpi_outputs.get(channel, {})
                 new.update({t: res})
                 gpi_outputs.update({channel: new})
-                pass
-        pass
 
         # once the sim finished, store the results
-        Archivist.store(gpi_outputs, result_file)
+        simulation = {
+            'salience': salience,
+            'threshold': thresholds,
+            'gpi_outputs': gpi_outputs
+        }
+        Archivist.store(simulation, result_file)

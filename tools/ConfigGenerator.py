@@ -39,7 +39,7 @@ def config_sim1_generator():
         1: None,
         2: None
     }
-    nb_of_runs = 5
+    nb_of_runs = 6
     time_interval = 1.0
     channels = 3
     salience = {

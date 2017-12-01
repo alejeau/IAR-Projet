@@ -7,6 +7,14 @@ import tools.Archivist as confLoader
 
 class DIPM:
     def __init__(self):
+
+        # activation
+        self.a_d1 = 0.2
+        self.a_d2 = 0.2
+        self.a_gpe = 0.2
+        self.a_stn = 0.2
+        self.a_gpi = 0.2
+
         # weights
         self.wcs1 = 1.0
         self.wcs2 = 1.0
@@ -28,6 +36,12 @@ class DIPM:
         self.k = 25.0
         # time increment
         self.dt = 1.0
+
+        # storage of y_d1
+        self.y_d1 = 0.0
+
+    def get_theta_gpi(self):
+        return self.theta_gpi
 
     # StratiumD1
     def u_i_d1(self, y_i_c: float):
@@ -58,8 +72,8 @@ class DIPM:
         return self.m * (a_i_stn - self.theta_stn) * Tools.heaviside_step_function(a_i_stn - self.theta_stn)
 
     # GPi
-    def u_i_gpi(self, y_i_c: float):
-        return (-self.wsd1_gpi) * y_i_c
+    def u_i_gpi(self, y_i_c: float, stn_list: [float]):
+        return (-self.wsd1_gpi) * y_i_c + self.stn_gpi * sum(stn_list)
 
     def y_i_gpi(self, a_i_gpi: float):
         return self.m * (a_i_gpi - self.theta_gpi) * Tools.heaviside_step_function(a_i_gpi - self.theta_gpi)
@@ -67,10 +81,36 @@ class DIPM:
     def delta_a(self, a: float, u: float):
         return a - self.k * (a - u) * self.dt
 
-    def next(self, salience) -> float:
+    def compute_stn(self, salience) -> float:
         # we have the salience, we now need a_i_xxx
         # we also probably need to store the past values
-        pass
+
+        # d1
+        u_d1 = self.u_i_d1(salience)
+        self.a_d1 = self.delta_a(self.a_d1, u_d1)
+        self.y_d1 = self.y_i_d1(self.a_d1)
+
+        # d2
+        u_d2 = self.u_i_d2(salience)
+        self.a_d2 = self.delta_a(self.a_d2, u_d2)
+        y_d2 = self.y_i_d2(self.a_d2)
+
+        # gpe
+        u_gpe = self.u_i_gpe(y_d2)
+        self.a_gpe = self.delta_a(self.a_gpe, u_gpe)
+        y_gpe = self.y_i_gpe(self.a_gpe)
+
+        # stn
+        u_stn = self.u_i_stn(y_gpe)
+        self.a_stn = self.delta_a(self.a_stn, u_stn)
+        y_stn = self.y_i_stn(self.a_stn)
+
+        return y_stn
+
+    def compute_gpi(self, stn_list: [float]) -> float:
+        u_gpi = self.u_i_gpi(self.y_d1, stn_list)
+        self.a_gpi = self.delta_a(self.a_gpi, u_gpi)
+        return self.y_i_gpi(self.a_gpi)
 
     def load_conf(self, filename: str):
         conf = confLoader.load(filename)
