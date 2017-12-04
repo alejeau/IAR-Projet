@@ -11,7 +11,6 @@ class DIPMSimulator:
         self.dipms = {float: DIPM.DIPM()}
         self.config = None
         self.gpi_output = {float: {float: float}}
-        self.timeline = []
 
     def init_and_load_config(self, filename: str):
         self.config = Archivist.load(filename)
@@ -30,10 +29,10 @@ class DIPMSimulator:
         channels = self.config['channels']
         salience = self.config['salience']
         thresholds = {}
-        for channel in range(0, channels):
-            thresholds.update({channel: self.dipms[channel].get_theta_gpi()})
         gpi_outputs = {}
 
+        for channel in range(0, channels):
+            thresholds.update({channel: self.dipms[channel].get_theta_gpi()})
 
         # main loop of the simulation
         for t in range(0, self.config['nb_of_runs']):

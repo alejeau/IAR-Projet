@@ -6,6 +6,14 @@ import tools.Archivist as Archivist
 
 def config_dipm1_generator():
     conf = {}
+
+    # activation
+    conf.update({'a_d1': 0.2})
+    conf.update({'a_d2': 0.2})
+    conf.update({'a_gpe': 0.2})
+    conf.update({'a_stn': 0.2})
+    conf.update({'a_gpi': 0.2})
+
     # weights
     conf.update({'wcs1': 1.0})
     conf.update({'wcs2': 1.0})
@@ -43,9 +51,9 @@ def config_sim1_generator():
     time_interval = 1.0
     channels = 3
     salience = {
-        0: [0.0, 0.4, 0.4, 0.6, 0.4],
-        1: [0.0, 0.0, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, 5)]
+        0: [0.0, 0.4, 0.4, 0.6, 0.4, 0.4],
+        1: [0.0, 0.0, 0.6, 0.6, 0.6, 0.6],
+        2: [0.0 for i in range(0, nb_of_runs)]
     }
 
     config1.update({'name': name})
