@@ -28,6 +28,8 @@ class SCPM:
         self.m = 1.0
         # activation rate
         self.k = 25.0
+        # time increment
+        self.dt = 1.0
 
     # StratiumD1
     def u_i_d1(self, y_i_c: float):
@@ -63,3 +65,30 @@ class SCPM:
 
     def y_i_gpi(self, a_i_gpi: float):
         return self.m * (a_i_gpi - self.theta_gpi) * Tools.heaviside_step_function(a_i_gpi - self.theta_gpi)
+
+    def delta_a(self, a: float, u: float) -> float:
+        return a - self.k * (a - u) * self.dt
+
+    def compute_stn(self, salience) -> float:
+        # we have the salience, we now need a_i_xxx
+        # we also probably need to store the past values
+
+        # d1
+        u_d1 = self.u_i_d1(salience)
+        self.a_d1 = self.delta_a(self.a_d1, u_d1)
+        # print('delta_d1: ' + str(self.a_d1))
+        self.y_d1 = self.y_i_d1(self.a_d1)
+
+        # d2
+        u_d2 = self.u_i_d2(salience)
+        self.a_d2 = self.delta_a(self.a_d2, u_d2)
+        # print('delta_d2: ' + str(self.a_d2))
+        y_d2 = self.y_i_d2(self.a_d2)
+
+        # # stn
+        # u_stn = self.u_i_stn(y_gpe)
+        # self.a_stn = self.delta_a(self.a_stn, u_stn)
+        # # print('delta_stn: ' + str(self.a_stn))
+        # y_stn = self.y_i_stn(self.a_stn)
+
+        return y_stn

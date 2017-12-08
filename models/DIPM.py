@@ -33,9 +33,9 @@ class DIPM:
         # slope parameter
         self.m = 1.0
         # activation rate
-        self.k = 25.0
+        self.k = 25
         # time increment
-        self.dt = 1.0
+        self.dt = 0.0025
 
         # storage of y_d1
         self.y_d1 = 0.0
