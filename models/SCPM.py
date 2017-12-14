@@ -133,7 +133,7 @@ class SCPM:
     def compute_d1_to_gpi(self, salience: float, prev_stn_list: [float], current_stn_list: [float]) -> {str: float}:
         vals = self.compute_d1_to_stn(salience, prev_stn_list)
         y_gpi = self.compute_gpi(current_stn_list)
-        vals.update('y_gpi': y_gpi)
+        vals.update({'y_gpi': y_gpi})
         return vals
         
     def load_conf(self, filename: str):

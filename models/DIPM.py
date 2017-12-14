@@ -133,7 +133,7 @@ class DIPM:
     def compute_d1_to_gpi(self, salience: float, stn_list: [float]) -> {str: float}:
         vals = self.compute_d1_to_stn(salience)
         y_gpi = self.compute_gpi(stn_list)
-        vals.update('y_gpi': y_gpi)
+        vals.update({'y_gpi': y_gpi})
         return vals
 
     def load_conf(self, filename: str):
