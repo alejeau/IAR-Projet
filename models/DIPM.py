@@ -115,19 +115,26 @@ class DIPM:
         self.y_stn = self.y_i_stn(self.a_stn)
         return self.y_stn
 
-    def compute_d1_to_stn(self, salience: float) -> [float]:
+    # assumes y_d1 has been computed
+    def compute_gpi(self, stn_list: [float]) -> float:
+        u_gpi = self.u_i_gpi(self.y_d1, stn_list)
+        self.a_gpi = self.delta_a(self.a_gpi, u_gpi)
+        self.y_gpi = self.y_i_gpi(self.a_gpi)
+        return self.y_gpi
+
+    def compute_d1_to_stn(self, salience: float) -> {str: float}:
         y_d1 = self.compute_d1(salience)
         y_d2 = self.compute_d2(salience)
         y_gpe = self.compute_gpe(y_d2)
         y_stn = self.compute_stn(y_gpe)
 
-        return [y_d1, y_d2, y_gpe, y_stn]
-
-    # assumes y_d1 has been computed
-    def compute_gpi(self, stn_list: [float]) -> float:
-        u_gpi = self.u_i_gpi(self.y_d1, stn_list)
-        self.a_gpi = self.delta_a(self.a_gpi, u_gpi)
-        return self.y_i_gpi(self.a_gpi)
+        return {'y_d1': y_d1, 'y_d2': y_d2, 'y_gpe': y_gpe, 'y_stn': y_stn}
+        
+    def compute_d1_to_gpi(self, salience: float, stn_list: [float]) -> [float]:
+        vals = self.compute_d1_to_stn(salience)
+        y_gpi = self.compute_gpi(stn_list)
+        vals.update('y_gpi': y_gpi)
+        return vals
 
     def load_conf(self, filename: str):
         conf = confLoader.load(filename)
