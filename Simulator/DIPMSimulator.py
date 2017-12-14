@@ -39,7 +39,7 @@ class DIPMSimulator:
             stn_list = []
             for channel in range(0, channels):
                 # compute y_stn output for each channel
-                stn_list.append(self.dipms[channel].compute_stn(salience[channel][t]))
+                stn_list.append(self.dipms[channel].compute_d1_to_stn(salience[channel][t][3]))
 
             for channel in range(0, channels):
                 # compute y_gpi output for each channel

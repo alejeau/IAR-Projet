@@ -41,6 +41,7 @@ class SCPM:
 
         # storage of y_d1
         self.y_d1 = 0.0
+        self.y_gpe = 0.0
 
     # StratiumD1
     def u_i_d1(self, y_c: float):
@@ -80,7 +81,7 @@ class SCPM:
     def delta_a(self, a: float, u: float) -> float:
         return a - self.k * (a - u) * self.dt
 
-    def compute_stn(self, salience) -> float:
+    def compute_gpe(self, salience: float, prev_stn_list: [float]) -> float:
         # we have the salience, we now need a_i_xxx
         # we also probably need to store the past values
 
@@ -95,11 +96,24 @@ class SCPM:
         self.a_d2 = self.delta_a(self.a_d2, u_d2)
         # print('delta_d2: ' + str(self.a_d2))
         y_d2 = self.y_i_d2(self.a_d2)
-
-        # # stn
-        # u_stn = self.u_i_stn(y_gpe)
-        # self.a_stn = self.delta_a(self.a_stn, u_stn)
-        # # print('delta_stn: ' + str(self.a_stn))
-        # y_stn = self.y_i_stn(self.a_stn)
+        
+        u_gpe = self.u_i_gpe(self.y_d2, prev_stn_list)
+        self.a_gpe = self.delta_a(self.a_gpe, u_gpe)
+        self.y_gpe = self.y_i_gpe(self.a_gpe)
+        
+        return self.y_gpe
+    
+    def compute_stn(self, salience: float, prev_gpe_list: [float]) -> float:   
+        # stn
+        u_stn = self.u_i_stn(self.y_gpe)
+        self.a_stn = self.delta_a(self.a_stn, u_stn)
+        # print('delta_stn: ' + str(self.a_stn))
+        y_stn = self.y_i_stn(self.a_stn)
 
         return y_stn
+        
+        
+        
+        
+        
+        
