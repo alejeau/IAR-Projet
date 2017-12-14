@@ -37,15 +37,15 @@ class DIPM:
         # time increment
         self.dt = 0.001
 
-        # storage of y_d1
+        # storage of y_xxx values
         self.y_d1 = 0.0
         self.y_d2 = 0.0
         self.y_gpe = 0.0
         self.y_stn = 0.0
         self.y_gpi = 0.0
         
-        # storage of old values
-        self.old_y_stn = []
+#        # storage of old values
+#        self.old_y_stn = []
 
     def get_theta_gpi(self) -> float:
         return self.theta_gpi
@@ -130,7 +130,7 @@ class DIPM:
 
         return {'y_d1': y_d1, 'y_d2': y_d2, 'y_gpe': y_gpe, 'y_stn': y_stn}
         
-    def compute_d1_to_gpi(self, salience: float, stn_list: [float]) -> [float]:
+    def compute_d1_to_gpi(self, salience: float, stn_list: [float]) -> {str: float}:
         vals = self.compute_d1_to_stn(salience)
         y_gpi = self.compute_gpi(stn_list)
         vals.update('y_gpi': y_gpi)
@@ -157,3 +157,8 @@ class DIPM:
         self.m = conf['m']
         self.k = conf['k']
         self.dt = conf['dt']
+        self.y_d1 = conf['y_d1']
+        self.y_d2 = conf['y_d2']
+        self.y_gpe = conf['y_gpe']
+        self.y_stn = conf['y_stn']
+        self.y_gpi = conf['y_gpi']
