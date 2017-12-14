@@ -11,6 +11,7 @@ class DIPMSimulator:
         self.dipms = {float: DIPM.DIPM()}
         self.config = None
         self.gpi_output = {float: {float: float}}
+        self.old_stn_list = []
 
     def init_and_load_config(self, filename: str):
         self.config = Archivist.load(filename)
@@ -24,6 +25,7 @@ class DIPMSimulator:
 
             # add the DIPM
             self.dipms.update({i: dipm})
+        self.old_stn_list = [0.0 for i in range(0, channels)]
 
     def run_sim(self, result_file: str):
         channels = self.config['channels']

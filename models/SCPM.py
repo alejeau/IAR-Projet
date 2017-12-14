@@ -162,7 +162,3 @@ class SCPM:
         self.y_gpe = conf['y_gpe']
         self.y_stn = conf['y_stn']
         self.y_gpi = conf['y_gpi']
-        
-        
-        
-        
