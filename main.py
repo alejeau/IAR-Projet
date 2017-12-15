@@ -3,6 +3,7 @@
 
 import Simulator.DIPMSimulator as DipmSim
 import tools.Archivist as Archivist
+import tools.display as Display
 
 sim = DipmSim.DIPMSimulator()
 sim.init_and_load_config('configs/sim1.p')
@@ -20,3 +21,5 @@ keys = sorted(data['gpi_outputs'].keys())
 print('keys: ' + str(keys))
 for k in keys:
     print(str(k) + ': ' + str(data['gpi_outputs'][k]))
+
+Display.display_data(data['gpi_outputs'])

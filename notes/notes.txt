@@ -1,4 +1,4 @@
-Biology inspired robot beahviour selection mechanism
+﻿Biology inspired robot beahviour selection mechanism
 
 Basal ganglia (ganglions de la base)
 
@@ -26,6 +26,13 @@ salience = saillance, grande probabilité d'être remarqué
 
 GA: genetic algorithm
 
+
+        # dt=0.001 plusieurs mises a jour
+        # mises a jours a chaque dt
+        # graphes + graphe de chaque ganglion pour voir les evolutions
+        # utiliser les y a t pour calculer les y a t+1, faire les MAJ que avec les valeurs d'avant
+        # fonction de fitness (tester les 2 tables pour comparaison)
+        # courbe: fitness en fonction de la generation
 
 
 

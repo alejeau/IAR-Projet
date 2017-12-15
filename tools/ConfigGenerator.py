@@ -50,6 +50,7 @@ def config_sim1_generator():
     nb_of_runs = 6
     time_interval = 1.0
     channels = 3
+    dt = 0.001
     salience = {
         0: [0.0, 0.4, 0.4, 0.6, 0.4, 0.4],
         1: [0.0, 0.0, 0.6, 0.6, 0.6, 0.6],
@@ -62,6 +63,7 @@ def config_sim1_generator():
     config1.update({'time_interval': time_interval})
     config1.update({'channels': channels})
     config1.update({'salience': salience})
+    config1.update({'dt': dt})
 
     Archivist.store(config1, '../configs/sim1.p')
 

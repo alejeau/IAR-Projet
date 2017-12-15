@@ -37,6 +37,13 @@ class DIPM:
         # time increment
         self.dt = 0.001
 
+        # storage of u_xxx values
+        self.u_d1 = 0.0
+        self.u_d2 = 0.0
+        self.u_gpe = 0.0
+        self.u_stn = 0.0
+        self.u_gpi = 0.0
+
         # storage of y_xxx values
         self.y_d1 = 0.0
         self.y_d2 = 0.0
@@ -50,8 +57,8 @@ class DIPM:
     def get_theta_gpi(self) -> float:
         return self.theta_gpi
         
-    def get_dt(self) -> float:
-        return self.dt
+    def set_dt(self, dt: float):
+        self.dt = dt
 
     # StratiumD1
     def u_i_d1(self, y_c: float) -> float:
@@ -92,48 +99,48 @@ class DIPM:
         return a - self.k * (a - u) * self.dt
         
     def compute_d1(self, salience: float) -> float:
-        u_d1 = self.u_i_d1(salience)
-        self.a_d1 = self.delta_a(self.a_d1, u_d1)
         self.y_d1 = self.y_i_d1(self.a_d1)
+        self.a_d1 = self.delta_a(self.a_d1, self.u_d1)
+        self.u_d1 = self.u_i_d1(salience)
         return self.y_d1
         
     def compute_d2(self, salience: float) -> float:
-        u_d2 = self.u_i_d2(salience)
-        self.a_d2 = self.delta_a(self.a_d2, u_d2)
         self.y_d2 = self.y_i_d2(self.a_d2)
+        self.a_d2 = self.delta_a(self.a_d2, self.u_d2)
+        self.u_d2 = self.u_i_d2(salience)
         return self.y_d2
         
     def compute_gpe(self, y_d2: float) -> float:
-        u_gpe = self.u_i_gpe(y_d2)
-        self.a_gpe = self.delta_a(self.a_gpe, u_gpe)
         self.y_gpe = self.y_i_gpe(self.a_gpe)
+        self.a_gpe = self.delta_a(self.a_gpe, self.u_gpe)
+        self.u_gpe = self.u_i_gpe(y_d2)
         return self.y_gpe
 
     def compute_stn(self, y_gpe: float) -> float:
-        u_stn = self.u_i_stn(y_gpe)
-        self.a_stn = self.delta_a(self.a_stn, u_stn)
         self.y_stn = self.y_i_stn(self.a_stn)
+        self.a_stn = self.delta_a(self.a_stn, self.u_stn)
+        self.u_stn = self.u_i_stn(y_gpe)
         return self.y_stn
 
     # assumes y_d1 has been computed
     def compute_gpi(self, stn_list: [float]) -> float:
-        u_gpi = self.u_i_gpi(self.y_d1, stn_list)
-        self.a_gpi = self.delta_a(self.a_gpi, u_gpi)
         self.y_gpi = self.y_i_gpi(self.a_gpi)
+        self.a_gpi = self.delta_a(self.a_gpi, self.u_gpi)
+        self.u_gpi = self.u_i_gpi(self.y_d1, stn_list)
         return self.y_gpi
 
     def compute_d1_to_stn(self, salience: float) -> {str: float}:
-        y_d1 = self.compute_d1(salience)
-        y_d2 = self.compute_d2(salience)
-        y_gpe = self.compute_gpe(y_d2)
-        y_stn = self.compute_stn(y_gpe)
+        self.y_gpe = self.compute_gpe(self.y_d2)
+        self.y_stn = self.compute_stn(self.y_gpe)
+        self.y_d1 = self.compute_d1(salience)
+        self.y_d2 = self.compute_d2(salience)
 
-        return {'y_d1': y_d1, 'y_d2': y_d2, 'y_gpe': y_gpe, 'y_stn': y_stn}
+        return {'y_d1': self.y_d1, 'y_d2': self.y_d2, 'y_gpe': self.y_gpe, 'y_stn': self.y_stn}
         
     def compute_d1_to_gpi(self, salience: float, stn_list: [float]) -> {str: float}:
         vals = self.compute_d1_to_stn(salience)
-        y_gpi = self.compute_gpi(stn_list)
-        vals.update({'y_gpi': y_gpi})
+        self.y_gpi = self.compute_gpi(stn_list)
+        vals.update({'y_gpi': self.y_gpi})
         return vals
 
     def load_conf(self, filename: str):
