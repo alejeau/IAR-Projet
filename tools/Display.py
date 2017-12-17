@@ -17,7 +17,9 @@ def display_and_save(gpi_outputs: {int: {int: float}}, export_name: str):
     # one empty list per channel
     ordonnees = [[] for i in range(len(channels))]
     # init the fig
-    plt.figure(1)
+    # plt.figure(1)
+    my_fig = plt.figure(figsize=(3*len(channels), 3), dpi=300)
+    # for channel, ax in channels, axes:
     for channel in channels:
         # max should be len, but we get an error because we do not have all of our points...
         sample_size = max(gpi_outputs[channel].keys())
@@ -31,7 +33,8 @@ def display_and_save(gpi_outputs: {int: {int: float}}, export_name: str):
         # rows, column, plot number as 13X (1 row, 3 columns, channel X)
         fig_id = 100 + len(channels) * 10 + channel + 1
         plt.subplot(fig_id)
-        plt.plot(abscisses, ordonnees[channel])
+        normalized_abcsisses = [a/1000.0 for a in abscisses]
+        plt.plot(normalized_abcsisses, ordonnees[channel])
 
     if export_name is not (None or ''):
         plt.savefig(export_name)
