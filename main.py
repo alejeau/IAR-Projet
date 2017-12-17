@@ -7,8 +7,8 @@ import tools.Archivist as Archivist
 import tools.Display as Display
 
 sim = None
-# model = 'dipm'
-model = 'scpm'
+model = 'dipm'
+# model = 'scpm'
 config = 'configs/'
 results = 'results/'
 export = 'img_export/'
@@ -39,4 +39,4 @@ print('keys: ' + str(keys))
 for k in keys:
     print(str(k) + ': ' + str(data['gpi_outputs'][k]))
 
-Display.display_and_save(data['gpi_outputs'], export)
+Display.display_and_save(data['gpi_outputs'], model, export)

@@ -4,6 +4,7 @@
 from tools import Tools as Tools
 import tools.Archivist as confLoader
 
+
 class SCPM:
     def __init__(self):
 
@@ -56,8 +57,8 @@ class SCPM:
     def get_theta_gpi(self) -> float:
         return self.theta_gpi
         
-    def set_dt(self, dt : float) -> float:
-        self.dt = dt;
+    def set_dt(self, dt: float):
+        self.dt = dt
 
     # StratiumD1
     def u_i_d1(self, y_c: float):

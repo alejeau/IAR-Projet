@@ -67,6 +67,7 @@ def config_sim1_generator():
 
     Archivist.store(config1, '../configs/sim1.p')
 
+
 def config_scpm1_generator():
     conf = {}
 
@@ -132,6 +133,7 @@ def config_sim2_generator():
     config1.update({'dt': dt})
 
     Archivist.store(config1, '../configs/sim2.p')
+
 
 config_sim1_generator()
 config_dipm1_generator()
