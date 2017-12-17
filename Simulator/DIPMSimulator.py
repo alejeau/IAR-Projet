@@ -7,10 +7,10 @@ import tools.Archivist as Archivist
 
 class DIPMSimulator:
     def __init__(self):
-        self.dipms = {float: DIPM.DIPM()}
+        self.dipms = {int: DIPM.DIPM()}
         self.config = None
         self.gpi_output = {float: {float: float}}
-        self.dt = 0.0
+        self.dt = 0.001
         self.old_stn_list = []
 
     def init_and_load_config(self, filename: str):
@@ -39,20 +39,20 @@ class DIPMSimulator:
 
         # main loop of the simulation
         for r in range(0, self.config['nb_of_runs']):
-            stn_list = []
-            for t in range(0, int(1/self.dt)):
+            for t in range(0, int(1/self.dt)+1):
+                stn_list = []
                 for channel in range(0, channels):
                     # compute y_stn output for each channel
-                    stn_list.append(self.dipms[channel].compute_d1_to_stn(salience[channel][r])['y_stn'])
+                    stn_list.append(self.dipms[channel].compute_d2_to_stn(salience[channel][r])['y_stn'])
 
                 for channel in range(0, channels):
                     # compute y_gpi output for each channel
-                    res = self.dipms[channel].compute_gpi(self.old_stn_list)
+                    res = self.dipms[channel].compute_gpi(salience[channel][r], self.old_stn_list)
                     self.old_stn_list = stn_list
 
                     # we store it
                     new = gpi_outputs.get(channel, {})
-                    new.update({r + r * t: res})
+                    new.update({t + r * 1000: res})
                     gpi_outputs.update({channel: new})
 
         # once the sim finished, store the results

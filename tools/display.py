@@ -19,13 +19,12 @@ def display_data(gpi_outputs: {int: {int: float}}):
         sample_size = max(gpi_outputs[channel].keys())
         scale = int(sample_size / 1000)
         # 1000 per plot max, so we pick only one value out of size/1000
-        print(sample_size)
-        print(scale)
-        abscisses = [i for i in range(0, sample_size, scale)]
+
+        abscisses = [i for i in range(0, sample_size+1, scale)]
         for i in abscisses:
             ordonnees[channel].append(gpi_outputs[channel][i])
 
-        # rows, column, plot number as 31X (3 columns, 1 row, channel X)
+        # rows, column, plot number as 13X (1 row, 3 columns, channel X)
         id = 100 + len(channels) * 10 + channel + 1
         plt.subplot(id)
         plt.plot(abscisses, ordonnees[channel])

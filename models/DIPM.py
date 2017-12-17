@@ -21,7 +21,7 @@ class DIPM:
         self.wsd2_gpe = 1.0
         self.wgpe_stn = 1.0
         self.wsd1_gpi = 1.0
-        self.stn_gpi = 1.0
+        self.wstn_gpi = 1.0
 
         # threshold
         self.theta_d1 = 0.2
@@ -90,7 +90,7 @@ class DIPM:
 
     # GPi
     def u_i_gpi(self, y_sd1: float, stn_list: [float]) -> float:
-        return (-self.wsd1_gpi) * y_sd1 + self.stn_gpi * sum(stn_list)
+        return (-self.wsd1_gpi) * y_sd1 + self.wstn_gpi * sum(stn_list)
 
     def y_i_gpi(self, a_i_gpi: float) -> float:
         return self.m * (a_i_gpi - self.theta_gpi) * Tools.heaviside_step_function(a_i_gpi - self.theta_gpi)
@@ -122,25 +122,23 @@ class DIPM:
         self.u_stn = self.u_i_stn(y_gpe)
         return self.y_stn
 
-    # assumes y_d1 has been computed
-    def compute_gpi(self, stn_list: [float]) -> float:
+    def compute_gpi(self, salience: float, stn_list: [float]) -> float:
         self.y_gpi = self.y_i_gpi(self.a_gpi)
         self.a_gpi = self.delta_a(self.a_gpi, self.u_gpi)
         self.u_gpi = self.u_i_gpi(self.y_d1, stn_list)
+        self.y_d1 = self.compute_d1(salience)
         return self.y_gpi
 
-    def compute_d1_to_stn(self, salience: float) -> {str: float}:
-        self.y_gpe = self.compute_gpe(self.y_d2)
+    def compute_d2_to_stn(self, salience: float) -> {str: float}:
         self.y_stn = self.compute_stn(self.y_gpe)
-        self.y_d1 = self.compute_d1(salience)
+        self.y_gpe = self.compute_gpe(self.y_d2)
         self.y_d2 = self.compute_d2(salience)
-
-        return {'y_d1': self.y_d1, 'y_d2': self.y_d2, 'y_gpe': self.y_gpe, 'y_stn': self.y_stn}
+        return {'y_d2': self.y_d2, 'y_gpe': self.y_gpe, 'y_stn': self.y_stn}
         
     def compute_d1_to_gpi(self, salience: float, stn_list: [float]) -> {str: float}:
-        vals = self.compute_d1_to_stn(salience)
-        self.y_gpi = self.compute_gpi(stn_list)
-        vals.update({'y_gpi': self.y_gpi})
+        self.y_gpi = self.compute_gpi(salience, stn_list)
+        vals = self.compute_d2_to_stn(salience)
+        vals.update({'y_gpi': self.y_gpi, 'y_d1': self.y_d1})
         return vals
 
     def load_conf(self, filename: str):
@@ -155,7 +153,7 @@ class DIPM:
         self.wsd2_gpe = conf['wsd2_gpe']
         self.wgpe_stn = conf['wgpe_stn']
         self.wsd1_gpi = conf['wsd1_gpi']
-        self.stn_gpi = conf['stn_gpi']
+        self.wstn_gpi = conf['stn_gpi']
         self.theta_d1 = conf['theta_d1']
         self.theta_d2 = conf['theta_d2']
         self.theta_gpe = conf['theta_gpe']
