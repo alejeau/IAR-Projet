@@ -9,11 +9,11 @@ class SCPM:
     def __init__(self):
 
         # activation
-        self.a_d1 = 0.2
-        self.a_d2 = 0.2
-        self.a_gpe = 0.2
-        self.a_stn = 0.2
-        self.a_gpi = 0.2
+        self.a_d1 = 0.0
+        self.a_d2 = 0.0
+        self.a_gpe = 0.0
+        self.a_stn = 0.0
+        self.a_gpi = 0.0
 
         # weights
         self.wcs1 = 1.0

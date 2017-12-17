@@ -45,16 +45,22 @@ def config_sim1_generator():
     dipms_conf = {
         0: None,
         1: None,
-        2: None
+        2: None,
+        3: None,
+        4: None,
+        5: None
     }
     nb_of_runs = 5
     time_interval = 1.0
-    channels = 3
+    channels = 6
     dt = 0.001
     salience = {
         0: [0.0, 0.4, 0.4, 0.6, 0.4, 0.4],
         1: [0.0, 0.0, 0.6, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs)]
+        2: [0.0 for i in range(0, nb_of_runs)],
+        3: [0.0 for i in range(0, nb_of_runs)],
+        4: [0.0 for i in range(0, nb_of_runs)],
+        5: [0.0 for i in range(0, nb_of_runs)]
     }
 
     config1.update({'name': name})
@@ -112,16 +118,22 @@ def config_sim2_generator():
     scpms_conf = {
         0: None,
         1: None,
-        2: None
+        2: None,
+        3: None,
+        4: None,
+        5: None
     }
     nb_of_runs = 5
     time_interval = 1.0
-    channels = 3
+    channels = 6
     dt = 0.001
     salience = {
         0: [0.0, 0.4, 0.4, 0.6, 0.4, 0.4],
         1: [0.0, 0.0, 0.6, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs)]
+        2: [0.0 for i in range(0, nb_of_runs)],
+        3: [0.0 for i in range(0, nb_of_runs)],
+        4: [0.0 for i in range(0, nb_of_runs)],
+        5: [0.0 for i in range(0, nb_of_runs)]
     }
 
     config1.update({'name': name})
