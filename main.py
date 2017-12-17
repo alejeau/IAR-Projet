@@ -4,20 +4,29 @@
 import Simulator.DIPMSimulator as DipmSim
 import Simulator.SCPMSimulator as ScpmSim
 import tools.Archivist as Archivist
-import tools.display as Display
+import tools.Display as Display
 
-# sim = DipmSim.DIPMSimulator()
-# sim.init_and_load_config('configs/sim1.p')
-# sim.run_sim('results/results_sim_1.p')
-#
-# data = Archivist.load('results/results_sim_1.p')
+sim = None
+# model = 'dipm'
+model = 'scpm'
+config = 'configs/'
+results = 'results/'
+export = 'img_export/'
 
-sim = ScpmSim.SCPMSimulator()
-sim.init_and_load_config('configs/sim2.p')
-sim.run_sim('results/results_sim_2.p')
+if model == 'dipm':
+    sim = DipmSim.DIPMSimulator()
+    config += 'sim1.p'
+    results += 'results_sim_1.p'
+    export += model + '_sim1'
+elif model == 'scpm':
+    sim = ScpmSim.SCPMSimulator()
+    config += 'sim2.p'
+    results += 'results_sim_2.p'
+    export += model + '_sim2'
 
-data = Archivist.load('results/results_sim_2.p')
-
+sim.init_and_load_config(config)
+sim.run_sim(results)
+data = Archivist.load(results)
 
 print('\nsalience:')
 keys = sorted(data['salience'].keys())
@@ -30,4 +39,4 @@ print('keys: ' + str(keys))
 for k in keys:
     print(str(k) + ': ' + str(data['gpi_outputs'][k]))
 
-Display.display_data(data['gpi_outputs'])
+Display.display_and_save(data['gpi_outputs'], export)
