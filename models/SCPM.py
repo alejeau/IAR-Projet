@@ -19,12 +19,12 @@ class SCPM:
         self.wcs1 = 1.0
         self.wcs2 = 1.0
         self.wsd2_gpe = 1.0
-        self.wstn_gpe = 1.0
         self.wc_stn = 1.0
         self.wgpe_stn = 1.0
         self.wsd1_gpi = 1.0
-        self.wstn_gpi = 1.0
-        self.wgpe_gpi = 0.3
+        self.wstn_gpe = 0.8
+        self.wstn_gpi = 0.8
+        self.wgpe_gpi = 0.4
 
         # threshold
         self.theta_d1 = 0.2
@@ -76,21 +76,21 @@ class SCPM:
 
     # GPe
     def u_i_gpe(self, y_d2: float, y_stn: list):
-        return (-self.wsd2_gpe) * y_d2 + self.wstn_gpe * sum(y_stn)
+        return ((-self.wsd2_gpe) * y_d2) + (self.wstn_gpe * sum(y_stn))
 
     def y_i_gpe(self, a_gpe: float):
         return self.m * (a_gpe - self.theta_gpe) * Tools.heaviside_step_function(a_gpe - self.theta_gpe)
 
     # STN
     def u_i_stn(self, y_c: float, y_gpe: float):
-        return self.wc_stn * y_c - self.wgpe_stn * y_gpe
+        return (self.wc_stn * y_c) - (self.wgpe_stn * y_gpe)
 
     def y_i_stn(self, a_stn: float):
         return self.m * (a_stn - self.theta_stn) * Tools.heaviside_step_function(a_stn - self.theta_stn)
 
     # GPi
     def u_i_gpi(self, y_d1: float, stn_list: list, y_gpe: float):
-        return (-self.wsd1_gpi) * y_d1 + self.wstn_gpi * sum(stn_list) - self.wgpe_gpi * y_gpe
+        return ((-self.wsd1_gpi) * y_d1) + (self.wstn_gpi * sum(stn_list)) - (self.wgpe_gpi * y_gpe)
 
     def y_i_gpi(self, a_gpi: float):
         return self.m * (a_gpi - self.theta_gpi) * Tools.heaviside_step_function(a_gpi - self.theta_gpi)
