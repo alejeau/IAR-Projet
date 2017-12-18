@@ -24,7 +24,7 @@ class SCPMSimulator:
             if scpms_conf[i] is not None:
                 scpm.load_conf(scpms_conf[i])
             scpm.set_dt(self.dt)
-            # add the DIPM
+            # add the SCPM
             self.scpms.update({i: scpm})
         self.old_stn_list = [0.0 for i in range(0, channels)]
 
@@ -42,18 +42,16 @@ class SCPMSimulator:
             for t in range(0, int(1/self.dt)+1):
                 stn_list = []
                 for channel in range(0, channels):
-                    # compute y_stn output for each channel
-                    stn_list.append(self.scpms[channel].compute_d2_to_stn(salience[channel][r], self.old_stn_list)['y_stn'])
-
-                for channel in range(0, channels):
-                    # compute y_gpi output for each channel
-                    res = self.scpms[channel].compute_gpi(salience[channel][r], self.old_stn_list)
-                    self.old_stn_list = stn_list
+                    values = self.scpms[channel].compute_d1_to_gpi(salience[channel][r], self.old_stn_list)
+                    stn_list.append(values['y_stn'])
+                    res = values['y_gpi']
 
                     # we store it
                     new = gpi_outputs.get(channel, {})
                     new.update({t + r * 1000: res})
                     gpi_outputs.update({channel: new})
+                # update the old list of stn values
+                self.old_stn_list = stn_list
 
         # once the sim finished, store the results
         simulation = {

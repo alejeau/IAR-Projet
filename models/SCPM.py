@@ -7,14 +7,6 @@ import tools.Archivist as confLoader
 
 class SCPM:
     def __init__(self):
-
-        # activation
-        self.a_d1 = 0.0
-        self.a_d2 = 0.0
-        self.a_gpe = 0.0
-        self.a_stn = 0.0
-        self.a_gpi = 0.0
-
         # weights
         self.wcs1 = 1.0
         self.wcs2 = 1.0
@@ -40,6 +32,13 @@ class SCPM:
         # time increment
         self.dt = 0.001
 
+        # activation
+        self.a_d1 = 0.0
+        self.a_d2 = 0.0
+        self.a_gpe = 0.0
+        self.a_stn = 0.0
+        self.a_gpi = 0.0
+
         # storage of u_xxx values
         self.u_d1 = 0.0
         self.u_d2 = 0.0
@@ -54,94 +53,116 @@ class SCPM:
         self.y_stn = 0.0
         self.y_gpi = 0.0
 
+        # old activation
+        self.old_a_d1 = 0.0
+        self.old_a_d2 = 0.0
+        self.old_a_gpe = 0.0
+        self.old_a_stn = 0.0
+        self.old_a_gpi = 0.0
+
+        # storage of old u_xxx values
+        self.old_u_d1 = 0.0
+        self.old_u_d2 = 0.0
+        self.old_u_gpe = 0.0
+        self.old_u_stn = 0.0
+        self.old_u_gpi = 0.0
+
+        # storage of old y_xxx values
+        self.old_y_d1 = 0.0
+        self.old_y_d2 = 0.0
+        self.old_y_gpe = 0.0
+        self.old_y_stn = 0.0
+        self.old_y_gpi = 0.0
+
     def get_theta_gpi(self) -> float:
         return self.theta_gpi
         
     def set_dt(self, dt: float):
         self.dt = dt
 
+    def output(self, a: float, theta: float) -> float:
+        return self.m * (a - theta) * Tools.heaviside_step_function(a - theta)
+
+    def delta_a(self, a: float, u: float) -> float:
+        return a - self.k * (a - u) * self.dt
+
     # StratiumD1
     def u_i_d1(self, y_c: float):
         return self.wcs1 * y_c
-
-    def y_i_d1(self, a_d1: float):
-        return self.m * (a_d1 - self.theta_d1) * Tools.heaviside_step_function(a_d1 - self.theta_d1)
 
     # StratiumD2
     def u_i_d2(self, y_c: float):
         return self.wcs2 * y_c
 
-    def y_i_d2(self, a_d2: float):
-        return self.m * (a_d2 - self.theta_d2) * Tools.heaviside_step_function(a_d2 - self.theta_d2)
-
     # GPe
     def u_i_gpe(self, y_d2: float, y_stn: list):
         return ((-self.wsd2_gpe) * y_d2) + (self.wstn_gpe * sum(y_stn))
-
-    def y_i_gpe(self, a_gpe: float):
-        return self.m * (a_gpe - self.theta_gpe) * Tools.heaviside_step_function(a_gpe - self.theta_gpe)
 
     # STN
     def u_i_stn(self, y_c: float, y_gpe: float):
         return (self.wc_stn * y_c) - (self.wgpe_stn * y_gpe)
 
-    def y_i_stn(self, a_stn: float):
-        return self.m * (a_stn - self.theta_stn) * Tools.heaviside_step_function(a_stn - self.theta_stn)
-
     # GPi
     def u_i_gpi(self, y_d1: float, stn_list: list, y_gpe: float):
         return ((-self.wsd1_gpi) * y_d1) + (self.wstn_gpi * sum(stn_list)) - (self.wgpe_gpi * y_gpe)
 
-    def y_i_gpi(self, a_gpi: float):
-        return self.m * (a_gpi - self.theta_gpi) * Tools.heaviside_step_function(a_gpi - self.theta_gpi)
-
-    def delta_a(self, a: float, u: float) -> float:
-        return a - self.k * (a - u) * self.dt
-
     def compute_d1(self, salience: float) -> float:
-        self.y_d1 = self.y_i_d1(self.a_d1)
-        self.a_d1 = self.delta_a(self.a_d1, self.u_d1)
         self.u_d1 = self.u_i_d1(salience)
+        self.a_d1 = self.delta_a(self.old_a_d1, self.old_u_d1)
+        self.y_d1 = self.output(self.old_a_d1, self.theta_d1)
         return self.y_d1
         
     def compute_d2(self, salience: float) -> float:
-        self.y_d2 = self.y_i_d2(self.a_d2)
-        self.a_d2 = self.delta_a(self.a_d2, self.u_d2)
         self.u_d2 = self.u_i_d2(salience)
+        self.a_d2 = self.delta_a(self.old_a_d2, self.old_u_d2)
+        self.y_d2 = self.output(self.old_a_d2, self.theta_d2)
         return self.y_d2
     
     # requires previous values of stn outputs (at t-1)
-    def compute_gpe(self, y_d2: float, prev_stn_list: [float]) -> float:
-        self.y_gpe = self.y_i_gpe(self.a_gpe)
-        self.a_gpe = self.delta_a(self.a_gpe, self.u_gpe)
-        self.u_gpe = self.u_i_gpe(y_d2, prev_stn_list)
+    def compute_gpe(self, y_d2: float, stn_list: [float]) -> float:
+        self.u_gpe = self.u_i_gpe(y_d2, stn_list)
+        self.a_gpe = self.delta_a(self.old_a_gpe, self.old_u_gpe)
+        self.y_gpe = self.output(self.old_a_gpe, self.theta_gpe)
         return self.y_gpe
 
     def compute_stn(self, salience: float, y_gpe: float) -> float:
-        self.y_stn = self.y_i_stn(self.a_stn)
-        self.a_stn = self.delta_a(self.a_stn, self.u_stn)
         self.u_stn = self.u_i_stn(salience, y_gpe)
+        self.a_stn = self.delta_a(self.old_a_stn, self.old_u_stn)
+        self.y_stn = self.output(self.old_a_stn, self.theta_stn)
         return self.y_stn
 
-    def compute_gpi(self, salience: float, stn_list: [float]) -> float:
-        self.y_gpi = self.y_i_gpi(self.a_gpi)
-        self.a_gpi = self.delta_a(self.a_gpi, self.u_gpi)
-        self.u_gpi = self.u_i_gpi(self.y_d1, stn_list, self.y_gpe)
-        self.y_d1  = self.compute_d1(salience)
+    def compute_gpi(self, y_d1: float, y_gpe: float, stn_list: [float]) -> float:
+        self.u_gpi = self.u_i_gpi(y_d1, stn_list, y_gpe)
+        self.a_gpi = self.delta_a(self.old_a_gpi, self.old_u_gpi)
+        self.y_gpi = self.output(self.old_a_gpi, self.theta_gpi)
         return self.y_gpi
-
-    def compute_d2_to_stn(self, salience: float, stn_list: [float]) -> {str: float}:
-        self.y_stn = self.compute_stn(salience, self.y_gpe)
-        self.y_gpe = self.compute_gpe(self.y_d2, stn_list)
-        self.y_d2 = self.compute_d2(salience)
-        return {'y_d2': self.y_d2, 'y_gpe': self.y_gpe, 'y_stn': self.y_stn}
         
     def compute_d1_to_gpi(self, salience: float, stn_list: [float]) -> {str: float}:
-        self.y_gpi = self.compute_gpi(salience, stn_list)
-        vals = self.compute_d2_to_stn(salience, stn_list)
-        vals.update({'y_gpi': self.y_gpi, 'y_d1': self.y_d1})
-        return vals
-        
+        self.compute_d1(salience)
+        self.compute_d2(salience)
+        self.compute_gpe(self.old_y_d2, stn_list)
+        self.compute_stn(salience, self.old_y_gpe)
+        self.compute_gpi(self.old_y_d1, self.old_y_gpe, stn_list)
+        self.store_old_values()
+        return {'y_d1': self.y_d1, 'y_d2': self.y_d2, 'y_gpe': self.y_gpe, 'y_stn': self.y_stn, 'y_gpi': self.y_gpi}
+
+    def store_old_values(self):
+        self.old_a_d1 = self.a_d1
+        self.old_a_d2 = self.a_d2
+        self.old_a_gpe = self.a_gpe
+        self.old_a_stn = self.a_stn
+        self.old_a_gpi = self.a_gpi
+        self.old_u_d1 = self.u_d1
+        self.old_u_d2 = self.u_d2
+        self.old_u_gpe = self.u_gpe
+        self.old_u_stn = self.u_stn
+        self.old_u_gpi = self.u_gpi
+        self.old_y_d1 = self.y_d1
+        self.old_y_d2 = self.y_d2
+        self.old_y_gpe = self.y_gpe
+        self.old_y_stn = self.y_stn
+        self.old_y_gpi = self.y_gpi
+
     def load_conf(self, filename: str):
         conf = confLoader.load(filename)
         self.a_d1 = conf['a_d1']
