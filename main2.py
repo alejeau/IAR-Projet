@@ -40,7 +40,43 @@ def conf_gen():
     conf.update({'k': 25.0})
     # time increment
     conf.update({'dt': 1.0})
+
+    conf.update({'y_d1': 0.0})
+    conf.update({'y_d2': 0.0})
+    conf.update({'y_gpe': 0.0})
+    conf.update({'y_stn': 0.0})
+    conf.update({'y_gpi': 0.0})
+
     return conf
+
+
+def config_dipm_exp1():
+    config = {}
+    name = 'dipm1'
+    model_conf = {
+        0: None,
+        1: None,
+        2: None
+    }
+    nb_of_runs = 5
+    time_interval = 1.0
+    channels = 3
+    dt = 0.001
+    salience = {
+        0: [0.0, 0.4, 0.4, 0.6, 0.4],
+        1: [0.0, 0.0, 0.6, 0.6, 0.6],
+        2: [0.0 for i in range(0, nb_of_runs)]
+    }
+
+    config.update({'name': name})
+    config.update({'model_conf': model_conf})
+    config.update({'nb_of_runs': nb_of_runs})
+    config.update({'time_interval': time_interval})
+    config.update({'channels': channels})
+    config.update({'salience': salience})
+    config.update({'dt': dt})
+
+    return config
 
 
 points = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
@@ -56,31 +92,15 @@ for wsd2_gpe in points:
                 conf.update({'wstn_gpi': wstn_gpi})
                 conf_name = 'dipm' + '_' + str(wsd2_gpe) + '_' + str(wgpe_stn) + '_' + str(wsd1_gpi) + '_' + str(wstn_gpi)
                 confs.append(conf_name)
-                # print('Writing ' + conf_name + '...')
-                # Archivist.store(conf, 'configs/' + conf_name + '.p')
+                sim_conf = config_dipm_exp1()
+                sim_conf.update({'model_conf': {0: conf, 1: conf, 2: conf}})
                 sim = DipmSim.DIPMSimulator()
-                config = 'configs/' + conf_name + '.p'
+                sim.init_from_config(sim_conf)
+                config = 'configs/test/' + conf_name + '.p'
                 results = 'results/' + conf_name + '.p'
-                export = 'img_export/' + conf_name
+                export = 'img_export/' + conf_name + '.png'
                 print('Executing ' + conf_name + '...')
-                sim.init_and_load_config(config)
                 sim.run_sim(results)
                 data = Archivist.load(results)
                 print('Saving ' + conf_name + '...')
                 Display.display_and_save(data['gpi_outputs'], 'dipm', export, [0, 1, 2])
-
-# for c in confs:
-#     sim = DipmSim.DIPMSimulator()
-#     config = 'configs/' + c + '.p'
-#     results = 'results/' + c + '.p'
-#     export = 'img_export/' + c
-#     print('Executing ' + c + '...')
-#     sim.init_and_load_config(config)
-#     sim.run_sim(results)
-#     data = Archivist.load(results)
-#     print('Saving ' + c + '...')
-#     Display.display_and_save(data['gpi_outputs'], 'dipm', export, [0, 1, 2])
-
-
-
-

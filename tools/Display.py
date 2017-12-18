@@ -43,3 +43,5 @@ def display_and_save(gpi_outputs: {int: {int: float}}, title: str, export_name: 
         plt.savefig(export_name)
     else:
         plt.show()
+
+    plt.close(fig)

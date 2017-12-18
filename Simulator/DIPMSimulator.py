@@ -28,6 +28,21 @@ class DIPMSimulator:
             self.dipms.update({i: dipm})
         self.old_stn_list = [0.0 for i in range(0, channels)]
 
+    def init_from_config(self, conf):
+        self.config = conf
+        channels = self.config['channels']
+        dipms_conf = self.config['model_conf']
+        self.dt = self.config['dt']
+        for i in range(0, channels):
+            dipm = DIPM.DIPM()
+            # if conf of weights and all, load and add
+            if dipms_conf[i] is not None:
+                dipm.load_conf(dipms_conf[i])
+            dipm.set_dt(self.dt)
+            # add the DIPM
+            self.dipms.update({i: dipm})
+        self.old_stn_list = [0.0 for i in range(0, channels)]
+
     def run_sim(self, result_file: str):
         channels = self.config['channels']
         salience = self.config['salience']
