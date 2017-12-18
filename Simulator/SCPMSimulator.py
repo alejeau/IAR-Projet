@@ -16,7 +16,7 @@ class SCPMSimulator:
     def init_and_load_config(self, filename: str):
         self.config = Archivist.load(filename)
         channels = self.config['channels']
-        scpms_conf = self.config['scpms_conf']
+        scpms_conf = self.config['model_conf']
         self.dt = self.config['dt']
         for i in range(0, channels):
             scpm = SCPM.SCPM()

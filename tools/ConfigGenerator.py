@@ -4,6 +4,64 @@
 import tools.Archivist as Archivist
 
 
+def config_dipm_exp1():
+    config1 = {}
+    name = 'dipm1'
+    model_conf = {
+        0: None,
+        1: None,
+        2: None
+    }
+    nb_of_runs = 5
+    time_interval = 1.0
+    channels = 3
+    dt = 0.001
+    salience = {
+        0: [0.0, 0.4, 0.4, 0.6, 0.4],
+        1: [0.0, 0.0, 0.6, 0.6, 0.6],
+        2: [0.0 for i in range(0, nb_of_runs)]
+    }
+
+    config1.update({'name': name})
+    config1.update({'model_conf': model_conf})
+    config1.update({'nb_of_runs': nb_of_runs})
+    config1.update({'time_interval': time_interval})
+    config1.update({'channels': channels})
+    config1.update({'salience': salience})
+    config1.update({'dt': dt})
+
+    Archivist.store(config1, '../configs/config_dipm_exp1.p')
+
+
+def config_scpm_exp1():
+    config1 = {}
+    name = 'scpm1'
+    model_conf = {
+        0: None,
+        1: None,
+        2: None
+    }
+    nb_of_runs = 5
+    time_interval = 1.0
+    channels = 3
+    dt = 0.001
+    salience = {
+        0: [0.0, 0.4, 0.4, 0.6, 0.4],
+        1: [0.0, 0.0, 0.6, 0.6, 0.6],
+        2: [0.0 for i in range(0, nb_of_runs)]
+    }
+
+    config1.update({'name': name})
+    config1.update({'model_conf': model_conf})
+    config1.update({'nb_of_runs': nb_of_runs})
+    config1.update({'time_interval': time_interval})
+    config1.update({'channels': channels})
+    config1.update({'salience': salience})
+    config1.update({'dt': dt})
+
+    Archivist.store(config1, '../configs/config_scpm_exp1.p')
+
+
 def config_dipm1_generator():
     conf = {}
 
@@ -37,41 +95,6 @@ def config_dipm1_generator():
     conf.update({'dt': 1.0})
 
     Archivist.store(conf, '../configs/dipm1.p')
-
-
-def config_sim1_generator():
-    config1 = {}
-    name = 'sim1'
-    dipms_conf = {
-        0: None,
-        1: None,
-        2: None,
-        3: None,
-        4: None,
-        5: None
-    }
-    nb_of_runs = 5
-    time_interval = 1.0
-    channels = 6
-    dt = 0.001
-    salience = {
-        0: [0.0, 0.4, 0.4, 0.6, 0.4],
-        1: [0.0, 0.0, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs)],
-        3: [0.0 for i in range(0, nb_of_runs)],
-        4: [0.0 for i in range(0, nb_of_runs)],
-        5: [0.0 for i in range(0, nb_of_runs)]
-    }
-
-    config1.update({'name': name})
-    config1.update({'dipms_conf': dipms_conf})
-    config1.update({'nb_of_runs': nb_of_runs})
-    config1.update({'time_interval': time_interval})
-    config1.update({'channels': channels})
-    config1.update({'salience': salience})
-    config1.update({'dt': dt})
-
-    Archivist.store(config1, '../configs/sim1.p')
 
 
 def config_scpm1_generator():
@@ -112,43 +135,5 @@ def config_scpm1_generator():
     Archivist.store(conf, '../configs/scpm1.p')
 
 
-def config_sim2_generator():
-    config1 = {}
-    name = 'sim2 '
-    scpms_conf = {
-        0: None,
-        1: None,
-        2: None,
-        3: None,
-        4: None,
-        5: None
-    }
-    nb_of_runs = 5
-    time_interval = 1.0
-    channels = 6
-    dt = 0.001
-    salience = {
-        0: [0.0, 0.4, 0.4, 0.6, 0.4],
-        1: [0.0, 0.0, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs)],
-        3: [0.0 for i in range(0, nb_of_runs)],
-        4: [0.0 for i in range(0, nb_of_runs)],
-        5: [0.0 for i in range(0, nb_of_runs)]
-    }
-
-    config1.update({'name': name})
-    config1.update({'scpms_conf': scpms_conf})
-    config1.update({'nb_of_runs': nb_of_runs})
-    config1.update({'time_interval': time_interval})
-    config1.update({'channels': channels})
-    config1.update({'salience': salience})
-    config1.update({'dt': dt})
-
-    Archivist.store(config1, '../configs/sim2.p')
-
-
-config_sim1_generator()
-config_dipm1_generator()
-
-config_sim2_generator()
-config_scpm1_generator()
+config_dipm_exp1()
+config_scpm_exp1()

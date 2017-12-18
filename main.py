@@ -8,35 +8,38 @@ import tools.Display as Display
 
 sim = None
 # model = 'dipm'
-model = 'scpm'
-config = 'configs/'
-results = 'results/'
-export = 'img_export/'
+# # model = 'scpm'
 
-if model == 'dipm':
-    sim = DipmSim.DIPMSimulator()
-    config += 'sim1.p'
-    results += 'results_sim_dipm.p'
-    export += model + '_sim'
-elif model == 'scpm':
-    sim = ScpmSim.SCPMSimulator()
-    config += 'sim2.p'
-    results += 'results_sim_scpm.p'
-    export += model + '_sim'
+models = ['dipm', 'scpm']
 
-sim.init_and_load_config(config)
-sim.run_sim(results)
-data = Archivist.load(results)
+for model in models:
+    config = 'configs/'
+    results = 'results/'
+    export = 'img_export/'
+    if model == 'dipm':
+        sim = DipmSim.DIPMSimulator()
+        config += 'config_dipm_exp1.p'
+        results += 'results_dipm_exp1.p'
+        export += model + '_exp1'
+    elif model == 'scpm':
+        sim = ScpmSim.SCPMSimulator()
+        config += 'config_scpm_exp1.p'
+        results += 'results_scpm_exp1.p'
+        export += model + '_exp1'
 
-print('\nsalience:')
-keys = sorted(data['salience'].keys())
-for k in keys:
-    print(str(k) + ': ' + str(data['salience'][k]))
+    sim.init_and_load_config(config)
+    sim.run_sim(results)
+    data = Archivist.load(results)
 
-print('\ngpi_outputs:')
-keys = sorted(data['gpi_outputs'].keys())
-print('keys: ' + str(keys))
-for k in keys:
-    print(str(k) + ': ' + str(data['gpi_outputs'][k]))
+    # print('\nsalience:')
+    # keys = sorted(data['salience'].keys())
+    # for k in keys:
+    #     print(str(k) + ': ' + str(data['salience'][k]))
+    #
+    # print('\ngpi_outputs:')
+    # keys = sorted(data['gpi_outputs'].keys())
+    # print('keys: ' + str(keys))
+    # for k in keys:
+    #     print(str(k) + ': ' + str(data['gpi_outputs'][k]))
 
-Display.display_and_save(data['gpi_outputs'], model, export, [0, 1, 2])
+    Display.display_and_save(data['gpi_outputs'], model, export, [0, 1, 2])

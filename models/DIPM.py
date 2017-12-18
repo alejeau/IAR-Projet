@@ -13,7 +13,7 @@ class DIPM:
         self.wsd2_gpe = 1.0
         self.wgpe_stn = 1.0
         self.wsd1_gpi = 1.0
-        self.wstn_gpi = 1.0
+        self.wstn_gpi = 0.4
 
         # threshold
         self.theta_d1 = 0.2
@@ -80,7 +80,7 @@ class DIPM:
     def output(self, a: float, theta: float) -> float:
         return self.m * (a - theta) * Tools.heaviside_step_function(a - theta)
 
-    def delta_a(self, a: float, u: float) -> float:
+    def a_plus_delta_a(self, a: float, u: float) -> float:
         return a - self.k * (a - u) * self.dt
 
     # StratiumD1
@@ -105,32 +105,32 @@ class DIPM:
 
     def compute_d1(self, salience: float) -> float:
         self.u_d1 = self.u_i_d1(salience)
-        self.a_d1 = self.delta_a(self.old_a_d1, self.old_u_d1)
+        self.a_d1 = self.a_plus_delta_a(self.old_a_d1, self.old_u_d1)
         self.y_d1 = self.output(self.old_a_d1, self.theta_d1)
         return self.y_d1
 
     def compute_d2(self, salience: float) -> float:
         self.u_d2 = self.u_i_d2(salience)
-        self.a_d2 = self.delta_a(self.old_a_d2, self.old_u_d2)
+        self.a_d2 = self.a_plus_delta_a(self.old_a_d2, self.old_u_d2)
         self.y_d2 = self.output(self.old_a_d2, self.theta_d2)
         return self.y_d2
 
     # requires previous values of stn outputs (at t-1)
     def compute_gpe(self, y_d2: float) -> float:
         self.u_gpe = self.u_i_gpe(y_d2)
-        self.a_gpe = self.delta_a(self.old_a_gpe, self.old_u_gpe)
+        self.a_gpe = self.a_plus_delta_a(self.old_a_gpe, self.old_u_gpe)
         self.y_gpe = self.output(self.old_a_gpe, self.theta_gpe)
         return self.y_gpe
 
     def compute_stn(self, y_gpe: float) -> float:
         self.u_stn = self.u_i_stn(y_gpe)
-        self.a_stn = self.delta_a(self.old_a_stn, self.old_u_stn)
+        self.a_stn = self.a_plus_delta_a(self.old_a_stn, self.old_u_stn)
         self.y_stn = self.output(self.old_a_stn, self.theta_stn)
         return self.y_stn
 
     def compute_gpi(self, y_d1: float, stn_list: [float]) -> float:
         self.u_gpi = self.u_i_gpi(y_d1, stn_list)
-        self.a_gpi = self.delta_a(self.old_a_gpi, self.old_u_gpi)
+        self.a_gpi = self.a_plus_delta_a(self.old_a_gpi, self.old_u_gpi)
         self.y_gpi = self.output(self.old_a_gpi, self.theta_gpi)
         return self.y_gpi
 

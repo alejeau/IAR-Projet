@@ -16,7 +16,7 @@ class DIPMSimulator:
     def init_and_load_config(self, filename: str):
         self.config = Archivist.load(filename)
         channels = self.config['channels']
-        dipms_conf = self.config['dipms_conf']
+        dipms_conf = self.config['model_conf']
         self.dt = self.config['dt']
         for i in range(0, channels):
             dipm = DIPM.DIPM()
