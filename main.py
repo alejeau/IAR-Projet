@@ -3,12 +3,14 @@
 
 import Simulator.DIPMSimulator as DipmSim
 import Simulator.SCPMSimulator as ScpmSim
+import Simulator.SCPM2Simulator as Scpm2Sim
 import tools.Archivist as Archivist
 import tools.Display as Display
 
 sim = None
 # model = 'dipm'
-model = 'scpm'
+# model = 'scpm'
+model = 'scpm2'
 config = 'configs/'
 results = 'results/'
 export = 'img_export/'
@@ -16,13 +18,18 @@ export = 'img_export/'
 if model == 'dipm':
     sim = DipmSim.DIPMSimulator()
     config += 'sim1.p'
-    results += 'results_sim_1.p'
-    export += model + '_sim1'
+    results += 'results_sim_dipm.p'
+    export += model + '_sim'
 elif model == 'scpm':
     sim = ScpmSim.SCPMSimulator()
     config += 'sim2.p'
-    results += 'results_sim_2.p'
-    export += model + '_sim2'
+    results += 'results_sim_scpm.p'
+    export += model + '_sim'
+elif model == 'scpm2':
+    sim = Scpm2Sim.SCPM2Simulator()
+    config += 'sim2.p'
+    results += 'results_sim_scpm2.p'
+    export += model + '_sim'
 
 sim.init_and_load_config(config)
 sim.run_sim(results)
