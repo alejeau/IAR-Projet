@@ -39,7 +39,7 @@ class SCPMSimulator:
 
         # main loop of the simulation
         for r in range(0, self.config['nb_of_runs']):
-            for t in range(0, int(1/self.dt)+1):
+            for t in range(0, int(1/self.dt)):
                 stn_list = []
                 for channel in range(0, channels):
                     values = self.scpms[channel].compute_d1_to_gpi(salience[channel][r], self.old_stn_list)

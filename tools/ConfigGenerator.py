@@ -55,12 +55,12 @@ def config_sim1_generator():
     channels = 6
     dt = 0.001
     salience = {
-        0: [0.0, 0.4, 0.4, 0.6, 0.4, 0.4],
-        1: [0.0, 0.0, 0.6, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs+1)],
-        3: [0.0 for i in range(0, nb_of_runs+1)],
-        4: [0.0 for i in range(0, nb_of_runs+1)],
-        5: [0.0 for i in range(0, nb_of_runs+1)]
+        0: [0.0, 0.4, 0.4, 0.6, 0.4],
+        1: [0.0, 0.0, 0.6, 0.6, 0.6],
+        2: [0.0 for i in range(0, nb_of_runs)],
+        3: [0.0 for i in range(0, nb_of_runs)],
+        4: [0.0 for i in range(0, nb_of_runs)],
+        5: [0.0 for i in range(0, nb_of_runs)]
     }
 
     config1.update({'name': name})
@@ -128,12 +128,12 @@ def config_sim2_generator():
     channels = 6
     dt = 0.001
     salience = {
-        0: [0.0, 0.4, 0.4, 0.6, 0.4, 0.4],
-        1: [0.0, 0.0, 0.6, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs+1)],
-        3: [0.0 for i in range(0, nb_of_runs+1)],
-        4: [0.0 for i in range(0, nb_of_runs+1)],
-        5: [0.0 for i in range(0, nb_of_runs+1)]
+        0: [0.0, 0.4, 0.4, 0.6, 0.4],
+        1: [0.0, 0.0, 0.6, 0.6, 0.6],
+        2: [0.0 for i in range(0, nb_of_runs)],
+        3: [0.0 for i in range(0, nb_of_runs)],
+        4: [0.0 for i in range(0, nb_of_runs)],
+        5: [0.0 for i in range(0, nb_of_runs)]
     }
 
     config1.update({'name': name})

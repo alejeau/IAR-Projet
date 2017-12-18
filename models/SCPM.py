@@ -87,23 +87,23 @@ class SCPM:
         return a - self.k * (a - u) * self.dt
 
     # StratiumD1
-    def u_i_d1(self, y_c: float):
+    def u_i_d1(self, y_c: float) -> float:
         return self.wcs1 * y_c
 
     # StratiumD2
-    def u_i_d2(self, y_c: float):
+    def u_i_d2(self, y_c: float) -> float:
         return self.wcs2 * y_c
 
     # GPe
-    def u_i_gpe(self, y_d2: float, y_stn: list):
+    def u_i_gpe(self, y_d2: float, y_stn: list) -> float:
         return ((-self.wsd2_gpe) * y_d2) + (self.wstn_gpe * sum(y_stn))
 
     # STN
-    def u_i_stn(self, y_c: float, y_gpe: float):
+    def u_i_stn(self, y_c: float, y_gpe: float) -> float:
         return (self.wc_stn * y_c) - (self.wgpe_stn * y_gpe)
 
     # GPi
-    def u_i_gpi(self, y_d1: float, stn_list: list, y_gpe: float):
+    def u_i_gpi(self, y_d1: float, stn_list: list, y_gpe: float) -> float:
         return ((-self.wsd1_gpi) * y_d1) + (self.wstn_gpi * sum(stn_list)) - (self.wgpe_gpi * y_gpe)
 
     def compute_d1(self, salience: float) -> float:
