@@ -80,7 +80,7 @@ def config_dipm_exp1():
 conf = conf_gen()
 # conf.update({'wcs1': 1.3})
 # conf.update({'wcs2': 1.3})
-conf.update({'wsd2_gpe': 0.35})
+conf.update({'wsd2_gpe': 0.4})
 # conf.update({'wgpe_stn': 1.0})
 # conf.update({'wsd1_gpi': 1.0})
 # conf.update({'stn_gpi': 1.0})
@@ -89,12 +89,13 @@ sim_conf = config_dipm_exp1()
 sim_conf.update({'model_conf': {0: conf, 1: conf, 2: conf}})
 sim = DipmSim.DIPMSimulator()
 sim.init_from_config(sim_conf)
-config = 'configs/sim2/' + conf_name + '.p'
-results = 'results/sim2/' + conf_name + '.p'
-export = 'img_export/sim2/' + conf_name + '.png'
+folder = 'sim2/'
+config = 'configs/' + folder + conf_name + '.p'
+results = 'results/' + folder + conf_name + '.p'
+export = 'img_export/' + folder + conf_name + '.png'
 print('Executing ' + conf_name + '...')
 sim.run_sim(results)
 data = Archivist.load(results)
 print('Saving ' + conf_name + '...')
 
-Display.display_and_save(data['gpi_outputs'], 'dipm', export, [0, 1, 2])
+Display.display_all_and_save(data['gpi_outputs'], 'dipm', export, [0, 1, 2], data['salience'], 0.05)

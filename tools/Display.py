@@ -46,7 +46,8 @@ def display_and_save(gpi_outputs: {int: {int: float}}, title: str, export_name: 
 
     plt.close(fig)
 
-def display_all_and_save(gpi_outputs: {int: {int: float}}, title: str, export_name: str, channels_to_display: [int], salience: {int: [float]}, selection_threshold: float):
+
+def display_all_and_save(gpi_outputs: {int: {int: float}}, title: str, export_name: str, channels_to_display: [int], saliences: {int: [float]}, selection_threshold: float):
     channels = sorted(gpi_outputs.keys())
     # one empty list per channel
     ordonnees = [[] for i in range(len(channels_to_display))]
@@ -60,8 +61,10 @@ def display_all_and_save(gpi_outputs: {int: {int: float}}, title: str, export_na
             # 1000 per plot max, so we pick only one value out of size/1000
 
             abscisses = [i for i in range(0, sample_size + 1, scale)]
+            salience = []
             for i in abscisses:
                 ordonnees[channel].append(gpi_outputs[channel][i])
+                salience.append(saliences[channel][int(i / 1000)])
 
             # rows, column, plot number as 13X (1 row, 3 columns, channel X)
             fig_id = 100 + len(channels_to_display) * 10 + channel + 1
@@ -72,11 +75,7 @@ def display_all_and_save(gpi_outputs: {int: {int: float}}, title: str, export_na
             ax.set_xlim([0, 5])
             ax.set_ylim([0, 1])
             plt.plot(normalized_abcsisses, ordonnees[channel])
-            sal = []
-            for s in salience:
-                for t in range(0, 1000):
-                    sal.append(s)
-            lines = plt.plot(normalized_abcsisses, sal)
+            lines = plt.plot(normalized_abcsisses, salience)
             plt.setp(lines, color='red')
             lines = plt.plot([0.0, 5.0], [selection_threshold, selection_threshold])
             plt.setp(lines, color='green')
