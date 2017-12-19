@@ -8,8 +8,8 @@ import tools.Archivist as confLoader
 class DIPM:
     def __init__(self):
         # weights
-        self.wcs1 = 1.0
-        self.wcs2 = 1.0
+        self.wcs1 = 1.3
+        self.wcs2 = 1.3
         self.wsd2_gpe = 0.4
         self.wgpe_stn = 1.0
         self.wsd1_gpi = 1.0

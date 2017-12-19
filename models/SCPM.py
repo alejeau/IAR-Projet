@@ -8,8 +8,8 @@ import tools.Archivist as confLoader
 class SCPM:
     def __init__(self):
         # weights
-        self.wcs1 = 1.0
-        self.wcs2 = 1.0
+        self.wcs1 = 1.15
+        self.wcs2 = 1.15
         self.wsd2_gpe = 0.4
         self.wc_stn = 1.0
         self.wgpe_stn = 1.0
