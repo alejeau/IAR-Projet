@@ -10,7 +10,7 @@ class SCPM:
         # weights
         self.wcs1 = 1.0
         self.wcs2 = 1.0
-        self.wsd2_gpe = 1.0
+        self.wsd2_gpe = 0.4
         self.wc_stn = 1.0
         self.wgpe_stn = 1.0
         self.wsd1_gpi = 1.0

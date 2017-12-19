@@ -10,10 +10,10 @@ class DIPM:
         # weights
         self.wcs1 = 1.0
         self.wcs2 = 1.0
-        self.wsd2_gpe = 1.0
+        self.wsd2_gpe = 0.4
         self.wgpe_stn = 1.0
         self.wsd1_gpi = 1.0
-        self.wstn_gpi = 0.4
+        self.wstn_gpi = 1.0
 
         # threshold
         self.theta_d1 = 0.2

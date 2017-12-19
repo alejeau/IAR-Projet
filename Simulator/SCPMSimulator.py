@@ -48,7 +48,7 @@ class SCPMSimulator:
 
                     # we store it
                     new = gpi_outputs.get(channel, {})
-                    new.update({t + r * 1000: res})
+                    new.update({t + r * int(1/self.dt): res})
                     gpi_outputs.update({channel: new})
                 # update the old list of stn values
                 self.old_stn_list = stn_list

@@ -42,4 +42,4 @@ for model in models:
     # for k in keys:
     #     print(str(k) + ': ' + str(data['gpi_outputs'][k]))
 
-    Display.display_and_save(data['gpi_outputs'], model, export, [0, 1, 2])
+    Display.display_all_and_save(data['gpi_outputs'], model, export, [0, 1, 2], data['salience'], 0.05)
