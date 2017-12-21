@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 # -*-coding: utf-8 -*
 
-import tools.Archivist as Archivist
-
 
 def config_dipm_exp1():
     conf = {}
@@ -60,7 +58,3 @@ def config_scpm_exp1():
     conf.update({'dt': dt})
 
     return conf
-
-
-Archivist.store(config_dipm_exp1(), '../../configs/config_dipm_exp1.p')
-Archivist.store(config_scpm_exp1(), '../../configs/config_scpm_exp1.p')

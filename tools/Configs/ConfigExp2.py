@@ -1,15 +1,16 @@
 #!/usr/bin/python3
 # -*-coding: utf-8 -*
 
-import tools.Archivist as Archivist
+import tools.Configs.Models as ModelConf
 
 
 def config_dipm_exp2() -> {}:
     conf = {}
     name = 'dipm2'
+    basic_conf = ModelConf.get_dipm_base_generator()
     model_conf = {
-        0: None,
-        1: None,
+        0: basic_conf,
+        1: basic_conf,
     }
     salience = {
         0: [0.0, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0],
@@ -34,9 +35,10 @@ def config_dipm_exp2() -> {}:
 def config_scpm_exp2() -> {}:
     conf = {}
     name = 'scpm2'
+    basic_conf = ModelConf.get_scpm_base_generator()
     model_conf = {
-        0: None,
-        1: None,
+        0: basic_conf,
+        1: basic_conf,
     }
     salience = {
         0: [0.0, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0],
@@ -56,7 +58,3 @@ def config_scpm_exp2() -> {}:
     conf.update({'dt': dt})
 
     return conf
-
-
-Archivist.store(config_dipm_exp2(), '../../configs/config_dipm_exp2.p')
-Archivist.store(config_scpm_exp2(), '../../configs/config_scpm_exp2.p')

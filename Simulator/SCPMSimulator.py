@@ -14,7 +14,10 @@ class SCPMSimulator:
         self.old_stn_list = []
 
     def init_and_load_config(self, filename: str):
-        self.config = Archivist.load(filename)
+        self.init_with_config(Archivist.load(filename))
+
+    def init_with_config(self, conf):
+        self.config = conf
         channels = self.config['channels']
         scpms_conf = self.config['model_conf']
         self.dt = self.config['dt']

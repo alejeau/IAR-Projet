@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 # -*-coding: utf-8 -*
 
-import tools.Archivist as Archivist
-
 
 def get_dipm_base_generator():
     conf = {}
@@ -75,7 +73,3 @@ def get_scpm_base_generator():
     conf.update({'a_gpi': 0.0})
 
     return conf
-
-
-Archivist.store(get_dipm_base_generator(), '../../configs/dipm_base.p')
-Archivist.store(get_scpm_base_generator(), '../../configs/scpm_base.p')
