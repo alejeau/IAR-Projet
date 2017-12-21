@@ -163,13 +163,7 @@ class SCPM:
         self.old_y_stn = self.y_stn
         self.old_y_gpi = self.y_gpi
 
-    def load_conf(self, filename: str):
-        conf = confLoader.load(filename)
-        self.a_d1 = conf['a_d1']
-        self.a_d2 = conf['a_d2']
-        self.a_gpe = conf['a_gpe']
-        self.a_stn = conf['a_stn']
-        self.a_gpi = conf['a_gpi']
+    def load_conf(self, conf):
         self.wcs1 = conf['wcs1']
         self.wcs2 = conf['wcs2']
         self.wsd2_gpe = conf['wsd2_gpe']
@@ -187,8 +181,33 @@ class SCPM:
         self.m = conf['m']
         self.k = conf['k']
         self.dt = conf['dt']
-        self.y_d1 = conf['y_d1']
-        self.y_d2 = conf['y_d2']
-        self.y_gpe = conf['y_gpe']
-        self.y_stn = conf['y_stn']
-        self.y_gpi = conf['y_gpi']
+        self.a_d1 = conf['a_d1']
+        self.a_d2 = conf['a_d2']
+        self.a_gpe = conf['a_gpe']
+        self.a_stn = conf['a_stn']
+        self.a_gpi = conf['a_gpi']
+
+    def load_conf_from_file(self, filename: str):
+        conf = confLoader.load(filename)
+        self.wcs1 = conf['wcs1']
+        self.wcs2 = conf['wcs2']
+        self.wsd2_gpe = conf['wsd2_gpe']
+        self.wstn_gpe = conf['wstn_gpe']
+        self.wc_stn = conf['wc_stn']
+        self.wgpe_stn = conf['wgpe_stn']
+        self.wsd1_gpi = conf['wsd1_gpi']
+        self.wstn_gpi = conf['stn_gpi']
+        self.wgpe_gpi = conf['wgpe_gpi']
+        self.theta_d1 = conf['theta_d1']
+        self.theta_d2 = conf['theta_d2']
+        self.theta_gpe = conf['theta_gpe']
+        self.theta_stn = conf['theta_stn']
+        self.theta_gpi = conf['theta_gpi']
+        self.m = conf['m']
+        self.k = conf['k']
+        self.dt = conf['dt']
+        self.a_d1 = conf['a_d1']
+        self.a_d2 = conf['a_d2']
+        self.a_gpe = conf['a_gpe']
+        self.a_stn = conf['a_stn']
+        self.a_gpi = conf['a_gpi']
