@@ -30,11 +30,11 @@ class DIPM:
         self.dt = 0.001
 
         # activation
-        self.a_d1 = 0.2
-        self.a_d2 = 0.2
-        self.a_gpe = 0.2
-        self.a_stn = 0.2
-        self.a_gpi = 0.2
+        self.a_d1 = 0.0
+        self.a_d2 = 0.0
+        self.a_gpe = 0.0
+        self.a_stn = 0.0
+        self.a_gpi = 0.0
 
         # storage of u_xxx values
         self.u_d1 = 0.0
