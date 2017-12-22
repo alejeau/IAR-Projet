@@ -51,7 +51,7 @@ def analyze_results():
 
     models = ['dipm', 'scpm']
 
-    # model_res: {Model: {sim_number {channel: {salience: value}}}}
+    # model_res: {Model: {sim_number {channel: {salience: [value]}}}}
     model_res = {}
     for model in models:
         for sim_number in range(0, 121):
@@ -74,7 +74,7 @@ def analyze_results():
             val.update({sim_number: channel_res})
             model_res.update({model: val})
 
-    # model_res: {Model: {sim_number {channel: {salience: value}}}}
+    # model_res: {Model: {sim_number {channel: {salience: [value]}}}}
     # model_res to compute to results
     pp = pprint.PrettyPrinter(indent=0)
     pp.pprint(model_res)
