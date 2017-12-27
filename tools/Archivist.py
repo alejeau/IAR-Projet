@@ -2,12 +2,21 @@
 # -*-coding: utf-8 -*
 
 import pickle
+import pprint
 
 
 def store(data: dict, file_name: str):
     # Using pickle's serialization to keep int keys as int
     with open(file_name, 'wb') as results_file:
         pickle.dump(data, results_file)
+    results_file.close()
+
+
+def pretty_store(data: dict, file_name: str):
+    pp = pprint.PrettyPrinter(indent=0)
+    text = pp.pformat(data)
+    with open(file_name, 'w') as results_file:
+        results_file.write(text)
     results_file.close()
 
 

@@ -6,7 +6,6 @@ import Simulator.SCPMSimulator as ScpmSim
 import tools.Archivist as Archivist
 import tools.Display as Display
 import tools.Configs.ConfigExp2 as Config
-import pprint
 
 
 def normalized_number(size: int, number: int) -> str:
@@ -44,7 +43,8 @@ def run_sims():
 
 def analyze_results():
     # result: {Model: {channel: {index: value}}}
-    results = {str: {int: {float: float}}}
+    # results = {str: {int: {float: float}}}
+    results = {}
     channels = Config.config_scpm_exp2()['channels']
     salience = Config.config_scpm_exp2()['salience']
     dt = Config.config_scpm_exp2()['dt']
@@ -74,14 +74,53 @@ def analyze_results():
             val.update({sim_number: channel_res})
             model_res.update({model: val})
 
-    # model_res: {Model: {sim_number {channel: {salience: [value]}}}}
-    # model_res to compute to results
-    pp = pprint.PrettyPrinter(indent=0)
-    pp.pprint(model_res)
+    Archivist.pretty_store(model_res, 'results/model_res.txt')
+
+    res_tmp = {}
+    for model in models:
+        chan_tmp = {}
+        sal_tmp = {}
+        for exp in model_res[model]:
+            for channel in model_res[model][exp]:
+                for sal in model_res[model][exp][channel]:
+                    tmp = sal_tmp.get(sal, [])
+                    for value in model_res[model][exp][channel][sal]:
+                        tmp.append(value)
+                    sal_tmp.update({sal: tmp})
+                chan_tmp.update({channel: sal_tmp})
+            res_tmp.update({model: chan_tmp})
+
+    Archivist.pretty_store(res_tmp, 'results/res_tmp.txt')
+
+    for model in models:
+        chan = results.get(model, {})
+        for channel in res_tmp[model]:
+            sal = chan.get(channel, {})
+            for s in res_tmp[model][channel]:
+                res = sum(res_tmp[model][channel][s]) / len(res_tmp[model][channel][s])
+                sal.update({s: res})
+            chan.update({channel: sal})
+        results.update({model: chan})
+
+    Archivist.pretty_store(results, 'results/results.txt')
+
+    return results
+
+
+def display_curves(results):
+    models = ['dipm', 'scpm']
+    channels = Config.config_scpm_exp2()['channels']
+    salience = Config.config_scpm_exp2()['salience']
+
+    for model in results.keys():
+        title = str(model) + ' exp2'
+        export_name = str(model) + '_exp2'
+        Display.save_simple(results[model], title, 'img_export/exp2/' + export_name)
 
 
 def main():
-    analyze_results()
+    results = analyze_results()
+    display_curves(results)
 
     # # Before launching data saving as images, we need the tools to analyze the outputs and generate the right map
     # data = Archivist.load(results)
