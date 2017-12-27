@@ -108,10 +108,6 @@ def analyze_results():
 
 
 def display_curves(results):
-    models = ['dipm', 'scpm']
-    channels = Config.config_scpm_exp2()['channels']
-    salience = Config.config_scpm_exp2()['salience']
-
     for model in results.keys():
         title = str(model) + ' exp2'
         export_name = str(model) + '_exp2'
