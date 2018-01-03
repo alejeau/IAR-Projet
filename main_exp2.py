@@ -140,7 +140,7 @@ def display_curves(results):
         Display.save_simple(results[model], title, 'img_export/exp2/' + export_name)
 
 
-def exp2(model: str, improved_sim: bool):
+def exp2(model: str, improved_sim: bool, export_name: str):
     results = analyze_results(improved_sim)
     display_curves(results)
 
@@ -149,7 +149,7 @@ def exp2(model: str, improved_sim: bool):
         matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.05)
     elif model is 'scpm':
         matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.05)
-    Display.save_abilities_figure(matrix, '', '')
+    Display.save_abilities_figure(matrix, '', export_name)
 
 
 def nice_one():
@@ -168,12 +168,12 @@ def nice_one():
 
 def main():
     # run_sims()
-    run_improved_sims()
+    # run_improved_sims()
     # nice_one()
     # exp2('dipm', improved_sim=False)
     # exp2('scpm', improved_sim=False)
-    # exp2('dipm', improved_sim=True)
-    # exp2('scpm', improved_sim=True)
+    exp2('dipm', improved_sim=True, export_name="img_export/exp2/dipm_improved_abilities_matrix.png")
+    exp2('scpm', improved_sim=True, export_name="img_export/exp2/scpm_improved_abilities_matrix.png")
 
 
 main()

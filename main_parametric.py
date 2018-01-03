@@ -5,29 +5,31 @@ import Simulator.DIPMSimulator as DipmSim
 import Simulator.SCPMSimulator as ScpmSim
 import tools.Archivist as Archivist
 import tools.Display as Display
+import tools.Configs.ConfigExp2 as Config
 
 sim = None
 # model = 'dipm'
 # model = 'scpm'
 
 models = ['dipm', 'scpm']
+improved_sim = True
 
 for model in models:
-    config = 'configs/'
+    config = None
     results = 'results/'
     export = 'img_export/'
+
     if model == 'dipm':
         sim = DipmSim.DIPMSimulator()
-        config += 'config_dipm_exp2.p'
-        results += 'results_dipm_exp2.p'
-        export += model + '_exp2'
+        config = Config.improved_config_dipm_exp2()
     elif model == 'scpm':
-        sim = ScpmSim.SCPMSimulator()
-        config += 'config_scpm_exp2.p'
-        results += 'results_scpm_exp1.p'
-        export += model + '_exp2'
+        sim = DipmSim.DIPMSimulator()
+        config = Config.improved_config_scpm_exp2()
 
-    sim.init_and_load_config(config)
+    results += 'results_improved_' + model + '_exp2.p'
+    export += 'improved_' + model + '_exp2'
+
+    sim.init_with_config(config)
     sim.run_sim(results)
     data = Archivist.load(results)
 

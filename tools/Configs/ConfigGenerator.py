@@ -11,7 +11,9 @@ class ConfigGenerator:
     @staticmethod
     def generate_models():
         Archivist.store(Models.get_dipm_base_generator(), '../../configs/dipm_base.p')
+        Archivist.store(Models.get_dipm_improved_generator(), '../../configs/dipm_improved.p')
         Archivist.store(Models.get_scpm_base_generator(), '../../configs/scpm_base.p')
+        Archivist.store(Models.get_scpm_improved_generator(), '../../configs/scpm_improved.p')
 
     @staticmethod
     def generate_config_exp1():
@@ -21,7 +23,9 @@ class ConfigGenerator:
     @staticmethod
     def generate_config_exp2():
         Archivist.store(ConfigExp2.config_dipm_exp2(), '../../configs/config_dipm_exp2.p')
+        Archivist.store(ConfigExp2.improved_config_dipm_exp2(), '../../configs/config_improved_dipm_exp2.p')
         Archivist.store(ConfigExp2.config_scpm_exp2(), '../../configs/config_scpm_exp2.p')
+        Archivist.store(ConfigExp2.improved_config_scpm_exp2(), '../../configs/config_improved_scpm_exp2.p')
 
     @staticmethod
     def generate_all():
