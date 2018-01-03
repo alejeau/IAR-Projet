@@ -168,8 +168,8 @@ def nice_one():
 
 def main():
     # run_sims()
-    # run_improved_sims()
-    nice_one()
+    run_improved_sims()
+    # nice_one()
     # exp2('dipm', improved_sim=False)
     # exp2('scpm', improved_sim=False)
     # exp2('dipm', improved_sim=True)
