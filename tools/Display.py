@@ -2,6 +2,7 @@
 # -*-coding: utf-8 -*
 
 import matplotlib.pyplot as plt
+import models.AbilitiesMatrix as AbilitiesMatrix
 
 
 def load_file():
@@ -166,3 +167,7 @@ def flexible_display_or_save(gpi_outputs: {int: {int or float: float}},
         plt.show()
 
     plt.close(fig)
+
+
+def save_abilities_figure(abilities_matrix: AbilitiesMatrix):
+    pass

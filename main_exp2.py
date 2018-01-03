@@ -6,6 +6,7 @@ import Simulator.SCPMSimulator as ScpmSim
 import tools.Archivist as Archivist
 import tools.Display as Display
 import tools.Configs.ConfigExp2 as Config
+import models.AbilitiesMatrix as AbilitiesMatrix
 
 
 def normalized_number(size: int, number: int) -> str:
@@ -116,7 +117,13 @@ def display_curves(results):
 
 def main():
     results = analyze_results()
-    display_curves(results)
+    # display_curves(results)
+    dipm_matrix = AbilitiesMatrix.AbilitiesMatrix()
+    dipm_matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.05)
+    dipm_matrix.normal_print()
+
+    # scpm_matrix = AbilitiesMatrix.AbilitiesMatrix()
+    # scpm_matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.05)
 
     # # Before launching data saving as images, we need the tools to analyze the outputs and generate the right map
     # data = Archivist.load(results)
