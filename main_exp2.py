@@ -116,14 +116,27 @@ def display_curves(results):
 
 
 def main():
-    results = analyze_results()
+    # results = analyze_results()
     # display_curves(results)
-    dipm_matrix = AbilitiesMatrix.AbilitiesMatrix()
-    dipm_matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.05)
-    dipm_matrix.normal_print()
+    # dipm_matrix = AbilitiesMatrix.AbilitiesMatrix()
+    # dipm_matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.25)
+    # dipm_matrix.normal_print()
 
     # scpm_matrix = AbilitiesMatrix.AbilitiesMatrix()
-    # scpm_matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.05)
+    # # scpm_matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.13)
+    # scpm_matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.12)
+    # scpm_matrix.normal_print()
+
+    values1 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.4, 0.0]
+    values2 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
+    chan1 = {}
+    chan2 = {}
+    for i in range(len(values1)):
+        chan1.update({i: values1[i]})
+        chan2.update({i: values2[i]})
+    matrix = AbilitiesMatrix.AbilitiesMatrix()
+    matrix.generate_matrix(chan1, chan2, 0.3)
+    matrix.normal_print()
 
     # # Before launching data saving as images, we need the tools to analyze the outputs and generate the right map
     # data = Archivist.load(results)

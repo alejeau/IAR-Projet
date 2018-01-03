@@ -22,12 +22,16 @@ class AbilitiesMatrix:
         self.threshold = threshold
         self.x_keys = sorted(channel1.keys())
         print('self.x_keys: ' + str(self.x_keys))
+        # tmp = [channel1[k] for k in self.x_keys]
+        # print('Channel1: ' + str(tmp))
         self.x_len = len(self.x_keys)
         self.y_keys = sorted(channel2.keys())
         print('self.y_keys: ' + str(self.y_keys))
+        # tmp = [channel2[k] for k in self.y_keys]
+        # print('Channel2: ' + str(tmp))
         self.y_len = len(self.y_keys)
 
-        self.matrix = [[Abilities.DEFAULT] * self.y_len for i in range(self.x_len)]
+        self.matrix = [[Abilities.NO_SELECTION] * self.y_len for i in range(self.x_len)]
 
         i = 0
         for k in self.x_keys:
@@ -44,20 +48,23 @@ class AbilitiesMatrix:
         for x in self.x_keys:
             i = self.x_keys_map[x]
             for y in self.y_keys:
-                j = self.y_keys_map[x]
-                value = Abilities.SELECTION
-                if channel1[x] >= threshold and channel2[y] >= threshold:
-                    value = Abilities.NO_SELECTION
-                elif channel1[x] < threshold and channel2[y] < threshold:
-                    value = Abilities.NO_SWITCHING
-                # There might be some switching from chan2 to chan1 but it's not explicitly detailed in the paper,
-                # so I have not included that.
-                elif channel2[y] < threshold <= channel1[x]:
-                    prev_x = self.reversed_x_keys_map[i-1]
-                    if channel1[prev_x] < threshold:
-                        value = Abilities.SWITCHING
+                j = self.y_keys_map[y]
+                if channel1[x] < threshold or channel2[y] < threshold:
+                    value = Abilities.SELECTION
+                    if channel1[x] < threshold <= channel2[y]:
+                        if j != 0:
+                            prev_y = self.reversed_y_keys_map[j-1]
+                            if channel2[prev_y] < threshold:
+                                value = Abilities.SWITCHING
+                    elif channel2[y] < threshold <= channel1[x]:
+                        if i != 0:
+                            prev_x = self.reversed_x_keys_map[i-1]
+                            if channel1[prev_x] < threshold:
+                                value = Abilities.SWITCHING
+                    elif channel1[x] < threshold and channel2[y] < threshold and i != 0 and j != 0:
+                        value = Abilities.NO_SWITCHING
 
-                self.matrix[i][j] = value
+                    self.matrix[i][j] = value
 
     def get_x_keys(self):
         return self.x_keys
@@ -69,7 +76,8 @@ class AbilitiesMatrix:
         return self.matrix[self.x_keys_map[x]][self.y_keys_map[y]]
 
     def normal_print(self):
-        print(self.matrix)
+        for x in self.matrix:
+            print(x)
 
     def pretty_print(self):
         pp = pprint.PrettyPrinter(indent=0)
