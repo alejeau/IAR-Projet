@@ -115,33 +115,36 @@ def display_curves(results):
         Display.save_simple(results[model], title, 'img_export/exp2/' + export_name)
 
 
-def main():
-    # results = analyze_results()
-    # display_curves(results)
-    # dipm_matrix = AbilitiesMatrix.AbilitiesMatrix()
-    # dipm_matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.25)
-    # dipm_matrix.normal_print()
+def exp2(model: str):
+    results = analyze_results()
+    display_curves(results)
 
-    # scpm_matrix = AbilitiesMatrix.AbilitiesMatrix()
-    # # scpm_matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.13)
-    # scpm_matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.12)
-    # scpm_matrix.normal_print()
+    matrix = AbilitiesMatrix.AbilitiesMatrix()
+    if model is 'dipm':
+        matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.05)
+    elif model is 'scpm':
+        matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.05)
+    Display.save_abilities_figure(matrix, '', '')
 
+
+def nice_one():
+    abscissa = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     values1 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.4, 0.0]
     values2 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
     chan1 = {}
     chan2 = {}
-    for i in range(len(values1)):
-        chan1.update({i: values1[i]})
-        chan2.update({i: values2[i]})
+    for i in range(len(abscissa)):
+        chan1.update({abscissa[i]: values1[i]})
+        chan2.update({abscissa[i]: values2[i]})
     matrix = AbilitiesMatrix.AbilitiesMatrix()
     matrix.generate_matrix(chan1, chan2, 0.3)
-    matrix.normal_print()
+    Display.save_abilities_figure(matrix, '', '')
 
-    # # Before launching data saving as images, we need the tools to analyze the outputs and generate the right map
-    # data = Archivist.load(results)
-    # export = 'img_export/' + model + '_exp2' + filename_ending
-    # Display.display_all_and_save(data['gpi_outputs'], model, export, [0, 1, 2], data['salience'], 0.05)
+
+def main():
+    nice_one()
+    # exp2('dipm')
+    # exp2('scpm')
 
 
 main()

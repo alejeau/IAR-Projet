@@ -21,14 +21,8 @@ class AbilitiesMatrix:
     def generate_matrix(self, channel1: {float: float}, channel2: {float: float}, threshold: float):
         self.threshold = threshold
         self.x_keys = sorted(channel1.keys())
-        print('self.x_keys: ' + str(self.x_keys))
-        # tmp = [channel1[k] for k in self.x_keys]
-        # print('Channel1: ' + str(tmp))
         self.x_len = len(self.x_keys)
         self.y_keys = sorted(channel2.keys())
-        print('self.y_keys: ' + str(self.y_keys))
-        # tmp = [channel2[k] for k in self.y_keys]
-        # print('Channel2: ' + str(tmp))
         self.y_len = len(self.y_keys)
 
         self.matrix = [[Abilities.NO_SELECTION] * self.y_len for i in range(self.x_len)]
@@ -72,8 +66,8 @@ class AbilitiesMatrix:
     def get_y_keys(self):
         return self.y_keys
 
-    def get(self, x: float, y: float):
-        return self.matrix[self.x_keys_map[x]][self.y_keys_map[y]]
+    def get_value(self, x_key: float, y_key: float):
+        return self.matrix[self.x_keys_map[x_key]][self.y_keys_map[y_key]]
 
     def normal_print(self):
         for x in self.matrix:

@@ -3,6 +3,7 @@
 
 import matplotlib.pyplot as plt
 import models.AbilitiesMatrix as AbilitiesMatrix
+from tools.Abilities import Abilities
 
 
 def load_file():
@@ -169,5 +170,49 @@ def flexible_display_or_save(gpi_outputs: {int: {int or float: float}},
     plt.close(fig)
 
 
-def save_abilities_figure(abilities_matrix: AbilitiesMatrix):
-    pass
+def save_abilities_figure(matrix: AbilitiesMatrix.AbilitiesMatrix, title: str, export_name: str):
+    x_no_selection = []
+    x_selection = []
+    x_no_switching = []
+    x_switching = []
+    y_no_selection = []
+    y_selection = []
+    y_no_switching = []
+    y_switching = []
+
+    x_keys = matrix.get_x_keys()
+    y_keys = matrix.get_y_keys()
+
+    fig = plt.figure()
+    for x in x_keys:
+        for y in y_keys:
+            value = matrix.get_value(x, y)
+            if value is Abilities.NO_SELECTION:
+                x_no_selection.append(x)
+                y_no_selection.append(y)
+            elif value is Abilities.SELECTION:
+                x_selection.append(x)
+                y_selection.append(y)
+            elif value is Abilities.NO_SWITCHING:
+                x_no_switching.append(x)
+                y_no_switching.append(y)
+            elif value is Abilities.SWITCHING:
+                x_switching.append(x)
+                y_switching.append(y)
+
+    # plt.scatter(x_no_selection, y_no_selection, marker='*', c='black')
+    # plt.scatter(x_selection, y_selection, marker='o', c='black')
+    # plt.scatter(x_no_switching, y_no_switching, marker='s', c='black')
+    # plt.scatter(x_switching, y_switching, marker='p', c='black')
+
+    plt.scatter(x_no_selection, y_no_selection, marker='*')
+    plt.scatter(x_selection, y_selection, marker='o')
+    plt.scatter(x_no_switching, y_no_switching, marker='s')
+    plt.scatter(x_switching, y_switching, marker='p')
+
+    if export_name is '':
+        plt.show()
+    else:
+        plt.savefig(export_name)
+
+    plt.close(fig)
