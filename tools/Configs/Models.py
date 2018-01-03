@@ -37,6 +37,13 @@ def get_dipm_base_generator():
     return conf
 
 
+def get_dipm_improved_generator():
+    conf = get_dipm_base_generator()
+    conf.update({'wcs1': 1.3})
+    conf.update({'wcs2': 1.3})
+    return conf
+
+
 def get_scpm_base_generator():
     conf = {}
 
@@ -72,4 +79,11 @@ def get_scpm_base_generator():
     conf.update({'a_stn': 0.0})
     conf.update({'a_gpi': 0.0})
 
+    return conf
+
+
+def get_scpm_improved_generator():
+    conf = get_dipm_base_generator()
+    conf.update({'wcs1': 1.15})
+    conf.update({'wcs2': 1.15})
     return conf

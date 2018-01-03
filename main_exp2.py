@@ -42,13 +42,37 @@ def run_sims():
             sim.run_sim(results)
 
 
-def analyze_results():
+def run_improved_sims():
+    sim = None
+    models = ['dipm', 'scpm']
+
+    for model in models:
+        if model == 'dipm':
+            conf = Config.improved_config_dipm_exp2()
+        else:
+            conf = Config.improved_config_scpm_exp2()
+
+        for i in range(0, 121):
+            if model == 'dipm':
+                sim = DipmSim.DIPMSimulator()
+            elif model == 'scpm':
+                sim = ScpmSim.SCPMSimulator()
+
+            filename_ending = normalized_number(3, i) + '.p'
+            results = 'results/exp2/' + 'results_improved_' + model + '_exp2_' + filename_ending
+
+            sim.init_with_config(conf)
+            sim.run_sim(results)
+
+
+def analyze_results(improved_sim: bool):
     # result: {Model: {channel: {index: value}}}
     # results = {str: {int: {float: float}}}
     results = {}
     channels = Config.config_scpm_exp2()['channels']
     salience = Config.config_scpm_exp2()['salience']
     dt = Config.config_scpm_exp2()['dt']
+    improved = 'improved' if improved_sim else ''
 
     models = ['dipm', 'scpm']
 
@@ -56,7 +80,8 @@ def analyze_results():
     model_res = {}
     for model in models:
         for sim_number in range(0, 121):
-            filename = 'results/exp2/' + 'results_' + model + '_exp2_' + normalized_number(3, sim_number) + '.p'
+            filename = 'results/exp2/' + 'results_' + improved + '_' + model + '_exp2_'\
+                       + normalized_number(3, sim_number) + '.p'
             data = Archivist.load(filename)
             gpi_outputs = data['gpi_outputs']
             channel_res = {}
@@ -115,8 +140,8 @@ def display_curves(results):
         Display.save_simple(results[model], title, 'img_export/exp2/' + export_name)
 
 
-def exp2(model: str):
-    results = analyze_results()
+def exp2(model: str, improved_sim: bool):
+    results = analyze_results(improved_sim)
     display_curves(results)
 
     matrix = AbilitiesMatrix.AbilitiesMatrix()
@@ -142,9 +167,13 @@ def nice_one():
 
 
 def main():
+    # run_sims()
+    # run_improved_sims()
     nice_one()
-    # exp2('dipm')
-    # exp2('scpm')
+    # exp2('dipm', improved_sim=False)
+    # exp2('scpm', improved_sim=False)
+    # exp2('dipm', improved_sim=True)
+    # exp2('scpm', improved_sim=True)
 
 
 main()

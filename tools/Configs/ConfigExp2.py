@@ -32,6 +32,12 @@ def config_dipm_exp2() -> {}:
     return conf
 
 
+def improved_config_dipm_exp2() -> {}:
+    conf = config_dipm_exp2()
+    conf.update({'basic_conf': ModelConf.get_dipm_improved_generator()})
+    return conf
+
+
 def config_scpm_exp2() -> {}:
     conf = {}
     name = 'scpm2'
@@ -57,4 +63,10 @@ def config_scpm_exp2() -> {}:
     conf.update({'salience': salience})
     conf.update({'dt': dt})
 
+    return conf
+
+
+def improved_config_scpm_exp2() -> {}:
+    conf = config_scpm_exp2()
+    conf.update({'basic_conf': ModelConf.get_scpm_improved_generator()})
     return conf
