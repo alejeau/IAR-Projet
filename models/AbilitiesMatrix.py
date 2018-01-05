@@ -45,15 +45,10 @@ class AbilitiesMatrix:
                 j = self.y_keys_map[y]
                 if channel1[x] < threshold or channel2[y] < threshold:
                     value = Abilities.SELECTION
-                    if channel1[x] < threshold <= channel2[y]:
-                        if j != 0:
-                            prev_y = self.reversed_y_keys_map[j-1]
-                            if channel2[prev_y] < threshold:
-                                value = Abilities.SWITCHING
-                    elif channel2[y] < threshold <= channel1[x]:
+                    if channel2[y] < threshold <= channel1[x]:
                         if i != 0:
                             prev_x = self.reversed_x_keys_map[i-1]
-                            if channel1[prev_x] < threshold:
+                            if channel2[prev_x] < threshold:
                                 value = Abilities.SWITCHING
                     elif channel1[x] < threshold and channel2[y] < threshold and i != 0 and j != 0:
                         value = Abilities.NO_SWITCHING

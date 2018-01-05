@@ -35,11 +35,14 @@ def run_sims():
             elif model == 'scpm':
                 sim = ScpmSim.SCPMSimulator()
 
-            filename_ending = normalized_number(3, i) + '.p'
-            results = 'results/exp2/' + 'results_' + model + '_exp2_' + filename_ending
+            exp = normalized_number(3, i)
+            results = 'results/exp2/' + 'results_' + model + '_exp2_' + exp + '.p'
 
             sim.init_with_config(conf)
             sim.run_sim(results)
+            # data = Archivist.load(results)
+            # export_file = 'img_export/exp2/multi/' + model + '_exp2_' + exp + '.png'
+            # Display.flexible_display_or_save(data['gpi_outputs'], model, export_file, [0, 1], data['salience'], 0.05)
 
 
 def run_improved_sims():
@@ -58,11 +61,14 @@ def run_improved_sims():
             elif model == 'scpm':
                 sim = ScpmSim.SCPMSimulator()
 
-            filename_ending = normalized_number(3, i) + '.p'
-            results = 'results/exp2/' + 'results_improved_' + model + '_exp2_' + filename_ending
+            exp = normalized_number(3, i)
+            results = 'results/exp2/' + 'results_improved_' + model + '_exp2_' + exp + '.p'
 
             sim.init_with_config(conf)
             sim.run_sim(results)
+            # data = Archivist.load(results)
+            # export_file = 'img_export/exp2/multi/improved_' + model + '_exp2_' + exp + '.png'
+            # Display.flexible_display_or_save(data['gpi_outputs'], model, export_file, [0, 1], data['salience'], 0.05)
 
 
 def analyze_results(improved_sim: bool):
@@ -72,7 +78,7 @@ def analyze_results(improved_sim: bool):
     channels = Config.config_scpm_exp2()['channels']
     salience = Config.config_scpm_exp2()['salience']
     dt = Config.config_scpm_exp2()['dt']
-    improved = 'improved' if improved_sim else ''
+    improved = 'improved_' if improved_sim else ''
 
     models = ['dipm', 'scpm']
 
@@ -80,7 +86,7 @@ def analyze_results(improved_sim: bool):
     model_res = {}
     for model in models:
         for sim_number in range(0, 121):
-            filename = 'results/exp2/' + 'results_' + improved + '_' + model + '_exp2_'\
+            filename = 'results/exp2/' + 'results_' + improved + model + '_exp2_'\
                        + normalized_number(3, sim_number) + '.p'
             data = Archivist.load(filename)
             gpi_outputs = data['gpi_outputs']
@@ -154,8 +160,8 @@ def exp2(model: str, improved_sim: bool, export_name: str):
 
 def nice_one():
     abscissa = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    values1 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.4, 0.0]
-    values2 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
+    values1 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.5, 0.0]
+    values2 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.4, 0.2, 0.1, 0.0]
     chan1 = {}
     chan2 = {}
     for i in range(len(abscissa)):
@@ -170,8 +176,8 @@ def main():
     # run_sims()
     # run_improved_sims()
     # nice_one()
-    # exp2('dipm', improved_sim=False)
-    # exp2('scpm', improved_sim=False)
+    exp2('dipm', improved_sim=False, export_name="img_export/exp2/dipm_abilities_matrix.png")
+    exp2('scpm', improved_sim=False, export_name="img_export/exp2/scpm_abilities_matrix.png")
     exp2('dipm', improved_sim=True, export_name="img_export/exp2/dipm_improved_abilities_matrix.png")
     exp2('scpm', improved_sim=True, export_name="img_export/exp2/scpm_improved_abilities_matrix.png")
 
