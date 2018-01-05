@@ -84,20 +84,20 @@ def analyze_results(improved_sim: bool):
 
     # model_res: {Model: {sim_number {channel: {salience: [value]}}}}
     model_res = {}
-    for model in models:
-        for sim_number in range(0, 121):
-            filename = 'results/exp2/' + 'results_' + improved + model + '_exp2_'\
-                       + normalized_number(3, sim_number) + '.p'
+    for model in models:  # for each model
+        for sim_number in range(0, 121):  # for each simulation
+            filename = 'results/exp2/' + 'results_' + improved + model + '_exp2_' + normalized_number(3, sim_number) + '.p'
             data = Archivist.load(filename)
             gpi_outputs = data['gpi_outputs']
             channel_res = {}
-            for channel in range(0, channels):
+            for channel in range(0, channels):  # for each channel
                 tmp = []
                 salience_res = {}
-                for s in range(0, len(salience[channel])):
-                    for i in range(0, int(1/dt)):
-                        tmp.append(gpi_outputs[channel][i + s * (1/dt)])
-                    avg = sum(tmp) / len(tmp)
+                for s in range(0, len(salience[channel])):  # for each salience 0.0, 0.1, ..., 1.0 of channel channel
+                    time_intervals = int(1/dt)
+                    for i in range(0, time_intervals):  # for each dt of salience s
+                        tmp.append(gpi_outputs[channel][i + s * time_intervals])  # append outputs of gpi to tmp
+                    avg = sum(tmp) / len(tmp)   # we average the whole interval
                     val = salience_res.get(salience[channel][s], [])
                     val.append(avg)
                     salience_res.update({salience[channel][s]: val})
@@ -107,6 +107,20 @@ def analyze_results(improved_sim: bool):
             model_res.update({model: val})
 
     Archivist.pretty_store(model_res, 'results/model_res.txt')
+
+    """ ********************************************************************************************************** """
+    """ ********************************************************************************************************** """
+    """ ********************************************************************************************************** """
+    """ ********************************************************************************************************** """
+    """ ********************************************************************************************************** """
+    """                                                                                                            """
+    """ ******* There's a problem in the functions below, they store the exact same thing on both channels ******* """
+    """                                                                                                            """
+    """ ********************************************************************************************************** """
+    """ ********************************************************************************************************** """
+    """ ********************************************************************************************************** """
+    """ ********************************************************************************************************** """
+    """ ********************************************************************************************************** """
 
     res_tmp = {}
     for model in models:
