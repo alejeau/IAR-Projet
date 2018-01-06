@@ -106,28 +106,14 @@ def analyze_results(improved_sim: bool):
             val.update({sim_number: channel_res})
             model_res.update({model: val})
 
-    Archivist.pretty_store(model_res, 'results/model_res.txt')
-
-    """ ********************************************************************************************************** """
-    """ ********************************************************************************************************** """
-    """ ********************************************************************************************************** """
-    """ ********************************************************************************************************** """
-    """ ********************************************************************************************************** """
-    """                                                                                                            """
-    """ ******* There's a problem in the functions below, they store the exact same thing on both channels ******* """
-    """                                                                                                            """
-    """ ********************************************************************************************************** """
-    """ ********************************************************************************************************** """
-    """ ********************************************************************************************************** """
-    """ ********************************************************************************************************** """
-    """ ********************************************************************************************************** """
+    # Archivist.pretty_store(model_res, 'results/model_res.txt')
 
     res_tmp = {}
     for model in models:
         chan_tmp = {}
-        sal_tmp = {}
         for exp in model_res[model]:
             for channel in model_res[model][exp]:
+                sal_tmp = {}
                 for sal in model_res[model][exp][channel]:
                     tmp = sal_tmp.get(sal, [])
                     for value in model_res[model][exp][channel][sal]:
@@ -136,7 +122,7 @@ def analyze_results(improved_sim: bool):
                 chan_tmp.update({channel: sal_tmp})
             res_tmp.update({model: chan_tmp})
 
-    Archivist.pretty_store(res_tmp, 'results/res_tmp.txt')
+    # Archivist.pretty_store(res_tmp, 'results/res_tmp.txt')
 
     for model in models:
         chan = results.get(model, {})
@@ -148,7 +134,7 @@ def analyze_results(improved_sim: bool):
             chan.update({channel: sal})
         results.update({model: chan})
 
-    Archivist.pretty_store(results, 'results/results.txt')
+    # Archivist.pretty_store(results, 'results/results.txt')
 
     return results
 
@@ -166,9 +152,11 @@ def exp2(model: str, improved_sim: bool, export_name: str):
 
     matrix = AbilitiesMatrix.AbilitiesMatrix()
     if model is 'dipm':
-        matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.05)
+        # matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.05)
+        matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.25)
     elif model is 'scpm':
-        matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.05)
+        # matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.05)
+        matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.14)
     Display.save_abilities_figure(matrix, '', export_name)
 
 
@@ -189,11 +177,11 @@ def nice_one():
 def main():
     # run_sims()
     # run_improved_sims()
-    # nice_one()
-    exp2('dipm', improved_sim=False, export_name="img_export/exp2/dipm_abilities_matrix.png")
-    exp2('scpm', improved_sim=False, export_name="img_export/exp2/scpm_abilities_matrix.png")
-    exp2('dipm', improved_sim=True, export_name="img_export/exp2/dipm_improved_abilities_matrix.png")
-    exp2('scpm', improved_sim=True, export_name="img_export/exp2/scpm_improved_abilities_matrix.png")
+    nice_one()
+    # exp2('dipm', improved_sim=False, export_name="img_export/exp2/dipm_abilities_matrix.png")
+    # exp2('scpm', improved_sim=False, export_name="img_export/exp2/scpm_abilities_matrix.png")
+    # exp2('dipm', improved_sim=True, export_name="img_export/exp2/dipm_improved_abilities_matrix.png")
+    # exp2('scpm', improved_sim=True, export_name="img_export/exp2/scpm_improved_abilities_matrix.png")
 
 
 main()
