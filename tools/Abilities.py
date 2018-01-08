@@ -11,7 +11,7 @@ class AutoName(Enum):
 
 class Abilities(AutoName):
     DEFAULT = auto()
-    NO_SELECTION = auto()
-    SELECTION = auto()
-    NO_SWITCHING = auto()
-    SWITCHING = auto()
+    NO_SELECTION = '+'
+    SELECTION = '•'
+    NO_SWITCHING = '◙'
+    SWITCHING = '○'

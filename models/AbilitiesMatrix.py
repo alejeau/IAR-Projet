@@ -2,7 +2,7 @@
 # -*-coding: utf-8 -*
 
 from tools.Abilities import Abilities
-import pprint
+from models.Matrix import Matrix
 
 
 class AbilitiesMatrix:
@@ -15,7 +15,7 @@ class AbilitiesMatrix:
         self.reversed_x_keys_map = {}
         self.y_keys_map = {}
         self.reversed_y_keys_map = {}
-        self.matrix = [[]]
+        self.matrix = Matrix()
         self.threshold = 0.05
 
     def generate_matrix(self, channel1: {float: float}, channel2: {float: float}, threshold: float):
@@ -25,7 +25,7 @@ class AbilitiesMatrix:
         self.y_keys = sorted(channel2.keys())
         self.y_len = len(self.y_keys)
 
-        self.matrix = [[Abilities.NO_SELECTION] * self.y_len for i in range(self.x_len)]
+        tmp_matrix = [[Abilities.NO_SELECTION] * self.y_len for i in range(self.x_len)]
 
         i = 0
         for k in self.x_keys:
@@ -53,7 +53,8 @@ class AbilitiesMatrix:
                     elif channel1[x] <= threshold and channel2[y] <= threshold and i != 0 and j != 0:
                         value = Abilities.NO_SWITCHING
 
-                    self.matrix[i][j] = value
+                    tmp_matrix[i][j] = value
+        self.matrix.init_matrix(tmp_matrix)
 
     def get_x_keys(self):
         return self.x_keys
@@ -62,15 +63,10 @@ class AbilitiesMatrix:
         return self.y_keys
 
     def get_value(self, x_key: float, y_key: float):
-        return self.matrix[self.x_keys_map[x_key]][self.y_keys_map[y_key]]
-
-    def normal_print(self):
-        for x in self.matrix:
-            print(x)
+        return self.matrix.get_item(self.x_keys_map[x_key], self.y_keys_map[y_key])
 
     def pretty_print(self):
-        pp = pprint.PrettyPrinter(indent=0)
-        pp.pprint(self.matrix)
+        self.matrix.pprint()
 
-    def get_matrix(self) -> [[Abilities.value]]:
+    def get_matrix(self) -> Matrix:
         return self.matrix

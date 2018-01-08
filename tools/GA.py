@@ -2,8 +2,10 @@
 # -*-coding: utf-8 -*
 
 import random
-from pyeasyga.pyeasyga import pyeasyga
+from pyeasyga import pyeasyga
 from operator import attrgetter
+from models.Matrix import Matrix
+from models.AbilitiesMatrix import AbilitiesMatrix
 
 
 # generated at random
@@ -45,7 +47,7 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
     return population[-1]
 
 
-def fitness(individual: [float], data: [str]) -> float:
+def fitness(individual: AbilitiesMatrix, data: Matrix) -> float:
     # TODO
 
     # example

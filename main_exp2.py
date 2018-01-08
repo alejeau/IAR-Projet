@@ -7,6 +7,7 @@ import tools.Archivist as Archivist
 import tools.Display as Display
 import tools.Configs.ConfigExp2 as Config
 import models.AbilitiesMatrix as AbilitiesMatrix
+from tools.Configs.Matrices.GoalMatrices import GoalMatrices
 
 
 def normalized_number(size: int, number: int) -> str:
@@ -154,6 +155,7 @@ def exp2(model: str, improved_sim: bool, export_name: str):
     if model is 'dipm':
         # matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.05)
         matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.3)
+        Display.save_simple_abilities_matrix(matrix.get_matrix(), '', '')
     elif model is 'scpm':
         # matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.05)
         matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.14)
@@ -182,7 +184,11 @@ def main():
     # exp2('scpm', improved_sim=False, export_name="img_export/exp2/scpm_abilities_matrix.png")
     # exp2('dipm', improved_sim=True, export_name="img_export/exp2/dipm_improved_abilities_matrix.png")
     # exp2('scpm', improved_sim=True, export_name="img_export/exp2/scpm_improved_abilities_matrix.png")
-    # pass
+    # GoalMatrices.dipm().pprint()
+    # Display.save_simple_abilities_matrix(GoalMatrices.dipm(), '', '')
+    # GoalMatrices.scpm().pprint()
+    # Display.save_simple_abilities_matrix(GoalMatrices.scpm(), '', '')
+    pass
 
 
 main()

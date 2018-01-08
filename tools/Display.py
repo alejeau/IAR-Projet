@@ -4,6 +4,7 @@
 import matplotlib.pyplot as plt
 import models.AbilitiesMatrix as AbilitiesMatrix
 from tools.Abilities import Abilities
+from models.Matrix import Matrix
 
 
 def load_file():
@@ -204,6 +205,49 @@ def save_abilities_figure(matrix: AbilitiesMatrix.AbilitiesMatrix, title: str, e
     # plt.scatter(x_selection, y_selection, marker='o', c='black')
     # plt.scatter(x_no_switching, y_no_switching, marker='s', c='black')
     # plt.scatter(x_switching, y_switching, marker='p', c='black')
+
+    plt.scatter(x_no_selection, y_no_selection, marker='*')
+    plt.scatter(x_selection, y_selection, marker='o')
+    plt.scatter(x_no_switching, y_no_switching, marker='s')
+    plt.scatter(x_switching, y_switching, marker='p')
+
+    if export_name is '':
+        plt.show()
+    else:
+        plt.savefig(export_name)
+
+    plt.close(fig)
+
+
+def save_simple_abilities_matrix(matrix: Matrix, title: str, export_name: str):
+    x_no_selection = []
+    x_selection = []
+    x_no_switching = []
+    x_switching = []
+    y_no_selection = []
+    y_selection = []
+    y_no_switching = []
+    y_switching = []
+
+    x_len = matrix.get_x_len()
+    y_len = matrix.get_y_len()
+
+    fig = plt.figure()
+    for x in range(x_len):
+        for y in range(y_len):
+            value = matrix.get_item(x, y)
+            if value is Abilities.NO_SELECTION:
+                x_no_selection.append(x)
+                y_no_selection.append(y)
+            elif value is Abilities.SELECTION:
+                x_selection.append(x)
+                y_selection.append(y)
+            elif value is Abilities.NO_SWITCHING:
+                x_no_switching.append(x)
+                y_no_switching.append(y)
+            elif value is Abilities.SWITCHING:
+                x_switching.append(x)
+                y_switching.append(y)
 
     plt.scatter(x_no_selection, y_no_selection, marker='*')
     plt.scatter(x_selection, y_selection, marker='o')

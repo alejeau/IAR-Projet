@@ -2,10 +2,10 @@
 # -*-coding: utf-8 -*
 
 from tools.Abilities import Abilities
-from tools import Display
+from models.Matrix import Matrix
 
 
-class BaseMatrices:
+class BaseMatrices(Matrix):
     @staticmethod
     def dipm():
         matrix = [
