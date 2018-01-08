@@ -153,7 +153,7 @@ def exp2(model: str, improved_sim: bool, export_name: str):
     matrix = AbilitiesMatrix.AbilitiesMatrix()
     if model is 'dipm':
         # matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.05)
-        matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.25)
+        matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.3)
     elif model is 'scpm':
         # matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.05)
         matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.14)
@@ -177,11 +177,12 @@ def nice_one():
 def main():
     # run_sims()
     # run_improved_sims()
-    nice_one()
-    # exp2('dipm', improved_sim=False, export_name="img_export/exp2/dipm_abilities_matrix.png")
+    # nice_one()
+    exp2('dipm', improved_sim=False, export_name="img_export/exp2/dipm_abilities_matrix.png")
     # exp2('scpm', improved_sim=False, export_name="img_export/exp2/scpm_abilities_matrix.png")
     # exp2('dipm', improved_sim=True, export_name="img_export/exp2/dipm_improved_abilities_matrix.png")
     # exp2('scpm', improved_sim=True, export_name="img_export/exp2/scpm_improved_abilities_matrix.png")
+    # pass
 
 
 main()
