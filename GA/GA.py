@@ -54,10 +54,6 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
 
 
 def fitness(individual: [float], data: [str]) -> float:
-    print('fitness:')
-    print('individual: ' + str(individual))
-    print('data: ' + str(data))
-
     conf = {}
     model_conf = {}
     if current_model is 'dipm':
@@ -72,7 +68,9 @@ def fitness(individual: [float], data: [str]) -> float:
     conf.update({'model_conf': {0: model_conf, 1: model_conf}})
 
     filenames = GaSimulator.run_sims(current_model, conf)
+    # print('filenames: ' + str(filenames))
     results = GaSimulator.analyze_results(filenames, conf)
+    print('results: ' + str(results))
 
     matrix = Tools.generate_simple_ability_matrix(results[0], results[1], 0.05)
     goal = Matrix()
@@ -87,7 +85,7 @@ def fitness(individual: [float], data: [str]) -> float:
 
 
 def run_ga(data: [str], population_size: int, generations: int, crossover_proba: float,
-           mutation_proba: float, elitism: bool):
+           mutation_proba: float, elitism: bool) -> [str]:
     ga = pyeasyga.GeneticAlgorithm(data, population_size, generations, crossover_proba, mutation_proba, elitism)
 
     ga.create_individual = create_individual
@@ -98,6 +96,4 @@ def run_ga(data: [str], population_size: int, generations: int, crossover_proba:
 
     random.seed()
     ga.run()
-    print(ga.best_individual())
-
-
+    return ga.best_individual()

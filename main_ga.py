@@ -24,4 +24,6 @@ for model in models:
                 'theta_d1', 'theta_d2', 'theta_gpe', 'theta_stn', 'theta_gpi']
 
     GA.current_model = model
-    GA.run_ga(data, population_size, generations, crossover_proba, mutation_proba, elitism)
+    result = GA.run_ga(data, population_size, generations, crossover_proba, mutation_proba, elitism)
+    print(result)
+

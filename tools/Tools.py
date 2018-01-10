@@ -74,7 +74,7 @@ def generate_simple_ability_matrix(channel1: {float: float}, channel2: {float: f
     return matrix
 
 
-def get_reward(evaluated: Abilities.value, goal: Abilities.value) -> int:
+def get_reward(evaluated: Abilities, goal: Abilities) -> int:
     num_evaluated = get_numerical_value_of_ability(evaluated)
     num_goal = get_numerical_value_of_ability(goal)
     res = num_evaluated - num_goal

@@ -19,21 +19,23 @@ class GaSimulator:
                 sim = ScpmSim.SCPMSimulator()
 
             exp = Tools.normalized_number(3, i)
-            result = 'results/exp2/' + 'results_' + model + '_exp2_' + exp + '.p'
+            result = 'results/ga/' + 'results_' + model + '_ga_' + exp + '.p'
             results.append(result)
 
             sim.init_with_config(conf)
             sim.run_sim(result)
 
-            return results
+        return results
 
     @staticmethod
     def analyze_results(filenames: [str], conf: {}) -> {}:
-        results = {}
+        # print('filenames: ' + str(filenames))
+        # print('conf: ' + str(conf))
+
         channels = conf['channels']
         salience = conf['salience']
         dt = conf['dt']
-        val = {}
+        raw = {}
         for sim_number in range(0, len(filenames)):  # for each simulation
             data = Archivist.load(filenames[sim_number])
             gpi_outputs = data['gpi_outputs']
@@ -50,18 +52,22 @@ class GaSimulator:
                     val.append(avg)
                     salience_res.update({salience[channel][s]: val})
                 channel_res.update({channel: salience_res})
-            val.update({sim_number: channel_res})
-    
+            raw.update({sim_number: channel_res})
+
+        print('raw: ' + str(raw))
+
         chan_tmp = {}
-        for exp in val.keys():
-            for channel in val[exp]:
+        for exp in raw.keys():
+            for channel in raw[exp]:
                 sal_tmp = {}
-                for sal in val[exp][channel]:
+                for sal in raw[exp][channel]:
                     tmp = sal_tmp.get(sal, [])
-                    for value in val[exp][channel][sal]:
+                    for value in raw[exp][channel][sal]:
                         tmp.append(value)
                     sal_tmp.update({sal: tmp})
                 chan_tmp.update({channel: sal_tmp})
+
+        print('chan_tmp: ' + str(chan_tmp))
 
         results = {}
         for channel in results.keys():
@@ -71,4 +77,5 @@ class GaSimulator:
                 sal.update({s: res})
             results.update({channel: sal})
 
+        print('results: ' + str(results))
         return results
