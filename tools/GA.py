@@ -4,6 +4,8 @@
 import random
 from pyeasyga import pyeasyga
 from operator import attrgetter
+from tools import Tools
+from tools.Abilities import Abilities
 from models.Matrix import Matrix
 from models.AbilitiesMatrix import AbilitiesMatrix
 
@@ -47,18 +49,26 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
     return population[-1]
 
 
+def get_reward(evaluated: Abilities.value, goal: Abilities.value) -> int:
+    num_evaluated = Tools.get_numerical_value_of_ability(evaluated)
+    num_goal = Tools.get_numerical_value_of_ability(goal)
+    res = num_evaluated - num_goal
+    if evaluated is Abilities.NO_SWITCHING:  # NO_SWITCHING is BAD
+        res -= 1
+    return res
+
+
 def fitness(individual: AbilitiesMatrix, data: Matrix) -> float:
-    # TODO
+    evaluated = individual.get_matrix()
+    x_len = evaluated.get_x_len()
+    y_len = evaluated.get_y_len()
+    
+    fitness_value = 0
+    for x in range(x_len):
+        for y in range(y_len):
+            fitness_value += get_reward(evaluated.get_item(x, y), data.get_item(x, y))
 
-    # example
-    # fitness = 0
-    # if individual.count(1) == 2:
-    #     for (selected, (fruit, profit)) in zip(individual, data):
-    #         if selected:
-    #             fitness += profit
-    # return fitness
-
-    return 0
+    return fitness_value
 
 
 def run_ga(data: [str], population_size: int, generations: int, crossover_proba: float,

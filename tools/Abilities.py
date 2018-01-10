@@ -15,3 +15,4 @@ class Abilities(AutoName):
     SELECTION = '•'
     NO_SWITCHING = '◙'
     SWITCHING = '○'
+
