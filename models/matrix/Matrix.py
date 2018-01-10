@@ -32,5 +32,5 @@ class Matrix:
             for y in range(self.y_len):
                 line = ''
                 for x in range(self.x_len):
-                    line += self.matrix[x][self.y_len - y - 1].value + '\t'
+                    line += self.matrix[x][-y-1].value + '\t'
                 print(line)

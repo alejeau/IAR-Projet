@@ -2,7 +2,7 @@
 # -*-coding: utf-8 -*
 
 from tools.Abilities import Abilities
-from models.Matrix import Matrix
+from models.matrix.Matrix import Matrix
 
 
 class AbilitiesMatrix:
@@ -25,7 +25,7 @@ class AbilitiesMatrix:
         self.y_keys = sorted(channel2.keys())
         self.y_len = len(self.y_keys)
 
-        tmp_matrix = [[Abilities.NO_SELECTION] * self.y_len for i in range(self.x_len)]
+        tmp_matrix = [[Abilities.NO_SELECTION] * self.y_len for _ in range(self.x_len)]
 
         i = 0
         for k in self.x_keys:

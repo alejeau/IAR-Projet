@@ -2,12 +2,10 @@
 # -*-coding: utf-8 -*
 
 import Simulator.DIPMSimulator as DipmSim
-import Simulator.SCPMSimulator as ScpmSim
 import tools.Archivist as Archivist
 import tools.Display as Display
 import tools.Configs.ConfigExp2 as Config
 import tools.Configs.Models as ModelConf
-from models import AbilitiesMatrix
 
 
 def config_dipm_base() -> {}:

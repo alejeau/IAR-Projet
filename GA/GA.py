@@ -4,10 +4,14 @@
 import random
 from pyeasyga import pyeasyga
 from operator import attrgetter
+from models.matrix.Matrix import Matrix
+from GA.GaSimulator import GaSimulator
 from tools import Tools
-from tools.Abilities import Abilities
-from models.Matrix import Matrix
-from models.AbilitiesMatrix import AbilitiesMatrix
+from tools.Configs import Models
+from tools.Configs import ConfigExp2
+from tools.Configs.Matrices.GoalMatrices import GoalMatrices
+
+current_model = ''
 
 
 # generated at random
@@ -39,34 +43,45 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
         fitnesses.append(individual.fitness)
         sum_of_fitness += individual.fitness
 
-    alea = random.random() * sum_of_fitness
+    rand = random.random() * sum_of_fitness
 
     for i in range(len(population)):
-        if fitnesses[i] < alea:
+        if fitnesses[i] < rand:
             return population[i]
 
     # when rounding errors occur, we return the fittest individual
     return population[-1]
 
 
-def get_reward(evaluated: Abilities.value, goal: Abilities.value) -> int:
-    num_evaluated = Tools.get_numerical_value_of_ability(evaluated)
-    num_goal = Tools.get_numerical_value_of_ability(goal)
-    res = num_evaluated - num_goal
-    if evaluated is Abilities.NO_SWITCHING:  # NO_SWITCHING is BAD
-        res -= 1
-    return res
+def fitness(individual: [float], data: [str]) -> float:
+    print('fitness:')
+    print('individual: ' + str(individual))
+    print('data: ' + str(data))
 
+    conf = {}
+    model_conf = {}
+    if current_model is 'dipm':
+        conf = ConfigExp2.config_dipm_exp2()
+        model_conf = Models.get_dipm_base_generator()
+    elif current_model is 'scpm':
+        conf = ConfigExp2.config_scpm_exp2()
+        model_conf = Models.get_scpm_base_generator()
+    # we update the model's weights' configuration
+    model_conf = Tools.update_conf(model_conf, data, individual)
+    # we update the sim's configuration
+    conf.update({'model_conf': {0: model_conf, 1: model_conf}})
 
-def fitness(individual: AbilitiesMatrix, data: Matrix) -> float:
-    evaluated = individual.get_matrix()
-    x_len = evaluated.get_x_len()
-    y_len = evaluated.get_y_len()
-    
-    fitness_value = 0
-    for x in range(x_len):
-        for y in range(y_len):
-            fitness_value += get_reward(evaluated.get_item(x, y), data.get_item(x, y))
+    filenames = GaSimulator.run_sims(current_model, conf)
+    results = GaSimulator.analyze_results(filenames, conf)
+
+    matrix = Tools.generate_simple_ability_matrix(results[0], results[1], 0.05)
+    goal = Matrix()
+    if current_model is 'dipm':
+        goal = GoalMatrices.dipm()
+    elif current_model is 'scpm':
+        goal = GoalMatrices.scpm()
+
+    fitness_value = Tools.value_for_fitness(matrix, goal)
 
     return fitness_value
 

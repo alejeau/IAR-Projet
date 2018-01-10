@@ -25,7 +25,7 @@ def get_dipm_base_generator():
     # activation rate
     conf.update({'k': 25.0})
     # time increment
-    conf.update({'dt': 1.0})
+    conf.update({'dt': 0.001})
 
     # activation
     conf.update({'a_d1': 0.0})

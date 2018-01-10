@@ -2,9 +2,9 @@
 # -*-coding: utf-8 -*
 
 import matplotlib.pyplot as plt
-import models.AbilitiesMatrix as AbilitiesMatrix
+import models.matrix.AbilitiesMatrix as AbilitiesMatrix
 from tools.Abilities import Abilities
-from models.Matrix import Matrix
+from models.matrix.Matrix import Matrix
 
 
 def load_file():

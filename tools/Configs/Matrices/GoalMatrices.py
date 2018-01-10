@@ -2,7 +2,7 @@
 # -*-coding: utf-8 -*
 
 from tools.Abilities import Abilities
-from models.Matrix import Matrix
+from models.matrix.Matrix import Matrix
 
 
 class GoalMatrices:
