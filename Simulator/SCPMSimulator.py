@@ -29,7 +29,7 @@ class SCPMSimulator:
             scpm.set_dt(self.dt)
             # add the SCPM
             self.scpms.update({i: scpm})
-        self.old_stn_list = [0.0 for i in range(0, channels)]
+        self.old_stn_list = [0.0 for _ in range(0, channels)]
 
     def run_sim(self, result_file: str):
         channels = self.config['channels']
@@ -62,4 +62,6 @@ class SCPMSimulator:
             'threshold': thresholds,
             'gpi_outputs': gpi_outputs
         }
-        Archivist.store(simulation, result_file)
+        if result_file != '':
+            Archivist.store_data(simulation, result_file)
+        return simulation

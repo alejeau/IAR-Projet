@@ -11,7 +11,9 @@ from tools.Configs import Models
 from tools.Configs import ConfigExp2
 from tools.Configs.Matrices.GoalMatrices import GoalMatrices
 
+threshold = 0.05
 current_model = ''
+number_of_sims = 121
 
 
 # generated at random
@@ -54,6 +56,10 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
 
 
 def fitness(individual: [float], data: [str]) -> float:
+    # the last 3 values of the individual  must be negatives
+    for i in range(1, 4):
+        individual[-i] = -individual[-i]
+
     conf = {}
     model_conf = {}
     if current_model is 'dipm':
@@ -62,17 +68,16 @@ def fitness(individual: [float], data: [str]) -> float:
     elif current_model is 'scpm':
         conf = ConfigExp2.config_scpm_exp2()
         model_conf = Models.get_scpm_base_generator()
+
     # we update the model's weights' configuration
     model_conf = Tools.update_conf(model_conf, data, individual)
     # we update the sim's configuration
     conf.update({'model_conf': {0: model_conf, 1: model_conf}})
 
-    filenames = GaSimulator.run_sims(current_model, conf)
-    # print('filenames: ' + str(filenames))
-    results = GaSimulator.analyze_results(filenames, conf)
-    print('results: ' + str(results))
+    raw_results = GaSimulator.run_sims(current_model, conf, number_of_sims)
+    results = GaSimulator.analyze_results(raw_results, conf, number_of_sims)
 
-    matrix = Tools.generate_simple_ability_matrix(results[0], results[1], 0.05)
+    matrix = Tools.generate_simple_ability_matrix(results[0], results[1], threshold)
     goal = Matrix()
     if current_model is 'dipm':
         goal = GoalMatrices.dipm()

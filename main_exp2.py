@@ -7,7 +7,11 @@ import tools.Archivist as Archivist
 import tools.Display as Display
 import tools.Configs.ConfigExp2 as Config
 import models.matrix.AbilitiesMatrix as AbilitiesMatrix
+from models.matrix.Matrix import Matrix
 from tools.Configs.Matrices.GoalMatrices import GoalMatrices
+from GA import GA
+from tools import Tools
+from tools.Configs import Models, ConfigExp2
 
 
 def normalized_number(size: int, number: int) -> str:
@@ -46,6 +50,22 @@ def run_sims():
             # Display.flexible_display_or_save(data['gpi_outputs'], model, export_file, [0, 1], data['salience'], 0.05)
 
 
+def run_parametrized_sims(conf: {}, model, number_of_sims=121):
+    sim = None
+
+    for i in range(number_of_sims):
+        if model == 'dipm':
+            sim = DipmSim.DIPMSimulator()
+        elif model == 'scpm':
+            sim = ScpmSim.SCPMSimulator()
+
+        exp = normalized_number(3, i)
+        results = 'results/exp2/' + 'results_' + model + '_exp2_' + exp + '.p'
+
+        sim.init_with_config(conf)
+        sim.run_sim(results)
+
+
 def run_improved_sims():
     sim = None
     models = ['dipm', 'scpm']
@@ -72,7 +92,7 @@ def run_improved_sims():
             # Display.flexible_display_or_save(data['gpi_outputs'], model, export_file, [0, 1], data['salience'], 0.05)
 
 
-def analyze_results(improved_sim: bool):
+def analyze_results(improved_sim: bool, number_of_sims=121):
     # result: {Model: {channel: {index: value}}}
     # results = {str: {int: {float: float}}}
     results = {}
@@ -86,7 +106,7 @@ def analyze_results(improved_sim: bool):
     # model_res: {Model: {sim_number {channel: {salience: [value]}}}}
     model_res = {}
     for model in models:  # for each model
-        for sim_number in range(0, 121):  # for each simulation
+        for sim_number in range(number_of_sims):  # for each simulation
             filename = 'results/exp2/' + 'results_' + improved + model + '_exp2_' + normalized_number(3, sim_number) + '.p'
             data = Archivist.load(filename)
             gpi_outputs = data['gpi_outputs']
@@ -107,7 +127,7 @@ def analyze_results(improved_sim: bool):
             val.update({sim_number: channel_res})
             model_res.update({model: val})
 
-    # Archivist.pretty_store(model_res, 'results/model_res.txt')
+    Archivist.pretty_store(model_res, 'results/model_res.txt')
 
     res_tmp = {}
     for model in models:
@@ -123,7 +143,7 @@ def analyze_results(improved_sim: bool):
                 chan_tmp.update({channel: sal_tmp})
             res_tmp.update({model: chan_tmp})
 
-    # Archivist.pretty_store(res_tmp, 'results/res_tmp.txt')
+    Archivist.pretty_store(res_tmp, 'results/res_tmp.txt')
 
     for model in models:
         chan = results.get(model, {})
@@ -135,7 +155,7 @@ def analyze_results(improved_sim: bool):
             chan.update({channel: sal})
         results.update({model: chan})
 
-    # Archivist.pretty_store(results, 'results/results.txt')
+    Archivist.pretty_store(results, 'results/results.txt')
 
     return results
 
@@ -177,10 +197,10 @@ def nice_one():
 
 
 def main():
-    # run_sims()
+    run_sims()
     # run_improved_sims()
     # nice_one()
-    exp2('dipm', improved_sim=False, export_name="img_export/exp2/dipm_abilities_matrix.png")
+    # exp2('dipm', improved_sim=False, export_name="img_export/exp2/dipm_abilities_matrix.png")
     # exp2('scpm', improved_sim=False, export_name="img_export/exp2/scpm_abilities_matrix.png")
     # exp2('dipm', improved_sim=True, export_name="img_export/exp2/dipm_improved_abilities_matrix.png")
     # exp2('scpm', improved_sim=True, export_name="img_export/exp2/scpm_improved_abilities_matrix.png")

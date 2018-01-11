@@ -18,7 +18,7 @@ def display_data(gpi_outputs: {int: {int: float}}):
 def display_and_save(gpi_outputs: {int: {int: float}}, title: str, export_name: str, channels_to_display: [int]):
     channels = sorted(gpi_outputs.keys())
     # one empty list per channel
-    ordonnees = [[] for i in range(len(channels_to_display))]
+    ordonnees = [[] for _ in range(len(channels_to_display))]
     # init the fig
     fig = plt.figure(figsize=(3*len(channels_to_display), 3), dpi=300)
     for channel in channels:

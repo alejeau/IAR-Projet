@@ -3,41 +3,33 @@
 
 import Simulator.DIPMSimulator as DipmSim
 import Simulator.SCPMSimulator as ScpmSim
-import tools.Archivist as Archivist
-from tools import Tools
 
 
 class GaSimulator:
     @staticmethod
-    def run_sims(model: str, conf: {}) -> [str]:
+    def run_sims(model: str, conf: {}, number_of_sims: int) -> [str]:
         sim = None
         results = []
-        for i in range(0, 121):
+        for i in range(number_of_sims):
             if model == 'dipm':
                 sim = DipmSim.DIPMSimulator()
             elif model == 'scpm':
                 sim = ScpmSim.SCPMSimulator()
 
-            exp = Tools.normalized_number(3, i)
-            result = 'results/ga/' + 'results_' + model + '_ga_' + exp + '.p'
-            results.append(result)
-
             sim.init_with_config(conf)
-            sim.run_sim(result)
+            res = sim.run_sim('')
+            results.append(res)
 
         return results
 
     @staticmethod
-    def analyze_results(filenames: [str], conf: {}) -> {}:
-        # print('filenames: ' + str(filenames))
-        # print('conf: ' + str(conf))
-
+    def analyze_results(raw_results: [{}], conf: {}, number_of_sims: int) -> {}:
         channels = conf['channels']
         salience = conf['salience']
         dt = conf['dt']
         raw = {}
-        for sim_number in range(0, len(filenames)):  # for each simulation
-            data = Archivist.load(filenames[sim_number])
+        for sim_number in range(number_of_sims):  # for each simulation
+            data = raw_results[sim_number]
             gpi_outputs = data['gpi_outputs']
             channel_res = {}
             for channel in range(0, channels):  # for each channel
@@ -54,8 +46,6 @@ class GaSimulator:
                 channel_res.update({channel: salience_res})
             raw.update({sim_number: channel_res})
 
-        print('raw: ' + str(raw))
-
         chan_tmp = {}
         for exp in raw.keys():
             for channel in raw[exp]:
@@ -67,15 +57,12 @@ class GaSimulator:
                     sal_tmp.update({sal: tmp})
                 chan_tmp.update({channel: sal_tmp})
 
-        print('chan_tmp: ' + str(chan_tmp))
-
         results = {}
-        for channel in results.keys():
+        for channel in chan_tmp.keys():
             sal = results.get(channel, {})
-            for s in results[channel]:
-                res = sum(results[channel][s]) / len(results[channel][s])
+            for s in chan_tmp[channel]:
+                res = sum(chan_tmp[channel][s]) / len(chan_tmp[channel][s])
                 sal.update({s: res})
             results.update({channel: sal})
 
-        print('results: ' + str(results))
         return results

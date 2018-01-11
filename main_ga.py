@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 # -*-coding: utf-8 -*
 
-import GA.GA as GA
+from GA import GA
+from tools import Archivist
 
 
 population_size = 100
-generations = 100
+# generations = 100
+generations = 1
 crossover_proba = 0.8
 mutation_proba = 0.02
 elitism = True
@@ -23,7 +25,25 @@ for model in models:
         data = ['wcs1', 'wcs2', 'wsd2_gpe', 'wc_stn', 'wgpe_stn', 'wsd1_gpi', 'wstn_gpe', 'wstn_gpi', 'wgpe_gpi',
                 'theta_d1', 'theta_d2', 'theta_gpe', 'theta_stn', 'theta_gpi']
 
+    GA.threshold = 0.3
     GA.current_model = model
+    GA.number_of_sims = 1
     result = GA.run_ga(data, population_size, generations, crossover_proba, mutation_proba, elitism)
-    print(result)
 
+    text = [
+        model,
+        GA.threshold,
+        data,
+        result
+    ]
+
+    binaries = {
+        'model': model,
+        'threshold': GA.threshold,
+        'data': data,
+        'result': result
+    }
+
+    filename = 'results/ga_' + model + '_results'
+    Archivist.store_text(text, filename + '.txt')
+    Archivist.store_data(binaries, filename + '.p')
