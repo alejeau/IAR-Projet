@@ -56,6 +56,7 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
 
 
 def fitness(individual: [float], data: [str]) -> float:
+    print('individual: ' + str(individual))
     # the last 3 values of the individual  must be negatives
     for i in range(1, 4):
         individual[-i] = -individual[-i]
@@ -74,10 +75,9 @@ def fitness(individual: [float], data: [str]) -> float:
     # we update the sim's configuration
     conf.update({'model_conf': {0: model_conf, 1: model_conf}})
 
-    raw_results = GaSimulator.run_sims(current_model, conf, number_of_sims)
-    results = GaSimulator.analyze_results(raw_results, conf, number_of_sims)
+    results = GaSimulator.run_sims(current_model, conf)
+    matrix = GaSimulator.analyze_results(results, conf, threshold)
 
-    matrix = Tools.generate_simple_ability_matrix(results[0], results[1], threshold)
     goal = Matrix()
     if current_model is 'dipm':
         goal = GoalMatrices.dipm()
@@ -85,7 +85,7 @@ def fitness(individual: [float], data: [str]) -> float:
         goal = GoalMatrices.scpm()
 
     fitness_value = Tools.value_for_fitness(matrix, goal)
-
+    print('fitness_value: ' + str(fitness_value))
     return fitness_value
 
 

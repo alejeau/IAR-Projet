@@ -12,12 +12,8 @@ def config_dipm_exp2() -> {}:
         0: basic_conf,
         1: basic_conf,
     }
-    salience = {
-        0: [0.0, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0],
-        1: [0.0, 0.0, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    }
-    channels = len(salience)
-    nb_of_runs = len(salience[0])
+    channels = 2
+    nb_of_runs = 6
     time_interval = 0.1
     dt = 0.001
 
@@ -26,7 +22,6 @@ def config_dipm_exp2() -> {}:
     conf.update({'nb_of_runs': nb_of_runs})
     conf.update({'time_interval': time_interval})
     conf.update({'channels': channels})
-    conf.update({'salience': salience})
     conf.update({'dt': dt})
 
     return conf
@@ -46,12 +41,8 @@ def config_scpm_exp2() -> {}:
         0: basic_conf,
         1: basic_conf,
     }
-    salience = {
-        0: [0.0, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0],
-        1: [0.0, 0.0, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    }
-    channels = len(salience)
-    nb_of_runs = len(salience[0])
+    channels = 2
+    nb_of_runs = 6
     time_interval = 0.1
     dt = 0.001
 
@@ -60,7 +51,6 @@ def config_scpm_exp2() -> {}:
     conf.update({'nb_of_runs': nb_of_runs})
     conf.update({'time_interval': time_interval})
     conf.update({'channels': channels})
-    conf.update({'salience': salience})
     conf.update({'dt': dt})
 
     return conf

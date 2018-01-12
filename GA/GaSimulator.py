@@ -3,66 +3,60 @@
 
 import Simulator.DIPMSimulator as DipmSim
 import Simulator.SCPMSimulator as ScpmSim
+from models.matrix.Matrix import Matrix
+from tools.Abilities import Abilities
+from tools import Tools
 
+saliences = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
 class GaSimulator:
-    @staticmethod
-    def run_sims(model: str, conf: {}, number_of_sims: int) -> [str]:
-        sim = None
-        results = []
-        for i in range(number_of_sims):
-            if model == 'dipm':
-                sim = DipmSim.DIPMSimulator()
-            elif model == 'scpm':
-                sim = ScpmSim.SCPMSimulator()
 
-            sim.init_with_config(conf)
-            res = sim.run_sim('')
-            results.append(res)
+    @staticmethod
+    def run_sims(model: str, conf: {}) -> {}:
+        sim = None
+        results = {}
+
+        for sc1 in saliences:
+            sal1 = [0.0] + [sc1 for _ in range(5)]
+            for sc2 in saliences:
+                sal2 = [0.0, 0.0] + [sc2 for _ in range(4)]
+                salience = {
+                    0: sal1,
+                    1: sal2
+                }
+                conf.update({'salience': salience})
+
+                if model == 'dipm':
+                    sim = DipmSim.DIPMSimulator()
+                elif model == 'scpm':
+                    sim = ScpmSim.SCPMSimulator()
+
+                sim.init_with_config(conf)
+                res = sim.run_sim('')
+                results.update({(sc1, sc2): res})
 
         return results
 
     @staticmethod
-    def analyze_results(raw_results: [{}], conf: {}, number_of_sims: int) -> {}:
+    def analyze_results(results: [{}], conf: {}, threshold) -> Matrix:
         channels = conf['channels']
-        salience = conf['salience']
+        # salience = conf['salience']
         dt = conf['dt']
         raw = {}
-        for sim_number in range(number_of_sims):  # for each simulation
-            data = raw_results[sim_number]
-            gpi_outputs = data['gpi_outputs']
-            channel_res = {}
-            for channel in range(0, channels):  # for each channel
-                tmp = []
-                salience_res = {}
-                for s in range(0, len(salience[channel])):  # for each salience 0.0, 0.1, ..., 1.0 of channel channel
-                    time_intervals = int(1/dt)
-                    for i in range(0, time_intervals):  # for each dt of salience s
-                        tmp.append(gpi_outputs[channel][i + s * time_intervals])  # append outputs of gpi to tmp
-                    avg = sum(tmp) / len(tmp)   # we average the whole interval
-                    val = salience_res.get(salience[channel][s], [])
-                    val.append(avg)
-                    salience_res.update({salience[channel][s]: val})
-                channel_res.update({channel: salience_res})
-            raw.update({sim_number: channel_res})
 
-        chan_tmp = {}
-        for exp in raw.keys():
-            for channel in raw[exp]:
-                sal_tmp = {}
-                for sal in raw[exp][channel]:
-                    tmp = sal_tmp.get(sal, [])
-                    for value in raw[exp][channel][sal]:
-                        tmp.append(value)
-                    sal_tmp.update({sal: tmp})
-                chan_tmp.update({channel: sal_tmp})
+        matrix = Matrix()
+        tmp_matrix = [[Abilities.NO_SELECTION] * len(saliences) for _ in range(len(saliences))]
 
-        results = {}
-        for channel in chan_tmp.keys():
-            sal = results.get(channel, {})
-            for s in chan_tmp[channel]:
-                res = sum(chan_tmp[channel][s]) / len(chan_tmp[channel][s])
-                sal.update({s: res})
-            results.update({channel: sal})
+        i = 0
+        for sc1 in saliences:
+            j = 0
+            for sc2 in saliences:
+                outputs = results[(sc1, sc2)]
+                gpi_outputs = outputs['gpi_outputs']
+                ability = Tools.determine_ability(gpi_outputs, dt, threshold)
+                tmp_matrix[i][j] = ability
+                j += 1
+            i += 1
 
-        return results
+        matrix.init_matrix(tmp_matrix)
+        return matrix

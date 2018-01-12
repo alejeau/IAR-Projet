@@ -29,8 +29,9 @@ def get_numerical_value_of_ability(ability: Abilities) -> int:
     if ability is Abilities.SWITCHING:
         return 3
 
-
-def generate_simple_ability_matrix(channel1: {float: float}, channel2: {float: float}, threshold: float):
+# t_chanX: keys of the dict to test
+def generate_simple_ability_matrix(channel1: {float: float}, t_chan1: [float], channel2: {float: float},
+                                   t_chan2: [float], threshold: float):
     x_keys_map = {}
     reversed_x_keys_map = {}
     y_keys_map = {}
@@ -55,6 +56,15 @@ def generate_simple_ability_matrix(channel1: {float: float}, channel2: {float: f
         reversed_y_keys_map.update({i: k})
         i += 1
 
+
+
+
+
+
+
+
+
+
     for x in x_keys:
         i = x_keys_map[x]
         for y in y_keys:
@@ -73,6 +83,44 @@ def generate_simple_ability_matrix(channel1: {float: float}, channel2: {float: f
     matrix.init_matrix(tmp_matrix)
     return matrix
 
+
+def determine_ability(outputs: {}, dt: float, threshold: float) -> Abilities:
+    chan1 = outputs[0]
+    keys_chan1 = chan1.keys()
+    chan2 = outputs[1]
+
+    pas_par_seconde = (1 / dt)
+    selected = 0
+    for t in range(int(1 * pas_par_seconde), int(2 * pas_par_seconde + 1)):
+        if chan1[t] <= threshold:
+            selected += 1
+    chan1_i1_selected = True if selected >= 0.8 * pas_par_seconde else False
+
+    chan1_never_selected = True
+    for t in keys_chan1:
+        if chan1[t] <= threshold:
+            chan1_never_selected = False
+            break
+
+    selected_chan1 = 0
+    selected_chan2 = 0
+    for t in range(int(2 * pas_par_seconde + 1), int(len(chan2))):
+        if chan1[t] <= threshold:
+            selected_chan1 += 1
+        if chan2[t] <= threshold:
+            selected_chan2 += 1
+    chan1_i2_selected = True if selected_chan1 >= 0.8 * (len(chan2) - (2 * pas_par_seconde + 1)) else False
+    chan2_selected = True if selected_chan2 >= 0.8 * (len(chan2) - (2 * pas_par_seconde + 1)) else False
+
+    ability = Abilities.NO_SELECTION
+    if (chan1_i1_selected and not chan2_selected) or (chan1_never_selected and chan2_selected):
+        ability = Abilities.SELECTION
+    elif chan1_i1_selected and chan1_i2_selected and chan2_selected:
+        ability = Abilities.NO_SWITCHING
+    elif chan1_i1_selected and not chan1_i2_selected and chan2_selected:
+        ability = Abilities.SWITCHING
+
+    return ability
 
 def get_reward(evaluated: Abilities, goal: Abilities) -> int:
     num_evaluated = get_numerical_value_of_ability(evaluated)
