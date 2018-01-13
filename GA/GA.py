@@ -13,7 +13,7 @@ from tools.Configs.Matrices.GoalMatrices import GoalMatrices
 
 threshold = 0.05
 current_model = ''
-number_of_sims = 121
+gen_number = 0
 
 
 # generated at random
@@ -56,7 +56,10 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
 
 
 def fitness(individual: [float], data: [str]) -> float:
-    print('individual: ' + str(individual))
+    global gen_number
+    print('Generation number: ' + str(gen_number))
+    gen_number += 1
+
     # the last 3 values of the individual  must be negatives
     for i in range(1, 4):
         individual[-i] = -individual[-i]
@@ -85,7 +88,6 @@ def fitness(individual: [float], data: [str]) -> float:
         goal = GoalMatrices.scpm()
 
     fitness_value = Tools.value_for_fitness(matrix, goal)
-    print('fitness_value: ' + str(fitness_value))
     return fitness_value
 
 

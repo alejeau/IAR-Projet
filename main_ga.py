@@ -6,14 +6,14 @@ from tools import Archivist
 
 
 population_size = 100
-# generations = 100
-generations = 1
+generations = 100
+# generations = 1
 crossover_proba = 0.8
 mutation_proba = 0.02
 elitism = True
 
-# models = ['dipm', 'scpm']
-models = ['dipm']
+models = ['dipm', 'scpm']
+# models = ['dipm']
 
 for model in models:
     data = [str]
@@ -25,9 +25,10 @@ for model in models:
         data = ['wcs1', 'wcs2', 'wsd2_gpe', 'wc_stn', 'wgpe_stn', 'wsd1_gpi', 'wstn_gpe', 'wstn_gpi', 'wgpe_gpi',
                 'theta_d1', 'theta_d2', 'theta_gpe', 'theta_stn', 'theta_gpi']
 
-    GA.threshold = 0.3
+    GA.threshold = 0.05
     GA.current_model = model
-    GA.number_of_sims = 1
+    GA.gen_number = 0
+    # GA.number_of_sims = 1
     result = GA.run_ga(data, population_size, generations, crossover_proba, mutation_proba, elitism)
 
     text = [
