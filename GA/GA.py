@@ -13,7 +13,7 @@ from tools.Configs.Matrices.GoalMatrices import GoalMatrices
 
 threshold = 0.05
 current_model = ''
-gen_number = 0
+iteration_number = 0
 
 
 # generated at random
@@ -56,9 +56,9 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
 
 
 def fitness(individual: [float], data: [str]) -> float:
-    global gen_number
-    print('Generation number: ' + str(gen_number))
-    gen_number += 1
+    global iteration_number
+    print('Iteration number: ' + str(iteration_number))
+    iteration_number += 1
 
     # the last 3 values of the individual  must be negatives
     for i in range(1, 4):

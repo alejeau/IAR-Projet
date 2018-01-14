@@ -9,6 +9,7 @@ from tools import Tools
 
 saliences = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
+
 class GaSimulator:
 
     @staticmethod
@@ -32,17 +33,14 @@ class GaSimulator:
                     sim = ScpmSim.SCPMSimulator()
 
                 sim.init_with_config(conf)
-                res = sim.run_sim('')
+                res = sim.run_sim()
                 results.update({(sc1, sc2): res})
 
         return results
 
     @staticmethod
     def analyze_results(results: [{}], conf: {}, threshold) -> Matrix:
-        channels = conf['channels']
-        # salience = conf['salience']
         dt = conf['dt']
-        raw = {}
 
         matrix = Matrix()
         tmp_matrix = [[Abilities.NO_SELECTION] * len(saliences) for _ in range(len(saliences))]

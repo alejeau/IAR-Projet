@@ -13,9 +13,6 @@ class SCPMSimulator:
         self.dt = 0.001
         self.old_stn_list = []
 
-    def init_and_load_config(self, filename: str):
-        self.init_with_config(Archivist.load(filename))
-
     def init_with_config(self, conf):
         self.config = conf
         channels = self.config['channels']
@@ -31,7 +28,7 @@ class SCPMSimulator:
             self.scpms.update({i: scpm})
         self.old_stn_list = [0.0 for _ in range(0, channels)]
 
-    def run_sim(self, result_file: str):
+    def run_sim(self):
         channels = self.config['channels']
         salience = self.config['salience']
         thresholds = {}
@@ -62,6 +59,4 @@ class SCPMSimulator:
             'threshold': thresholds,
             'gpi_outputs': gpi_outputs
         }
-        if result_file != '':
-            Archivist.store_data(simulation, result_file)
         return simulation
