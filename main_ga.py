@@ -6,8 +6,8 @@ from tools import Archivist
 
 
 population_size = 100
-# generations = 100
-generations = 1
+generations = 100
+# generations = 1
 crossover_proba = 0.8
 mutation_proba = 0.02
 elitism = True

@@ -57,7 +57,7 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
 
 def fitness(individual: [float], data: [str]) -> float:
     global iteration_number
-    print('Iteration number: ' + str(iteration_number))
+    print('current_model: ' + str(current_model) + ', iteration number: ' + str(iteration_number))
     iteration_number += 1
 
     # the last 3 values of the individual  must be negatives
