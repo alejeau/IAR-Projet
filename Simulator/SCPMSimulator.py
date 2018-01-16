@@ -37,13 +37,11 @@ class SCPMSimulator:
         thresholds = {}
         gpi_outputs = {}
 
-        print('channels: ' + str(channels))
         for channel in range(0, channels):
             thresholds.update({channel: self.scpms[channel].get_theta_gpi()})
 
         # main loop of the simulation
         for r in range(0, self.config['nb_of_runs']):
-            print('scpm: stn_list: ' + str(self.old_stn_list))
             for t in range(0, int(1/self.dt)):
                 stn_list = []
                 for channel in range(0, channels):
@@ -58,7 +56,6 @@ class SCPMSimulator:
                 # update the old list of stn values
                 self.old_stn_list = stn_list
 
-        print('scpm: stn_list: ' + str(self.old_stn_list))
         # once the sim finished, store the results
         simulation = {
             'salience': salience,

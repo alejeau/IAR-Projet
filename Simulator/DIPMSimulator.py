@@ -42,7 +42,6 @@ class DIPMSimulator:
 
         # main loop of the simulation
         for r in range(0, self.config['nb_of_runs']):
-            print('dipm: stn_list: ' + str(self.old_stn_list))
             for t in range(0, int(1/self.dt)):
                 stn_list = []
                 for channel in range(channels):
@@ -57,7 +56,6 @@ class DIPMSimulator:
                 # update the old list of stn values
                 self.old_stn_list = stn_list
 
-        print('dipm: stn_list: ' + str(self.old_stn_list))
         # once the sim finished, store the results
         simulation = {
             'salience': salience,
