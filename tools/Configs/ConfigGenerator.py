@@ -17,8 +17,8 @@ class ConfigGenerator:
 
     @staticmethod
     def generate_config_exp1():
-        Archivist.store_data(ConfigExp1.config_dipm_exp1(), '../../configs/config_dipm_exp1.p')
-        Archivist.store_data(ConfigExp1.config_scpm_exp1(), '../../configs/config_scpm_exp1.p')
+        Archivist.store_data(ConfigExp1.config_dipm_exp1_3_channels(), '../../configs/config_dipm_exp1.p')
+        Archivist.store_data(ConfigExp1.config_scpm_exp1_3_channels(), '../../configs/config_scpm_exp1.p')
 
     @staticmethod
     def generate_config_exp2():

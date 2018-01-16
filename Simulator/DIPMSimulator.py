@@ -31,21 +31,6 @@ class DIPMSimulator:
             self.dipms.update({i: dipm})
         self.old_stn_list = [0.0 for _ in range(0, channels)]
 
-    def init_from_config(self, conf):
-        self.config = conf
-        channels = self.config['channels']
-        dipms_conf = self.config['model_conf']
-        self.dt = self.config['dt']
-        for i in range(0, channels):
-            dipm = DIPM()
-            # if conf of weights and all, load and add
-            if dipms_conf[i] is not None:
-                dipm.load_conf(dipms_conf[i])
-            dipm.set_dt(self.dt)
-            # add the DIPM
-            self.dipms.update({i: dipm})
-        self.old_stn_list = [0.0 for i in range(0, channels)]
-
     def run_sim(self, result_file: str):
         channels = self.config['channels']
         salience = self.config['salience']
@@ -57,6 +42,7 @@ class DIPMSimulator:
 
         # main loop of the simulation
         for r in range(0, self.config['nb_of_runs']):
+            print('dipm: stn_list: ' + str(self.old_stn_list))
             for t in range(0, int(1/self.dt)):
                 stn_list = []
                 for channel in range(channels):
@@ -71,6 +57,7 @@ class DIPMSimulator:
                 # update the old list of stn values
                 self.old_stn_list = stn_list
 
+        print('dipm: stn_list: ' + str(self.old_stn_list))
         # once the sim finished, store the results
         simulation = {
             'salience': salience,
