@@ -39,12 +39,5 @@ for model in models:
         result
     ]
 
-    binaries = {
-        'model': model,
-        'threshold': GA.threshold,
-        'data': data,
-        'result': result
-    }
-
     filename = 'results/ga_' + model + '_results'
     Archivist.store_text(text, filename + '.txt')

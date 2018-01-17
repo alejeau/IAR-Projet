@@ -86,6 +86,10 @@ def fitness(individual: [float], data: [str]) -> float:
         goal = GoalMatrix.matrix_fifth()
 
     fitness_value = Tools.value_for_fitness(matrix, goal)
+
+    if gen_number != 0 and (gen_number - 99) % 100 == 0:
+        Tools.store_progress([current_model, threshold, data, (fitness_value, individual)], current_model, gen_number)
+
     return fitness_value
 
 

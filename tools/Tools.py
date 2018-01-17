@@ -3,6 +3,7 @@
 
 from tools.Abilities import Abilities
 from models.matrix.Matrix import Matrix
+from tools import Archivist
 
 
 def heaviside_step_function(number):
@@ -92,3 +93,8 @@ def update_conf(conf: {}, param: [str], value: [float]) -> {}:
     for i in range(len(param)):
         conf.update({param[i]: value[i]})
     return conf
+
+
+def store_progress(text: [], model: str, iteration: int):
+    filename = 'results/ga_' + model + '_results_' + str(iteration)
+    Archivist.store_text(text, filename + '.txt')
