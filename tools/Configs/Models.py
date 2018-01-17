@@ -8,10 +8,10 @@ def get_dipm_base_generator():
     # weights
     conf.update({'wcs1': 1.0})
     conf.update({'wcs2': 1.0})
-    conf.update({'wsd2_gpe': 0.4})
+    conf.update({'wsd2_gpe': 1.0})
     conf.update({'wgpe_stn': 1.0})
     conf.update({'wsd1_gpi': 1.0})
-    conf.update({'stn_gpi': 1.0})
+    conf.update({'wstn_gpi': 0.8})
 
     # threshold
     conf.update({'theta_d1': 0.2})
@@ -37,25 +37,18 @@ def get_dipm_base_generator():
     return conf
 
 
-def get_dipm_improved_generator():
-    conf = get_dipm_base_generator()
-    conf.update({'wcs1': 1.3})
-    conf.update({'wcs2': 1.3})
-    return conf
-
-
 def get_scpm_base_generator():
     conf = {}
 
     # weights
     conf.update({'wcs1': 1.0})
     conf.update({'wcs2': 1.0})
-    conf.update({'wsd2_gpe': 0.4})
-    conf.update({'wstn_gpe': 1.0})
+    conf.update({'wsd2_gpe': 1.0})
     conf.update({'wc_stn': 1.0})
     conf.update({'wgpe_stn': 1.0})
-    conf.update({'wsd1_gpi': 0.8})
-    conf.update({'stn_gpi': 0.8})
+    conf.update({'wsd1_gpi': 1.0})
+    conf.update({'wstn_gpe': 0.8})
+    conf.update({'wstn_gpi': 0.8})
     conf.update({'wgpe_gpi': 0.4})
 
     # threshold
@@ -79,11 +72,4 @@ def get_scpm_base_generator():
     conf.update({'a_stn': 0.0})
     conf.update({'a_gpi': 0.0})
 
-    return conf
-
-
-def get_scpm_improved_generator():
-    conf = get_dipm_base_generator()
-    conf.update({'wcs1': 1.15})
-    conf.update({'wcs2': 1.15})
     return conf

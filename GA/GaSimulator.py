@@ -6,26 +6,30 @@ import Simulator.SCPMSimulator as ScpmSim
 from models.matrix.Matrix import Matrix
 from tools.Abilities import Abilities
 from tools import Tools
+from tools.Values import Misc
 
-saliences = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+fifths = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+tenths = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
 
 class GaSimulator:
 
     @staticmethod
-    def run_sims(model: str, conf: {}) -> {}:
+    def run_sims(model: str, conf: {}, fifths_or_tenths=Misc.TENTHS) -> {}:
         sim = None
         results = {}
 
-        for sc1 in saliences:
+        salience = fifths if fifths_or_tenths is 'fifths' else tenths
+
+        for sc1 in salience:
             sal1 = [0.0] + [sc1 for _ in range(5)]
-            for sc2 in saliences:
+            for sc2 in salience:
                 sal2 = [0.0, 0.0] + [sc2 for _ in range(4)]
-                salience = {
+                sal = {
                     0: sal1,
                     1: sal2
                 }
-                conf.update({'salience': salience})
+                conf.update({'salience': sal})
 
                 if model == 'dipm':
                     sim = DipmSim.DIPMSimulator()
@@ -33,22 +37,23 @@ class GaSimulator:
                     sim = ScpmSim.SCPMSimulator()
 
                 sim.init_with_config(conf)
-                res = sim.run_sim()
+                res = sim.run_sim('')
                 results.update({(sc1, sc2): res})
 
         return results
 
     @staticmethod
-    def analyze_results(results: [{}], conf: {}, threshold) -> Matrix:
+    def analyze_results(results: [{}], conf: {}, threshold, fifths_or_tenths=Misc.TENTHS) -> Matrix:
         dt = conf['dt']
+        salience = fifths if fifths_or_tenths == Misc.FIFTHS else tenths
 
         matrix = Matrix()
-        tmp_matrix = [[Abilities.NO_SELECTION] * len(saliences) for _ in range(len(saliences))]
+        tmp_matrix = [[Abilities.NO_SELECTION] * len(salience) for _ in range(len(salience))]
 
         i = 0
-        for sc1 in saliences:
+        for sc1 in salience:
             j = 0
-            for sc2 in saliences:
+            for sc2 in salience:
                 outputs = results[(sc1, sc2)]
                 gpi_outputs = outputs['gpi_outputs']
                 ability = Tools.determine_ability(gpi_outputs, dt, threshold)

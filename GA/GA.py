@@ -4,16 +4,16 @@
 import random
 from pyeasyga import pyeasyga
 from operator import attrgetter
-from models.matrix.Matrix import Matrix
 from GA.GaSimulator import GaSimulator
-from tools import Tools
+from tools import Tools, Values
 from tools.Configs import Models
 from tools.Configs import ConfigExp2
-from tools.Configs.Matrices.GoalMatrices import GoalMatrices
+from tools.Configs.Matrices.GoalMatrix import GoalMatrix
 
 threshold = 0.05
 current_model = ''
-iteration_number = 0
+fifths_or_tenths = Values.Misc.TENTHS
+gen_number = 0
 
 
 # generated at random
@@ -56,9 +56,9 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
 
 
 def fitness(individual: [float], data: [str]) -> float:
-    global iteration_number
-    print('current_model: ' + str(current_model) + ', iteration number: ' + str(iteration_number))
-    iteration_number += 1
+    global gen_number
+    print('Generation number: ' + str(gen_number))
+    gen_number += 1
 
     # the last 3 values of the individual  must be negatives
     for i in range(1, 4):
@@ -78,14 +78,12 @@ def fitness(individual: [float], data: [str]) -> float:
     # we update the sim's configuration
     conf.update({'model_conf': {0: model_conf, 1: model_conf}})
 
-    results = GaSimulator.run_sims(current_model, conf)
-    matrix = GaSimulator.analyze_results(results, conf, threshold)
+    results = GaSimulator.run_sims(current_model, conf, fifths_or_tenths)
+    matrix = GaSimulator.analyze_results(results, conf, threshold, fifths_or_tenths)
 
-    goal = Matrix()
-    if current_model is 'dipm':
-        goal = GoalMatrices.dipm()
-    elif current_model is 'scpm':
-        goal = GoalMatrices.scpm()
+    goal = GoalMatrix.matrix_tenth()
+    if fifths_or_tenths is Values.Misc.FIFTHS:
+        goal = GoalMatrix.matrix_fifth()
 
     fitness_value = Tools.value_for_fitness(matrix, goal)
     return fitness_value

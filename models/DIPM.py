@@ -8,12 +8,12 @@ import tools.Archivist as confLoader
 class DIPM:
     def __init__(self):
         # weights
-        self.wcs1 = 1.3
-        self.wcs2 = 1.3
-        self.wsd2_gpe = 0.4
+        self.wcs1 = 1.0
+        self.wcs2 = 1.0
+        self.wsd2_gpe = 1.0
         self.wgpe_stn = 1.0
         self.wsd1_gpi = 1.0
-        self.wstn_gpi = 1.0
+        self.wstn_gpi = 0.8
 
         # threshold
         self.theta_d1 = 0.2
@@ -35,6 +35,10 @@ class DIPM:
         self.a_gpe = 0.0
         self.a_stn = 0.0
         self.a_gpi = 0.0
+
+        # dopamine levels
+        self.dopamine_level_d1 = 0.2
+        self.dopamine_level_d2 = 0.2
 
         # storage of u_xxx values
         self.u_d1 = 0.0
@@ -104,13 +108,13 @@ class DIPM:
         return (-self.wsd1_gpi * y_d1) + (self.wstn_gpi * sum(stn_list))
 
     def compute_d1(self, salience: float) -> float:
-        self.u_d1 = self.u_i_d1(salience)
+        self.u_d1 = self.u_i_d1(salience * (1 + self.dopamine_level_d1))
         self.a_d1 = self.a_plus_delta_a(self.old_a_d1, self.old_u_d1)
         self.y_d1 = self.output(self.old_a_d1, self.theta_d1)
         return self.y_d1
 
     def compute_d2(self, salience: float) -> float:
-        self.u_d2 = self.u_i_d2(salience)
+        self.u_d2 = self.u_i_d2(salience * (1 - self.dopamine_level_d2))
         self.a_d2 = self.a_plus_delta_a(self.old_a_d2, self.old_u_d2)
         self.y_d2 = self.output(self.old_a_d2, self.theta_d2)
         return self.y_d2
@@ -166,7 +170,7 @@ class DIPM:
         self.wsd2_gpe = conf['wsd2_gpe']
         self.wgpe_stn = conf['wgpe_stn']
         self.wsd1_gpi = conf['wsd1_gpi']
-        self.wstn_gpi = conf['stn_gpi']
+        self.wstn_gpi = conf['wstn_gpi']
         self.theta_d1 = conf['theta_d1']
         self.theta_d2 = conf['theta_d2']
         self.theta_gpe = conf['theta_gpe']
@@ -188,7 +192,7 @@ class DIPM:
         self.wsd2_gpe = conf['wsd2_gpe']
         self.wgpe_stn = conf['wgpe_stn']
         self.wsd1_gpi = conf['wsd1_gpi']
-        self.wstn_gpi = conf['stn_gpi']
+        self.wstn_gpi = conf['wstn_gpi']
         self.theta_d1 = conf['theta_d1']
         self.theta_d2 = conf['theta_d2']
         self.theta_gpe = conf['theta_gpe']

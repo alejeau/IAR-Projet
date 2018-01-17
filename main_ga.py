@@ -3,16 +3,18 @@
 
 from GA import GA
 from tools import Archivist
+from tools.Values import Misc
 
 
 population_size = 100
 generations = 100
-# generations = 1
 crossover_proba = 0.8
 mutation_proba = 0.02
 elitism = True
 
-models = ['dipm', 'scpm']
+# models = ['dipm', 'scpm']
+# models = ['dipm']
+models = ['scpm']
 
 for model in models:
     data = [str]
@@ -26,7 +28,8 @@ for model in models:
 
     GA.threshold = 0.05
     GA.current_model = model
-    GA.iteration_number = 0
+    GA.fifths_or_tenths = Misc.FIFTHS
+    GA.gen_number = 0
     result = GA.run_ga(data, population_size, generations, crossover_proba, mutation_proba, elitism)
 
     text = [

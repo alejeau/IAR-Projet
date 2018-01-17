@@ -5,7 +5,7 @@ from tools.Abilities import Abilities
 from models.matrix.Matrix import Matrix
 
 
-class GoalMatrices:
+class WangGaOptimizedMatrices:
     @staticmethod
     def dipm() -> Matrix:
         mat = [  # in x we store the y
@@ -27,7 +27,7 @@ class GoalMatrices:
 
     @staticmethod
     def pprint_dipm():
-        GoalMatrices.dipm().pprint()
+        WangGaOptimizedMatrices.dipm().pprint()
 
     @staticmethod
     def scpm() -> Matrix:
@@ -50,4 +50,4 @@ class GoalMatrices:
 
     @staticmethod
     def pprint_scpm():
-        GoalMatrices.scpm().pprint()
+        WangGaOptimizedMatrices.scpm().pprint()

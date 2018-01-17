@@ -70,11 +70,9 @@ def determine_ability(outputs: {}, dt: float, threshold: float) -> Abilities:
 
 
 def get_reward(evaluated: Abilities, goal: Abilities) -> int:
-    num_evaluated = get_numerical_value_of_ability(evaluated)
-    num_goal = get_numerical_value_of_ability(goal)
-    res = num_evaluated - num_goal
-    if evaluated is Abilities.NO_SWITCHING:  # NO_SWITCHING is BAD
-        res -= 1
+    res = 0
+    if evaluated is goal:
+        res = 1
     return res
 
 
