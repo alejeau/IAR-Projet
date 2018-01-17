@@ -3,6 +3,7 @@
 
 from GA import GA
 from tools import Archivist
+from tools.Values import Misc
 
 
 population_size = 100
@@ -27,8 +28,8 @@ for model in models:
 
     GA.threshold = 0.05
     GA.current_model = model
+    GA.fifths_or_tenths = Misc.FIFTHS
     GA.gen_number = 0
-    # GA.number_of_sims = 1
     result = GA.run_ga(data, population_size, generations, crossover_proba, mutation_proba, elitism)
 
     text = [

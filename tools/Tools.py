@@ -29,60 +29,6 @@ def get_numerical_value_of_ability(ability: Abilities) -> int:
     if ability is Abilities.SWITCHING:
         return 3
 
-# t_chanX: keys of the dict to test
-def generate_simple_ability_matrix(channel1: {float: float}, t_chan1: [float], channel2: {float: float},
-                                   t_chan2: [float], threshold: float):
-    x_keys_map = {}
-    reversed_x_keys_map = {}
-    y_keys_map = {}
-    reversed_y_keys_map = {}
-    matrix = Matrix()
-    x_keys = sorted(channel1.keys())
-    x_len = len(x_keys)
-    y_keys = sorted(channel2.keys())
-    y_len = len(y_keys)
-
-    tmp_matrix = [[Abilities.NO_SELECTION] * y_len for _ in range(x_len)]
-
-    i = 0
-    for k in x_keys:
-        x_keys_map.update({k: i})
-        reversed_x_keys_map.update({i: k})
-        i += 1
-
-    i = 0
-    for k in y_keys:
-        y_keys_map.update({k: i})
-        reversed_y_keys_map.update({i: k})
-        i += 1
-
-
-
-
-
-
-
-
-
-
-    for x in x_keys:
-        i = x_keys_map[x]
-        for y in y_keys:
-            j = y_keys_map[y]
-            if channel1[x] <= threshold or channel2[y] <= threshold:
-                value = Abilities.SELECTION
-                if channel2[y] <= threshold < channel1[x]:
-                    if i != 0:
-                        prev_x = reversed_x_keys_map[i-1]
-                        if channel2[prev_x] <= threshold:
-                            value = Abilities.SWITCHING
-                elif channel1[x] <= threshold and channel2[y] <= threshold and i != 0 and j != 0:
-                    value = Abilities.NO_SWITCHING
-
-                tmp_matrix[i][j] = value
-    matrix.init_matrix(tmp_matrix)
-    return matrix
-
 
 def determine_ability(outputs: {}, dt: float, threshold: float) -> Abilities:
     chan1 = outputs[0]
@@ -122,12 +68,11 @@ def determine_ability(outputs: {}, dt: float, threshold: float) -> Abilities:
 
     return ability
 
+
 def get_reward(evaluated: Abilities, goal: Abilities) -> int:
-    num_evaluated = get_numerical_value_of_ability(evaluated)
-    num_goal = get_numerical_value_of_ability(goal)
-    res = num_evaluated - num_goal
-    if evaluated is Abilities.NO_SWITCHING:  # NO_SWITCHING is BAD
-        res -= 1
+    res = 0
+    if evaluated is goal:
+        res = 1
     return res
 
 

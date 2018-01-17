@@ -4,15 +4,15 @@
 import random
 from pyeasyga import pyeasyga
 from operator import attrgetter
-from models.matrix.Matrix import Matrix
 from GA.GaSimulator import GaSimulator
-from tools import Tools
+from tools import Tools, Values
 from tools.Configs import Models
 from tools.Configs import ConfigExp2
 from tools.Configs.Matrices.GoalMatrix import GoalMatrix
 
 threshold = 0.05
 current_model = ''
+fifths_or_tenths = Values.Misc.TENTHS
 gen_number = 0
 
 
@@ -78,14 +78,12 @@ def fitness(individual: [float], data: [str]) -> float:
     # we update the sim's configuration
     conf.update({'model_conf': {0: model_conf, 1: model_conf}})
 
-    results = GaSimulator.run_sims(current_model, conf)
-    matrix = GaSimulator.analyze_results(results, conf, threshold)
+    results = GaSimulator.run_sims(current_model, conf, fifths_or_tenths)
+    matrix = GaSimulator.analyze_results(results, conf, threshold, fifths_or_tenths)
 
-    goal = Matrix()
-    if current_model is 'dipm':
-        goal = GoalMatrix.matrix_tenth()
-    elif current_model is 'scpm':
-        goal = GoalMatrix.scpm()
+    goal = GoalMatrix.matrix_tenth()
+    if fifths_or_tenths is Values.Misc.FIFTHS:
+        goal = GoalMatrix.matrix_fifth()
 
     fitness_value = Tools.value_for_fitness(matrix, goal)
     return fitness_value

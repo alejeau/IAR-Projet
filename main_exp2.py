@@ -1,213 +1,73 @@
 #!/usr/bin/python3
 # -*-coding: utf-8 -*
 
-import Simulator.DIPMSimulator as DipmSim
-import Simulator.SCPMSimulator as ScpmSim
-import tools.Archivist as Archivist
-import tools.Display as Display
-import tools.Configs.ConfigExp2 as Config
-import models.matrix.AbilitiesMatrix as AbilitiesMatrix
-from models.matrix.Matrix import Matrix
-from tools.Configs.Matrices.GoalMatrix import GoalMatrix
-from GA import GA
 from tools import Tools
-from tools.Configs import Models, ConfigExp2
+from tools import Display
+from tools.Values import Misc
+from tools.Configs import Models
+from tools.Configs import ConfigExp2
+from GA.GaSimulator import GaSimulator
+from tools.Configs.Matrices.GoalMatrix import GoalMatrix
+from tools.Configs.Matrices.WangGaOptimizedMatrices import WangGaOptimizedMatrices as Ga_mat
 
 
-def normalized_number(size: int, number: int) -> str:
-    n = str(number)
-    tmp = ''
-    s = size - len(n)
-    for i in range(0, s):
-        tmp += '0'
-
-    return tmp + n
-
-
-def run_sims():
-    sim = None
-    models = ['dipm', 'scpm']
-
-    for model in models:
-        if model == 'dipm':
-            conf = Config.config_dipm_exp2()
-        else:
-            conf = Config.config_scpm_exp2()
-
-        for i in range(0, 121):
-            if model == 'dipm':
-                sim = DipmSim.DIPMSimulator()
-            elif model == 'scpm':
-                sim = ScpmSim.SCPMSimulator()
-
-            exp = normalized_number(3, i)
-            results = 'results/exp2/' + 'results_' + model + '_exp2_' + exp + '.p'
-
-            sim.init_with_config(conf)
-            sim.run_sim(results)
-            # data = Archivist.load(results)
-            # export_file = 'img_export/exp2/multi/' + model + '_exp2_' + exp + '.png'
-            # Display.flexible_display_or_save(data['gpi_outputs'], model, export_file, [0, 1], data['salience'], 0.05)
-
-
-def run_parametrized_sims(conf: {}, model, number_of_sims=121):
-    sim = None
-
-    for i in range(number_of_sims):
-        if model == 'dipm':
-            sim = DipmSim.DIPMSimulator()
-        elif model == 'scpm':
-            sim = ScpmSim.SCPMSimulator()
-
-        exp = normalized_number(3, i)
-        results = 'results/exp2/' + 'results_' + model + '_exp2_' + exp + '.p'
-
-        sim.init_with_config(conf)
-        sim.run_sim(results)
-
-
-def run_improved_sims():
-    sim = None
-    models = ['dipm', 'scpm']
-
-    for model in models:
-        if model == 'dipm':
-            conf = Config.improved_config_dipm_exp2()
-        else:
-            conf = Config.improved_config_scpm_exp2()
-
-        for i in range(0, 121):
-            if model == 'dipm':
-                sim = DipmSim.DIPMSimulator()
-            elif model == 'scpm':
-                sim = ScpmSim.SCPMSimulator()
-
-            exp = normalized_number(3, i)
-            results = 'results/exp2/' + 'results_improved_' + model + '_exp2_' + exp + '.p'
-
-            sim.init_with_config(conf)
-            sim.run_sim(results)
-            # data = Archivist.load(results)
-            # export_file = 'img_export/exp2/multi/improved_' + model + '_exp2_' + exp + '.png'
-            # Display.flexible_display_or_save(data['gpi_outputs'], model, export_file, [0, 1], data['salience'], 0.05)
-
-
-def analyze_results(improved_sim: bool, number_of_sims=121):
-    # result: {Model: {channel: {index: value}}}
-    # results = {str: {int: {float: float}}}
-    results = {}
-    channels = Config.config_scpm_exp2()['channels']
-    salience = Config.config_scpm_exp2()['salience']
-    dt = Config.config_scpm_exp2()['dt']
-    improved = 'improved_' if improved_sim else ''
-
-    models = ['dipm', 'scpm']
-
-    # model_res: {Model: {sim_number {channel: {salience: [value]}}}}
-    model_res = {}
-    for model in models:  # for each model
-        for sim_number in range(number_of_sims):  # for each simulation
-            filename = 'results/exp2/' + 'results_' + improved + model + '_exp2_' + normalized_number(3, sim_number) + '.p'
-            data = Archivist.load(filename)
-            gpi_outputs = data['gpi_outputs']
-            channel_res = {}
-            for channel in range(0, channels):  # for each channel
-                tmp = []
-                salience_res = {}
-                for s in range(0, len(salience[channel])):  # for each salience 0.0, 0.1, ..., 1.0 of channel channel
-                    time_intervals = int(1/dt)
-                    for i in range(0, time_intervals):  # for each dt of salience s
-                        tmp.append(gpi_outputs[channel][i + s * time_intervals])  # append outputs of gpi to tmp
-                    avg = sum(tmp) / len(tmp)   # we average the whole interval
-                    val = salience_res.get(salience[channel][s], [])
-                    val.append(avg)
-                    salience_res.update({salience[channel][s]: val})
-                channel_res.update({channel: salience_res})
-            val = model_res.get(model, {})
-            val.update({sim_number: channel_res})
-            model_res.update({model: val})
-
-    Archivist.pretty_store(model_res, 'results/model_res.txt')
-
-    res_tmp = {}
-    for model in models:
-        chan_tmp = {}
-        for exp in model_res[model]:
-            for channel in model_res[model][exp]:
-                sal_tmp = {}
-                for sal in model_res[model][exp][channel]:
-                    tmp = sal_tmp.get(sal, [])
-                    for value in model_res[model][exp][channel][sal]:
-                        tmp.append(value)
-                    sal_tmp.update({sal: tmp})
-                chan_tmp.update({channel: sal_tmp})
-            res_tmp.update({model: chan_tmp})
-
-    Archivist.pretty_store(res_tmp, 'results/res_tmp.txt')
-
-    for model in models:
-        chan = results.get(model, {})
-        for channel in res_tmp[model]:
-            sal = chan.get(channel, {})
-            for s in res_tmp[model][channel]:
-                res = sum(res_tmp[model][channel][s]) / len(res_tmp[model][channel][s])
-                sal.update({s: res})
-            chan.update({channel: sal})
-        results.update({model: chan})
-
-    Archivist.pretty_store(results, 'results/results.txt')
-
-    return results
-
-
-def display_curves(results):
-    for model in results.keys():
-        title = str(model) + ' exp2'
-        export_name = str(model) + '_exp2'
-        Display.save_simple(results[model], title, 'img_export/exp2/' + export_name)
-
-
-def exp2(model: str, improved_sim: bool, export_name: str):
-    results = analyze_results(improved_sim)
-    display_curves(results)
-
-    matrix = AbilitiesMatrix.AbilitiesMatrix()
+def exp2(model, individual, data, threshold, fifths_or_tenths):
+    conf = {}
+    model_conf = {}
     if model is 'dipm':
-        # matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.05)
-        matrix.generate_matrix(results['dipm'][0], results['dipm'][1], 0.3)
-        Display.save_simple_abilities_matrix(matrix.get_matrix(), '', '')
+        conf = ConfigExp2.config_dipm_exp2()
+        model_conf = Models.get_dipm_base_generator()
     elif model is 'scpm':
-        # matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.05)
-        matrix.generate_matrix(results['scpm'][0], results['dipm'][1], 0.14)
-    Display.save_abilities_figure(matrix, '', export_name)
+        conf = ConfigExp2.config_scpm_exp2()
+        model_conf = Models.get_scpm_base_generator()
+
+    # we update the model's weights' configuration
+    model_conf = Tools.update_conf(model_conf, data, individual)
+    # we update the sim's configuration
+    conf.update({'model_conf': {0: model_conf, 1: model_conf}})
+
+    results = GaSimulator.run_sims(model, conf, fifths_or_tenths)
+    matrix = GaSimulator.analyze_results(results, conf, threshold, fifths_or_tenths)
+    Display.save_simple_abilities_matrix(matrix, '', '')
 
 
-def nice_one():
-    abscissa = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    values1 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.5, 0.0]
-    values2 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.4, 0.2, 0.1, 0.0]
-    chan1 = {}
-    chan2 = {}
-    for i in range(len(abscissa)):
-        chan1.update({abscissa[i]: values1[i]})
-        chan2.update({abscissa[i]: values2[i]})
-    matrix = AbilitiesMatrix.AbilitiesMatrix()
-    matrix.generate_matrix(chan1, chan2, 0.3)
-    Display.save_abilities_figure(matrix, '', '')
+def main_exp2():
+    # models = ['dipm', 'scpm']
+    # models = ['dipm']
+    models = ['scpm']
+    individual = [float]
+    threshold = 0.05
+    fifths_or_tenths = Misc.FIFTHS
+    data = [str]
+
+    for model in models:
+        if model == 'dipm':
+            data = ['wcs1', 'wcs2', 'wsd2_gpe', 'wgpe_stn', 'wsd1_gpi', 'wstn_gpi', 'theta_d1', 'theta_d2', 'theta_gpe',
+                    'theta_stn', 'theta_gpi']
+            individual = [0.94948035562892, 0.7247278639644021, 0.7626401017720236, 0.1251507767942246,
+                          0.6801936362298814, 0.5330200237697756, 0.007677974913827268, 0.17250093305279468,
+                          -0.34178973757684383, -0.1805072944715297, -0.3366105426889202]
+        elif model == 'scpm':
+            data = ['wcs1', 'wcs2', 'wsd2_gpe', 'wc_stn', 'wgpe_stn', 'wsd1_gpi', 'wstn_gpe', 'wstn_gpi', 'wgpe_gpi',
+                    'theta_d1', 'theta_d2', 'theta_gpe', 'theta_stn', 'theta_gpi']
+            individual = [0.45860185609965864, 0.5214167323687748, 0.21121036565437545, 0.870081341501728,
+                          0.6241650146479159, 0.8268923788309985, 0.14454111807730685, 0.08262191791402207,
+                          0.2676369188631271, 0.14994831884579007, 0.4981667707565255, -0.5466515671785532,
+                          -0.5652687596782892, -0.16848502608438598]
+
+        exp2(model, individual, data, threshold, fifths_or_tenths)
 
 
 def main():
-    # run_sims()
-    # run_improved_sims()
-    # nice_one()
-    # exp2('dipm', improved_sim=False, export_name="img_export/exp2/dipm_abilities_matrix.png")
-    # exp2('scpm', improved_sim=False, export_name="img_export/exp2/scpm_abilities_matrix.png")
-    # exp2('dipm', improved_sim=True, export_name="img_export/exp2/dipm_improved_abilities_matrix.png")
-    # exp2('scpm', improved_sim=True, export_name="img_export/exp2/scpm_improved_abilities_matrix.png")
     # GoalMatrix.matrix_tenth().pprint()
     # Display.save_simple_abilities_matrix(GoalMatrix.matrix_tenth(), '', '')
-    GoalMatrix.matrix_fifth().pprint()
-    Display.save_simple_abilities_matrix(GoalMatrix.matrix_fifth(), '', '')
+    # GoalMatrix.matrix_fifth().pprint()
+    # Display.save_simple_abilities_matrix(GoalMatrix.matrix_fifth(), '', '')
+    # print('Fitness value of GA-DIPM: ' + str(Tools.value_for_fitness(Ga_mat.dipm(), GoalMatrix.matrix_tenth())))
+    # print('Fitness value of GA-SCPM: ' + str(Tools.value_for_fitness(Ga_mat.scpm(), GoalMatrix.matrix_tenth())))
+
+    main_exp2()
+
     pass
 
 
