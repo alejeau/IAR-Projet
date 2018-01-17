@@ -33,8 +33,8 @@ def exp2(model, individual, data, threshold, fifths_or_tenths):
 
 def main_exp2():
     # models = ['dipm', 'scpm']
-    # models = ['dipm']
-    models = ['scpm']
+    models = ['dipm']
+    # models = ['scpm']
     individual = [float]
     threshold = 0.05
     fifths_or_tenths = Misc.FIFTHS
