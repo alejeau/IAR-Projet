@@ -8,7 +8,7 @@ import tools.Display as Display
 import tools.Configs.ConfigExp2 as Config
 import models.matrix.AbilitiesMatrix as AbilitiesMatrix
 from models.matrix.Matrix import Matrix
-from tools.Configs.Matrices.GoalMatrices import GoalMatrices
+from tools.Configs.Matrices.GoalMatrix import GoalMatrix
 from GA import GA
 from tools import Tools
 from tools.Configs import Models, ConfigExp2
@@ -197,17 +197,17 @@ def nice_one():
 
 
 def main():
-    run_sims()
+    # run_sims()
     # run_improved_sims()
     # nice_one()
     # exp2('dipm', improved_sim=False, export_name="img_export/exp2/dipm_abilities_matrix.png")
     # exp2('scpm', improved_sim=False, export_name="img_export/exp2/scpm_abilities_matrix.png")
     # exp2('dipm', improved_sim=True, export_name="img_export/exp2/dipm_improved_abilities_matrix.png")
     # exp2('scpm', improved_sim=True, export_name="img_export/exp2/scpm_improved_abilities_matrix.png")
-    # GoalMatrices.dipm().pprint()
-    # Display.save_simple_abilities_matrix(GoalMatrices.dipm(), '', '')
-    # GoalMatrices.scpm().pprint()
-    # Display.save_simple_abilities_matrix(GoalMatrices.scpm(), '', '')
+    # GoalMatrix.matrix_tenth().pprint()
+    # Display.save_simple_abilities_matrix(GoalMatrix.matrix_tenth(), '', '')
+    GoalMatrix.matrix_fifth().pprint()
+    Display.save_simple_abilities_matrix(GoalMatrix.matrix_fifth(), '', '')
     pass
 
 

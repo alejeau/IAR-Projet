@@ -9,7 +9,7 @@ from GA.GaSimulator import GaSimulator
 from tools import Tools
 from tools.Configs import Models
 from tools.Configs import ConfigExp2
-from tools.Configs.Matrices.GoalMatrices import GoalMatrices
+from tools.Configs.Matrices.GoalMatrix import GoalMatrix
 
 threshold = 0.05
 current_model = ''
@@ -83,9 +83,9 @@ def fitness(individual: [float], data: [str]) -> float:
 
     goal = Matrix()
     if current_model is 'dipm':
-        goal = GoalMatrices.dipm()
+        goal = GoalMatrix.matrix_tenth()
     elif current_model is 'scpm':
-        goal = GoalMatrices.scpm()
+        goal = GoalMatrix.scpm()
 
     fitness_value = Tools.value_for_fitness(matrix, goal)
     return fitness_value
