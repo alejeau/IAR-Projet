@@ -2,6 +2,7 @@
 # -*-coding: utf-8 -*
 
 import random
+import copy
 from pyeasyga import pyeasyga
 from operator import attrgetter
 from GA.GaSimulator import GaSimulator
@@ -40,20 +41,22 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
     sum_of_fitness = 0
     fitnesses = []
     # sort from worst to fittest individual
-    population.sort(key=attrgetter('fitness'))
+    tmp_pop = copy.deepcopy(population)
 
-    for individual in population:
+    tmp_pop.sort(key=attrgetter('fitness'))
+
+    for individual in tmp_pop:
         fitnesses.append(individual.fitness)
         sum_of_fitness += individual.fitness
 
     rand = random.random() * sum_of_fitness
 
-    for i in range(len(population)):
+    for i in range(len(tmp_pop)):
         if fitnesses[i] < rand:
-            return population[i]
+            return tmp_pop[i]
 
     # when rounding errors occur, we return the fittest individual
-    return population[-1]
+    return tmp_pop[-1]
 
 
 def fitness(individual: [float], data: [str]) -> float:
