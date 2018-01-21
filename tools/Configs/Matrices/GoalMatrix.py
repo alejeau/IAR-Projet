@@ -32,7 +32,7 @@ class GoalMatrix:
     @staticmethod
     def matrix_fifth() -> Matrix:
         mat = [  # in x we store the y
-            [Abilities.NO_SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING],
+            [Abilities.NO_SELECTION, Abilities.SELECTION, Abilities.SELECTION, Abilities.SELECTION, Abilities.SELECTION, Abilities.SELECTION],
             [Abilities.SELECTION, Abilities.NO_SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING],
             [Abilities.SELECTION, Abilities.SELECTION, Abilities.NO_SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING],
             [Abilities.SELECTION, Abilities.SELECTION, Abilities.SELECTION, Abilities.NO_SWITCHING, Abilities.SWITCHING, Abilities.SWITCHING],
