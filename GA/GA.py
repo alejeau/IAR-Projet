@@ -46,13 +46,13 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
     tmp_pop.sort(key=attrgetter('fitness'))
 
     for individual in tmp_pop:
-        fitnesses.append(individual.fitness)
         sum_of_fitness += individual.fitness
+        fitnesses.append(sum_of_fitness)
 
     rand = random.random() * sum_of_fitness
 
     for i in range(len(tmp_pop)):
-        if fitnesses[i] < rand:
+        if rand < fitnesses[i]:
             return tmp_pop[i]
 
     # when rounding errors occur, we return the fittest individual
