@@ -5,7 +5,7 @@ import random
 from pyeasyga import pyeasyga
 from operator import attrgetter
 from GA.GaSimulator import GaSimulator
-from tools import Tools, Values
+from tools import Tools, Values, Archivist
 from tools.Configs import Models
 from tools.Configs import ConfigExp2
 from tools.Configs.Matrices.GoalMatrix import GoalMatrix
@@ -14,6 +14,8 @@ threshold = 0.05
 current_model = ''
 fifths_or_tenths = Values.Misc.TENTHS
 gen_number = 0
+best_fitness = 0
+
 
 
 # generated at random
@@ -86,6 +88,14 @@ def fitness(individual: [float], data: [str]) -> float:
         goal = GoalMatrix.matrix_fifth()
 
     fitness_value = Tools.value_for_fitness(matrix, goal)
+
+    global best_fitness
+    if fitness_value != 0 and fitness_value >= best_fitness:
+        best_fitness = fitness_value
+        filename = 'results/ga/ga_' + str(current_model) + '_gen_' + str(Tools.normalized_number(4, gen_number))\
+                   + '_fit_' + str(fitness_value) + '.txt'
+        Archivist.store_text([current_model, threshold, data, (fitness_value, individual)], filename)
+
     return fitness_value
 
 
