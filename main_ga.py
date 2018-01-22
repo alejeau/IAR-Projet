@@ -28,7 +28,7 @@ for model in models:
 
     GA.threshold = 0.05
     GA.current_model = model
-    GA.fifths_or_tenths = Misc.TENTHS
+    GA.fifths_or_tenths = Misc.FIFTHS
     GA.gen_number = 0
     result = GA.run_ga(data, population_size, generations, crossover_proba, mutation_proba, elitism)
 
