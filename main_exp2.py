@@ -6,18 +6,19 @@ from tools import Display
 from tools.Values import Misc
 from tools.Configs import Models
 from tools.Configs import ConfigExp2
+from tools.individuals.loader import Loader
+from tools.individuals.Individuals import GaDipmFifths, GaScpmFifths, GaScpmTenths
 from GA.GaSimulator import GaSimulator
 from tools.Configs.Matrices.GoalMatrix import GoalMatrix
-from tools.Configs.Matrices.WangGaOptimizedMatrices import WangGaOptimizedMatrices as Ga_mat
 
 
-def exp2(model, individual, data, threshold, fifths_or_tenths):
+def exp2(model, individual, data, threshold, fifths_or_tenths, export_file):
     conf = {}
     model_conf = {}
-    if model is 'dipm':
+    if model == 'dipm':
         conf = ConfigExp2.config_dipm_exp2()
         model_conf = Models.get_dipm_base_generator()
-    elif model is 'scpm':
+    elif model == 'scpm':
         conf = ConfigExp2.config_scpm_exp2()
         model_conf = Models.get_scpm_base_generator()
 
@@ -28,40 +29,56 @@ def exp2(model, individual, data, threshold, fifths_or_tenths):
 
     results = GaSimulator.run_sims(model, conf, fifths_or_tenths)
     matrix = GaSimulator.analyze_results(results, conf, threshold, fifths_or_tenths)
-    Display.save_simple_abilities_matrix(matrix, '', '')
+    goal = GoalMatrix.matrix_fifth() if fifths_or_tenths is Misc.FIFTHS else GoalMatrix.matrix_tenth()
+    print('Fitness value: ' + str(Tools.value_for_fitness(matrix, goal)))
+    Display.save_simple_abilities_matrix(matrix, '', export_file)
 
 
 def main_exp2():
     # models = ['dipm', 'scpm']
     models = ['dipm']
     # models = ['scpm']
-    individual = [float]
+    individual = None
     threshold = 0.05
     fifths_or_tenths = Misc.FIFTHS
+    # fifths_or_tenths = Misc.TENTHS
     data = [str]
 
     for model in models:
         if model == 'dipm':
             data = ['wcs1', 'wcs2', 'wsd2_gpe', 'wgpe_stn', 'wsd1_gpi', 'wstn_gpi', 'theta_d1', 'theta_d2', 'theta_gpe',
                     'theta_stn', 'theta_gpi']
-            # individual = [0.9971387611575598, 0.2220930228821334, 0.875605834085602, 0.9977366109223583,
-            #               0.9543686693260294, 0.3117411415985536, 0.3902800110325897, 0.3197597878133651,
-            #               -0.8451867649391441, -0.4810295106138528, -0.21997955031315686]
-            # individual = [0.9971387611575598, 0.2220930228821334, 0.875605834085602, 0.9977366109223583,
-            #               0.9543686693260294, 0.3117411415985536, 0.3902800110325897, 0.3197597878133651,
-            #               -0.8451867649391441, -0.4810295106138528, -0.21997955031315686]
-            individual = [0.9971387611575598, 0.2220930228821334, 0.875605834085602, 0.9977366109223583,
-                          0.9543686693260294, 0.3117411415985536, 0.3902800110325897, 0.3197597878133651,
-                          0.8451867649391441, 0.4810295106138528, 0.21997955031315686]
+            individual = GaDipmFifths.FIT_29_GEN5_401
         elif model == 'scpm':
             data = ['wcs1', 'wcs2', 'wsd2_gpe', 'wc_stn', 'wgpe_stn', 'wsd1_gpi', 'wstn_gpe', 'wstn_gpi', 'wgpe_gpi',
                     'theta_d1', 'theta_d2', 'theta_gpe', 'theta_stn', 'theta_gpi']
-            individual = [0.45860185609965864, 0.5214167323687748, 0.21121036565437545, 0.870081341501728,
-                          0.6241650146479159, 0.8268923788309985, 0.14454111807730685, 0.08262191791402207,
-                          0.2676369188631271, 0.14994831884579007, 0.4981667707565255, -0.5466515671785532,
-                          -0.5652687596782892, -0.16848502608438598]
+            if fifths_or_tenths is Misc.FIFTHS:
+                # individual = GaScpmFifths.FIT_36_GEN_211
+                individual = GaScpmFifths.FIT_36_GEN_442
+            else:
+                # individual = GaScpmTenths.FIT_121_GEN_4290
+                individual = GaScpmTenths.FIT_121_GEN_4891
 
-        exp2(model, individual, data, threshold, fifths_or_tenths)
+        export_file = ''
+        exp2(model, individual, data, threshold, fifths_or_tenths, export_file)
+
+
+def main_exp2_loader():
+    fifths_or_tenths = Misc.FIFTHS
+    # fifths_or_tenths = Misc.TENTHS
+    path = 'results/ga/ga_dipm_fifths/'
+    filename = 'ga_dipm_gen_2432_fit_27.txt'
+
+    # path = 'results/ga/ga_scpm_fifths/'
+    # filename = 'ga_scpm_gen_0146_fit_19.txt'
+    #
+    # path = 'results/ga/ga_scpm_tenths/'
+    # filename = 'ga_scpm_gen_4066_fit_118.txt'
+    print(Loader.load_individual(path + filename))
+    model, threshold, fitness_value, data, individual = Loader.load_individual(path + filename)
+
+    export_file = ''
+    exp2(model, individual, data, threshold, fifths_or_tenths, export_file)
 
 
 def main():
@@ -72,7 +89,8 @@ def main():
     # print('Fitness value of GA-DIPM: ' + str(Tools.value_for_fitness(Ga_mat.dipm(), GoalMatrix.matrix_tenth())))
     # print('Fitness value of GA-SCPM: ' + str(Tools.value_for_fitness(Ga_mat.scpm(), GoalMatrix.matrix_tenth())))
 
-    main_exp2()
+    # main_exp2()
+    main_exp2_loader()
 
     pass
 

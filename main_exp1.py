@@ -1,15 +1,19 @@
 #!/usr/bin/python3
 # -*-coding: utf-8 -*
 
+from tools.Configs import ConfigExp1
+import tools.Display as Display
+import tools.Archivist as Archivist
 import Simulator.DIPMSimulator as DipmSim
 import Simulator.SCPMSimulator as ScpmSim
-import tools.Archivist as Archivist
-import tools.Display as Display
-from tools.Configs import ConfigExp1
+
+"""
+This is the main to launch to get the results of experience one of the paper called 
+"Biology inspired robot behaviour selection mechanism", 2007, by Wang et al.
+The exported figures correspond to figure 3 in the paper. 
+"""
 
 sim = None
-# model = 'dipm'
-# model = 'scpm'
 
 models = ['dipm', 'scpm']
 

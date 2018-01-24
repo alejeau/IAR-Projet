@@ -2,4 +2,3 @@
 **/*.pyc
 .spyderworkspace
 /venv
-/results/ga/*
