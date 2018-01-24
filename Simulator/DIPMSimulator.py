@@ -42,6 +42,7 @@ class DIPMSimulator:
 
         # main loop of the simulation
         for r in range(0, self.config['nb_of_runs']):
+            # for each time step and each channel, computes its output
             for t in range(0, int(1/self.dt)):
                 stn_list = []
                 for channel in range(channels):

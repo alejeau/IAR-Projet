@@ -18,7 +18,7 @@ class SCPM:
         self.wstn_gpi = 0.8
         self.wgpe_gpi = 0.4
 
-        # threshold
+        # thresholds
         self.theta_d1 = 0.2
         self.theta_d2 = 0.2
         self.theta_gpe = -0.2

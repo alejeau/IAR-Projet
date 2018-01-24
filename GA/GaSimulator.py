@@ -8,6 +8,7 @@ from tools.Abilities import Abilities
 from tools import Tools
 from tools.Values import Misc
 
+# inputs for the two channels
 fifths = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
 tenths = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
@@ -25,6 +26,8 @@ class GaSimulator:
             sal1 = [0.0] + [sc1 for _ in range(5)]
             for sc2 in salience:
                 sal2 = [0.0, 0.0] + [sc2 for _ in range(4)]
+
+                # input pair
                 sal = {
                     0: sal1,
                     1: sal2
@@ -42,6 +45,7 @@ class GaSimulator:
 
         return results
 
+    # generates the matrix of outputs
     @staticmethod
     def analyze_results(results: [{}], conf: {}, threshold, fifths_or_tenths=Misc.TENTHS) -> Matrix:
         dt = conf['dt']

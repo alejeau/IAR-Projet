@@ -15,7 +15,7 @@ class DIPM:
         self.wsd1_gpi = 1.0
         self.wstn_gpi = 0.8
 
-        # threshold
+        # thresholds
         self.theta_d1 = 0.2
         self.theta_d2 = 0.2
         self.theta_gpe = -0.2

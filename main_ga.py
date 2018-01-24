@@ -7,16 +7,17 @@ from tools.Values import Misc
 
 
 population_size = 100
-# generations = 100
-generations = 10
+generations = 100
 crossover_proba = 0.8
 mutation_proba = 0.02
 elitism = True
 
-models = ['dipm', 'scpm']
-# models = ['dipm']
+# models = ['dipm', 'scpm']
+models = ['dipm']
+# models = ['scpm']
 
 for model in models:
+    # data : genes (weights and thresholds) of the genome
     data = [str]
     if model == 'dipm':
         data = ['wcs1', 'wcs2', 'wsd2_gpe', 'wgpe_stn', 'wsd1_gpi', 'wstn_gpi', 'theta_d1', 'theta_d2', 'theta_gpe',

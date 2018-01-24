@@ -9,14 +9,12 @@ from tools import Tools, Values, Archivist
 from tools.Configs import Models
 from tools.Configs import ConfigExp2
 from tools.Configs.Matrices.GoalMatrix import GoalMatrix
-
+from copy import deepcopy
 threshold = 0.05
 current_model = ''
 fifths_or_tenths = Values.Misc.TENTHS
 gen_number = 0
 best_fitness = 0
-
-
 
 # generated at random
 # each weight or threshold is a single gene within the genome and is a real number in range [0,1]
@@ -24,6 +22,8 @@ def create_individual(data: [str]) -> [float]:
     return [random.uniform(0, 1) for _ in range(len(data))]
 
 
+# A single crossover point on both parents' chains is randomly selected.
+# All data beyond that point in either chain is swapped between the two parent genomes.
 def one_point_crossover(parent_1: [float], parent_2: [float]) -> ([float], [float]):
     crossover_index = random.randrange(1, len(parent_1))
     child_1 = parent_1[:crossover_index] + parent_2[crossover_index:]
@@ -41,20 +41,22 @@ def roulette_wheel_selector(population: [pyeasyga.Chromosome]) -> pyeasyga.Chrom
     sum_of_fitness = 0
     fitnesses = []
     # sort from worst to fittest individual
-    population.sort(key=attrgetter('fitness'))
+    tmp_pop = deepcopy(population)
 
-    for individual in population:
-        fitnesses.append(individual.fitness)
+    tmp_pop.sort(key=attrgetter('fitness'))
+
+    for individual in tmp_pop:
         sum_of_fitness += individual.fitness
+        fitnesses.append(sum_of_fitness)
 
     rand = random.random() * sum_of_fitness
 
-    for i in range(len(population)):
-        if fitnesses[i] < rand:
-            return population[i]
+    for i in range(len(tmp_pop)):
+        if rand < fitnesses[i]:
+            return tmp_pop[i]
 
     # when rounding errors occur, we return the fittest individual
-    return population[-1]
+    return tmp_pop[-1]
 
 
 def fitness(individual: [float], data: [str]) -> float:

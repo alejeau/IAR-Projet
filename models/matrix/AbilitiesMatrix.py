@@ -18,43 +18,6 @@ class AbilitiesMatrix:
         self.matrix = Matrix()
         self.threshold = 0.05
 
-    def generate_matrix(self, channel1: {float: float}, channel2: {float: float}, threshold: float):
-        self.threshold = threshold
-        self.x_keys = sorted(channel1.keys())
-        self.x_len = len(self.x_keys)
-        self.y_keys = sorted(channel2.keys())
-        self.y_len = len(self.y_keys)
-
-        tmp_matrix = [[Abilities.NO_SELECTION] * self.y_len for _ in range(self.x_len)]
-
-        i = 0
-        for k in self.x_keys:
-            self.x_keys_map.update({k: i})
-            self.reversed_x_keys_map.update({i: k})
-            i += 1
-
-        i = 0
-        for k in self.y_keys:
-            self.y_keys_map.update({k: i})
-            self.reversed_y_keys_map.update({i: k})
-            i += 1
-
-        for x in self.x_keys:
-            i = self.x_keys_map[x]
-            for y in self.y_keys:
-                j = self.y_keys_map[y]
-                if channel1[x] <= threshold or channel2[y] <= threshold:
-                    value = Abilities.SELECTION
-                    if channel2[y] <= threshold < channel1[x]:
-                        if i != 0:
-                            prev_x = self.reversed_x_keys_map[i-1]
-                            if channel2[prev_x] <= threshold:
-                                value = Abilities.SWITCHING
-                    elif channel1[x] <= threshold and channel2[y] <= threshold and i != 0 and j != 0:
-                        value = Abilities.NO_SWITCHING
-
-                    tmp_matrix[i][j] = value
-        self.matrix.init_matrix(tmp_matrix)
 
     def get_x_keys(self):
         return self.x_keys
