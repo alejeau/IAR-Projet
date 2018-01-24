@@ -5,7 +5,7 @@ from tools import Tools
 from tools import Display
 from tools.Values import Misc
 from tools.Configs import Models
-from tools.Configs import ConfigExp2
+from tools.Configs import ConfigExp1, ConfigExp2
 from tools.individuals.loader import Loader
 from tools.individuals.Individuals import GaDipmFifths, GaScpmFifths, GaScpmTenths
 from GA.GaSimulator import GaSimulator
@@ -44,8 +44,8 @@ def main_exp2():
     models = ['scpm']
     individual = None
     threshold = 0.05
-    fifths_or_tenths = Misc.FIFTHS
-    # fifths_or_tenths = Misc.TENTHS
+    # fifths_or_tenths = Misc.FIFTHS
+    fifths_or_tenths = Misc.TENTHS
     data = [str]
 
     for model in models:
@@ -88,6 +88,28 @@ def main_exp2_loader():
     exp2(model, individual, data, threshold, fifths_or_tenths, export_file, title)
 
 
+def main_exp2_base_models():
+    models = ['dipm', 'scpm']
+    threshold = 0.05
+
+    for model in models:
+        conf = {}
+        if model == 'dipm':
+            conf = ConfigExp2.config_dipm_exp2()
+        elif model == 'scpm':
+            conf = ConfigExp2.config_scpm_exp2()
+
+        conf.update({'model_conf': {0: None, 1: None}})
+        results = GaSimulator.run_sims(model, conf, Misc.TENTHS)
+        matrix = GaSimulator.analyze_results(results, conf, threshold, Misc.TENTHS)
+
+        title = model.upper() + ' base'
+        export_file = 'img_export/' + model + '_exp2_base'
+        coordinates_tenths = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        coordinates = [coordinates_tenths, coordinates_tenths]
+        Display.save_simple_abilities_matrix(matrix, title, export_file, coordinates)
+
+
 def main():
     # coordinate_fifths = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
     # coordinates_fifths = [coordinate_fifths, coordinate_fifths]
@@ -101,7 +123,8 @@ def main():
     # print('Fitness value of GA-SCPM: ' + str(Tools.value_for_fitness(Ga_mat.scpm(), GoalMatrix.matrix_tenth())))
 
     # main_exp2()
-    main_exp2_loader()
+    # main_exp2_loader()
+    main_exp2_base_models()
 
     pass
 
