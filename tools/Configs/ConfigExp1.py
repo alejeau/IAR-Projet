@@ -17,7 +17,7 @@ def config_dipm_exp1_3_channels():
     salience = {
         0: [0.0, 0.4, 0.4, 0.6, 0.4],
         1: [0.0, 0.0, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs)]
+        2: [0.0 for _ in range(0, nb_of_runs)]
     }
 
     conf.update({'name': name})
@@ -49,10 +49,10 @@ def config_dipm_exp1_6_channels():
     salience = {
         0: [0.0, 0.4, 0.4, 0.6, 0.4],
         1: [0.0, 0.0, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs)],
-        3: [0.0 for i in range(0, nb_of_runs)],
-        4: [0.0 for i in range(0, nb_of_runs)],
-        5: [0.0 for i in range(0, nb_of_runs)]
+        2: [0.0 for _ in range(0, nb_of_runs)],
+        3: [0.0 for _ in range(0, nb_of_runs)],
+        4: [0.0 for _ in range(0, nb_of_runs)],
+        5: [0.0 for _ in range(0, nb_of_runs)]
     }
 
     conf.update({'name': name})
@@ -82,7 +82,7 @@ def config_scpm_exp1_3_channels():
     salience = {
         0: [0.0, 0.4, 0.4, 0.6, 0.4],
         1: [0.0, 0.0, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs)]
+        2: [0.0 for _ in range(0, nb_of_runs)]
     }
 
     conf.update({'name': name})
@@ -114,10 +114,10 @@ def config_scpm_exp1_6_channels():
     salience = {
         0: [0.0, 0.4, 0.4, 0.6, 0.4],
         1: [0.0, 0.0, 0.6, 0.6, 0.6],
-        2: [0.0 for i in range(0, nb_of_runs)],
-        3: [0.0 for i in range(0, nb_of_runs)],
-        4: [0.0 for i in range(0, nb_of_runs)],
-        5: [0.0 for i in range(0, nb_of_runs)]
+        2: [0.0 for _ in range(0, nb_of_runs)],
+        3: [0.0 for _ in range(0, nb_of_runs)],
+        4: [0.0 for _ in range(0, nb_of_runs)],
+        5: [0.0 for _ in range(0, nb_of_runs)]
     }
 
     conf.update({'name': name})

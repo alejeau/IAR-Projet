@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 # -*-coding: utf-8 -*
 
+"""
+This class returns the base configuration of both DIPM and SCPM weights
+"""
+
 
 def get_dipm_base_generator():
     conf = {}

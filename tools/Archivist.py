@@ -39,6 +39,5 @@ def load(file_name: str) -> dict:
 def load_txt(file_name: str) -> [str]:
     with open(file_name) as f:
         content = f.readlines()
-    # you may also want to remove whitespace characters like `\n` at the end of each line
     content = [line.strip() for line in content]
     return content

@@ -5,6 +5,7 @@ from tools.Abilities import Abilities
 
 
 class Matrix:
+    """ This class represents a simple matrix so that we can store tools.Abilities in it """
     def __init__(self):
         self.x_len = 0
         self.y_len = 0

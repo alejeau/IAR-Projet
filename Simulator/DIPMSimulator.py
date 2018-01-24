@@ -7,7 +7,7 @@ import tools.Archivist as Archivist
 
 class DIPMSimulator:
     def __init__(self):
-        self.dipms = {int: DIPM}
+        self.dipms = {}
         self.config = None
         self.gpi_output = {float: {float: float}}
         self.dt = 0.001

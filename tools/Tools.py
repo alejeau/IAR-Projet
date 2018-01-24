@@ -28,6 +28,7 @@ def get_numerical_value_of_ability(ability: Abilities) -> int:
     if ability is Abilities.SWITCHING:
         return 3
 
+
 # determines the outcome of the simulation: Selection, No Selection, Switching or No Switching
 def determine_ability(outputs: {}, dt: float, threshold: float) -> Abilities:
     chan1 = outputs[0]
@@ -60,7 +61,6 @@ def determine_ability(outputs: {}, dt: float, threshold: float) -> Abilities:
     chan1_i2_selected = True if selected_chan1 >= 0.8 * (len(chan2) - (2 * pas_par_seconde + 1)) else False
     chan2_selected = True if selected_chan2 >= 0.8 * (len(chan2) - (2 * pas_par_seconde + 1)) else False
 
-
     # NO SELECTION: Neither active channel becomes selected
     ability = Abilities.NO_SELECTION
 
@@ -77,6 +77,7 @@ def determine_ability(outputs: {}, dt: float, threshold: float) -> Abilities:
 
     return ability
 
+
 # for the fitness function : gives +1 if the outcome is the same as the goal outcome
 def get_reward(evaluated: Abilities, goal: Abilities) -> int:
     res = 0
@@ -84,7 +85,8 @@ def get_reward(evaluated: Abilities, goal: Abilities) -> int:
         res = 1
     return res
 
-# compares the matrix of outcomes to the goal matrix
+
+# compares the GA-optimized output matrix to the goal matrix
 def value_for_fitness(test: Matrix, goal: Matrix) -> float:
     x_len = test.get_x_len()
     y_len = test.get_y_len()

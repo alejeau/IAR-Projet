@@ -2,7 +2,6 @@
 # -*-coding: utf-8 -*
 
 import matplotlib.pyplot as plt
-import models.matrix.AbilitiesMatrix as AbilitiesMatrix
 from tools.Abilities import Abilities
 from models.matrix.Matrix import Matrix
 
@@ -163,7 +162,7 @@ def flexible_display_or_save(gpi_outputs: {int: {int or float: float}},
     plt.close(fig)
 
 
-def save_simple_abilities_matrix(matrix: Matrix, title: str, export_name: str, labels: [[], []]):
+def save_simple_abilities_matrix(matrix: Matrix, title: str, export_name: str, coordinates: [[], []]):
     x_no_selection = []
     x_selection = []
     x_no_switching = []
@@ -176,7 +175,7 @@ def save_simple_abilities_matrix(matrix: Matrix, title: str, export_name: str, l
     x_len = matrix.get_x_len()
     y_len = matrix.get_y_len()
 
-    no_labels = True if labels == [] else False
+    no_labels = True if coordinates == [] else False
 
     fig = plt.figure()
     for x in range(x_len):
@@ -187,34 +186,37 @@ def save_simple_abilities_matrix(matrix: Matrix, title: str, export_name: str, l
                     x_no_selection.append(x)
                     y_no_selection.append(y)
                 else:
-                    x_no_selection.append(labels[0][x])
-                    y_no_selection.append(labels[1][y])
+                    x_no_selection.append(coordinates[0][x])
+                    y_no_selection.append(coordinates[1][y])
             elif value is Abilities.SELECTION:
                 if no_labels:
                     x_selection.append(x)
                     y_selection.append(y)
                 else:
-                    x_selection.append(labels[0][x])
-                    y_selection.append(labels[1][y])
+                    x_selection.append(coordinates[0][x])
+                    y_selection.append(coordinates[1][y])
             elif value is Abilities.NO_SWITCHING:
                 if no_labels:
                     x_no_switching.append(x)
                     y_no_switching.append(y)
                 else:
-                    x_no_switching.append(labels[0][x])
-                    y_no_switching.append(labels[1][y])
+                    x_no_switching.append(coordinates[0][x])
+                    y_no_switching.append(coordinates[1][y])
             elif value is Abilities.SWITCHING:
                 if no_labels:
                     x_switching.append(x)
                     y_switching.append(y)
                 else:
-                    x_switching.append(labels[0][x])
-                    y_switching.append(labels[1][y])
+                    x_switching.append(coordinates[0][x])
+                    y_switching.append(coordinates[1][y])
 
     plt.scatter(x_no_selection, y_no_selection, marker='*')
     plt.scatter(x_selection, y_selection, marker='o')
     plt.scatter(x_no_switching, y_no_switching, marker='s')
     plt.scatter(x_switching, y_switching, marker='p')
+
+    if title != '':
+        plt.title(title)
 
     if export_name is '':
         plt.show()

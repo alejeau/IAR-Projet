@@ -3,6 +3,7 @@
 
 from enum import Enum
 
+
 # for the size of the matrix
 class Misc(Enum):
     FIFTHS = 'fifths'
