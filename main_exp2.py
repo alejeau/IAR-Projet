@@ -31,7 +31,11 @@ def exp2(model, individual, data, threshold, fifths_or_tenths, export_file):
     matrix = GaSimulator.analyze_results(results, conf, threshold, fifths_or_tenths)
     goal = GoalMatrix.matrix_fifth() if fifths_or_tenths is Misc.FIFTHS else GoalMatrix.matrix_tenth()
     print('Fitness value: ' + str(Tools.value_for_fitness(matrix, goal)))
-    Display.save_simple_abilities_matrix(matrix, '', export_file)
+
+    label_fifths = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+    label_tenths = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    labels = [label_fifths, label_fifths] if fifths_or_tenths == Misc.FIFTHS else [label_tenths, label_tenths]
+    Display.save_simple_abilities_matrix(matrix, '', export_file, labels)
 
 
 def main_exp2():
@@ -64,17 +68,18 @@ def main_exp2():
 
 
 def main_exp2_loader():
-    fifths_or_tenths = Misc.FIFTHS
-    # fifths_or_tenths = Misc.TENTHS
-    path = 'results/ga/ga_dipm_fifths/'
-    filename = 'ga_dipm_gen_2432_fit_27.txt'
+    # fifths_or_tenths = Misc.FIFTHS
+    fifths_or_tenths = Misc.TENTHS
+    
+    # path = 'results/ga/ga_dipm_fifths/'
+    # filename = 'ga_dipm_gen_2432_fit_27.txt'
 
     # path = 'results/ga/ga_scpm_fifths/'
     # filename = 'ga_scpm_gen_0146_fit_19.txt'
-    #
-    # path = 'results/ga/ga_scpm_tenths/'
-    # filename = 'ga_scpm_gen_4066_fit_118.txt'
-    print(Loader.load_individual(path + filename))
+
+    path = 'results/ga/ga_scpm_tenths/'
+    filename = 'ga_scpm_gen_4066_fit_118.txt'
+
     model, threshold, fitness_value, data, individual = Loader.load_individual(path + filename)
 
     export_file = ''

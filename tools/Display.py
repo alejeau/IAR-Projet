@@ -163,7 +163,7 @@ def flexible_display_or_save(gpi_outputs: {int: {int or float: float}},
     plt.close(fig)
 
 
-def save_simple_abilities_matrix(matrix: Matrix, title: str, export_name: str):
+def save_simple_abilities_matrix(matrix: Matrix, title: str, export_name: str, labels: [[], []]):
     x_no_selection = []
     x_selection = []
     x_no_switching = []
@@ -176,22 +176,40 @@ def save_simple_abilities_matrix(matrix: Matrix, title: str, export_name: str):
     x_len = matrix.get_x_len()
     y_len = matrix.get_y_len()
 
+    no_labels = True if labels == [] else False
+
     fig = plt.figure()
     for x in range(x_len):
         for y in range(y_len):
             value = matrix.get_item(x, y)
             if value is Abilities.NO_SELECTION:
-                x_no_selection.append(x)
-                y_no_selection.append(y)
+                if no_labels:
+                    x_no_selection.append(x)
+                    y_no_selection.append(y)
+                else:
+                    x_no_selection.append(labels[0][x])
+                    y_no_selection.append(labels[1][y])
             elif value is Abilities.SELECTION:
-                x_selection.append(x)
-                y_selection.append(y)
+                if no_labels:
+                    x_selection.append(x)
+                    y_selection.append(y)
+                else:
+                    x_selection.append(labels[0][x])
+                    y_selection.append(labels[1][y])
             elif value is Abilities.NO_SWITCHING:
-                x_no_switching.append(x)
-                y_no_switching.append(y)
+                if no_labels:
+                    x_no_switching.append(x)
+                    y_no_switching.append(y)
+                else:
+                    x_no_switching.append(labels[0][x])
+                    y_no_switching.append(labels[1][y])
             elif value is Abilities.SWITCHING:
-                x_switching.append(x)
-                y_switching.append(y)
+                if no_labels:
+                    x_switching.append(x)
+                    y_switching.append(y)
+                else:
+                    x_switching.append(labels[0][x])
+                    y_switching.append(labels[1][y])
 
     plt.scatter(x_no_selection, y_no_selection, marker='*')
     plt.scatter(x_selection, y_selection, marker='o')
