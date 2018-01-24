@@ -7,14 +7,6 @@ from tools.Abilities import Abilities
 from models.matrix.Matrix import Matrix
 
 
-def load_file():
-    pass
-
-
-def display_data(gpi_outputs: {int: {int: float}}):
-    display_and_save(gpi_outputs, '', '')
-
-
 def display_and_save(gpi_outputs: {int: {int: float}}, title: str, export_name: str, channels_to_display: [int]):
     channels = sorted(gpi_outputs.keys())
     # one empty list per channel
@@ -55,7 +47,7 @@ def save_simple(gpi_outputs: {int: {float: float}},
                 export_name: str):
     channels = sorted(gpi_outputs.keys())
     # one empty list per channel
-    ordinates = [[] for i in range(len(channels))]
+    ordinates = [[] for _ in range(len(channels))]
     # init the fig
     fig = plt.figure(figsize=(3*len(channels), 3), dpi=300)
     for channel in channels:
@@ -86,7 +78,7 @@ def display_all_and_save(gpi_outputs: {int: {int or float: float}}, title: str, 
                          channels_to_display: [int], saliences: {int: [float]}, selection_threshold: float):
     channels = sorted(gpi_outputs.keys())
     # one empty list per channel
-    ordonnees = [[] for i in range(len(channels_to_display))]
+    ordonnees = [[] for _ in range(len(channels_to_display))]
     # init the fig
     fig = plt.figure(figsize=(3*len(channels_to_display), 3), dpi=300)
     for channel in channels:
@@ -132,7 +124,7 @@ def flexible_display_or_save(gpi_outputs: {int: {int or float: float}},
                              selection_threshold: float):
     channels = sorted(gpi_outputs.keys())
     # one empty list per channel
-    ordonnees = [[] for i in range(len(channels_to_display))]
+    ordonnees = [[] for _ in range(len(channels_to_display))]
     # init the fig
     fig = plt.figure(figsize=(3*len(channels_to_display), 3), dpi=300)
     for channel in channels:
@@ -167,54 +159,6 @@ def flexible_display_or_save(gpi_outputs: {int: {int or float: float}},
         plt.savefig(export_name)
     else:
         plt.show()
-
-    plt.close(fig)
-
-
-def save_abilities_figure(matrix: AbilitiesMatrix.AbilitiesMatrix, title: str, export_name: str):
-    x_no_selection = []
-    x_selection = []
-    x_no_switching = []
-    x_switching = []
-    y_no_selection = []
-    y_selection = []
-    y_no_switching = []
-    y_switching = []
-
-    x_keys = matrix.get_x_keys()
-    y_keys = matrix.get_y_keys()
-
-    fig = plt.figure()
-    for x in x_keys:
-        for y in y_keys:
-            value = matrix.get_value(x, y)
-            if value is Abilities.NO_SELECTION:
-                x_no_selection.append(x)
-                y_no_selection.append(y)
-            elif value is Abilities.SELECTION:
-                x_selection.append(x)
-                y_selection.append(y)
-            elif value is Abilities.NO_SWITCHING:
-                x_no_switching.append(x)
-                y_no_switching.append(y)
-            elif value is Abilities.SWITCHING:
-                x_switching.append(x)
-                y_switching.append(y)
-
-    # plt.scatter(x_no_selection, y_no_selection, marker='*', c='black')
-    # plt.scatter(x_selection, y_selection, marker='o', c='black')
-    # plt.scatter(x_no_switching, y_no_switching, marker='s', c='black')
-    # plt.scatter(x_switching, y_switching, marker='p', c='black')
-
-    plt.scatter(x_no_selection, y_no_selection, marker='*')
-    plt.scatter(x_selection, y_selection, marker='o')
-    plt.scatter(x_no_switching, y_no_switching, marker='s')
-    plt.scatter(x_switching, y_switching, marker='p')
-
-    if export_name is '':
-        plt.show()
-    else:
-        plt.savefig(export_name)
 
     plt.close(fig)
 

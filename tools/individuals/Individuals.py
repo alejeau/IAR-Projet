@@ -2,7 +2,6 @@
 # -*-coding: utf-8 -*
 
 from enum import Enum
-from tools.individuals.loader import Loader
 
 
 class GaDipmFifths(Enum):
