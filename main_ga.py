@@ -13,8 +13,8 @@ mutation_proba = 0.02
 elitism = True
 
 # models = ['dipm', 'scpm']
-# models = ['dipm']
-models = ['scpm']
+models = ['dipm']
+# models = ['scpm']
 
 for model in models:
     data = [str]
