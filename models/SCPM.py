@@ -182,14 +182,6 @@ class SCPM:
         self.theta_gpe = conf['theta_gpe']
         self.theta_stn = conf['theta_stn']
         self.theta_gpi = conf['theta_gpi']
-        self.m = conf['m']
-        self.k = conf['k']
-        self.dt = conf['dt']
-        self.a_d1 = conf['a_d1']
-        self.a_d2 = conf['a_d2']
-        self.a_gpe = conf['a_gpe']
-        self.a_stn = conf['a_stn']
-        self.a_gpi = conf['a_gpi']
 
     def load_conf_from_file(self, filename: str):
         conf = confLoader.load(filename)
@@ -207,11 +199,3 @@ class SCPM:
         self.theta_gpe = conf['theta_gpe']
         self.theta_stn = conf['theta_stn']
         self.theta_gpi = conf['theta_gpi']
-        self.m = conf['m']
-        self.k = conf['k']
-        self.dt = conf['dt']
-        self.a_d1 = conf['a_d1']
-        self.a_d2 = conf['a_d2']
-        self.a_gpe = conf['a_gpe']
-        self.a_stn = conf['a_stn']
-        self.a_gpi = conf['a_gpi']
